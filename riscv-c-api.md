@@ -62,5 +62,12 @@ https://creativecommons.org/licenses/by/4.0/.
 
 ## Intrinsic Functions
 
-Do we really have none of these?  I can't figure out
-`gcc/gcc/config/riscv/riscv-builtins.c`...
+## GCC-Specific Extensions
+
+### Intrinsic Functions
+
+These functions are specific to the GCC internals and are not expected
+to be used by users.
+
+* `unsigned int __builtin_riscv_frflags ()`
+* `void __builtin_riscv_fsflags (unsigned int)`
