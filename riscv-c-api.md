@@ -28,12 +28,15 @@ https://creativecommons.org/licenses/by/4.0/.
 * `-msmall-data-limit=N`
 * `-mexplicit-relocs` '-mno-explicit-relocs`
 * `-mrelax` `-mno-relax`
+* `-msave-restore` `-mno-save-restore`
+* `-mbranch-cost=N`
 
 ## Preprocessor Definitions
 
 * `__riscv`
 * `__riscv_32e`
 * `__riscv_xlen`
+* `__riscv_flen`
 * `__riscv_atomic`
 * `__riscv_compressed`
 * `__riscv_mul`
@@ -53,6 +56,9 @@ https://creativecommons.org/licenses/by/4.0/.
 
 * `__attribute__((naked))`
 * `__attribute__((interrupt))`
+* `__attribute__((interrupt("user")))`
+* `__attribute__((interrupt("supervisor")))`
+* `__attribute__((interrupt("machine")))`
 
 ## Intrinsic Functions
 
