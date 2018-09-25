@@ -1,7 +1,7 @@
 # RISC-V C API Specification
 
 This file contains the RISC-V additions to the standard C APIs.  It
-merges together the compiler command-line API, the preprosser API, and
+merges together the compiler command-line API, the preprocessor API, and
 the C language extensions (function attributes and intrinsic functions).
 
 ## Copyright and license information
