@@ -34,6 +34,7 @@ https://creativecommons.org/licenses/by/4.0/.
 ## Preprocessor Definitions
 
 * `__riscv`
+* `__riscv_abi_rve`
 * `__riscv_32e`
 * `__riscv_xlen`
 * `__riscv_flen`
