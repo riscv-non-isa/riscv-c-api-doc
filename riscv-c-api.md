@@ -54,6 +54,7 @@ https://creativecommons.org/licenses/by/4.0/.
 * `__riscv_cmodel_pic`
 * `__riscv_vector`
 * `__riscv_bitmanip`
+* `__riscv_zfh`
 
 ## Function Attributes
 
