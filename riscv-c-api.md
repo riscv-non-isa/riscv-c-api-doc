@@ -33,28 +33,41 @@ https://creativecommons.org/licenses/by/4.0/.
 
 ## Preprocessor Definitions
 
-* `__riscv`
-* `__riscv_abi_rve`
-* `__riscv_32e`
-* `__riscv_xlen`
-* `__riscv_flen`
-* `__riscv_atomic`
-* `__riscv_compressed`
-* `__riscv_mul`
-* `__riscv_div`
-* `__riscv_muldiv`
-* `__riscv_fdiv`
-* `__riscv_fsqrt`
-* `__riscv_float_abi_soft`
-* `__riscv_float_abi_single`
-* `__riscv_float_abi_double`
-* `__riscv_float_abi_quad`
-* `__riscv_cmodel_medlow`
-* `__riscv_cmodel_medany`
-* `__riscv_cmodel_pic`
-* `__riscv_vector`
-* `__riscv_bitmanip`
-* `__riscv_zfh`
+| Name                | Value | When defined                  |
+| ------------------- | ----- | ----------------------------- |
+| __riscv             | 1     | Always defined.               |
+| __riscv_xlen        | <ul><li>32 for rv32</li><li>64 for rv64</li><li>128 for rv128</ul> | Always defined.             |
+| __riscv_flen        | <ul><li>128 if `Q` extension available</li><li>64 if `D` extension available</li><li>32 if `F` extension available<li></ul> | `F` extension is available. |
+| __riscv_32e         | 1     | `E` extension is available.   |
+| __riscv_atomic      | 1     | `A` extension is available.   |
+| __riscv_compressed  | 1     | `C` extension is available.   |
+| __riscv_mul         | 1     | `M` extension is available.   |
+| __riscv_div         | 1     | `M` extension is available.   |
+| __riscv_muldiv      | 1     | `M` extension is available.   |
+| __riscv_fdiv        | 1     | `F` extension is available.   |
+| __riscv_fsqrt       | 1     | `F` extension is available.   |
+| __riscv_vector      | 1     | `V` extension is available.   |
+| __riscv_bitmanip    | 1     | `B` extension is available.   |
+| __riscv_zfh         | 1     | `Zfh` extension is available. |
+
+
+### ABI Related Preprocessor Definitions
+
+| Name                     | Value | When defined                  |
+| ------------------------ | ----- | ----------------------------- |
+| __riscv_abi_rve          | 1     | Defined if using `ilp32e` ABI |
+| __riscv_float_abi_soft   | 1     | Defined if using `ilp32`, `ilp32e` or `lp64` ABI. |
+| __riscv_float_abi_single | 1     | Defined if using `ilp32f` or `lp64f` ABI. |
+| __riscv_float_abi_double | 1     | Defined if using `ilp32d` or `lp64d` ABI. |
+| __riscv_float_abi_quad   | 1     | Defined if using `ilp32q` or `lp64q` ABI. |
+
+### Code Model Related Preprocessor Definitions
+
+| Name                  | Value    | When defined                          |
+| --------------------- | -------- | ------------------------------------- |
+| __riscv_cmodel_medlow | 1        | Defined if using `medlow` code model. |
+| __riscv_cmodel_medany | 1        | Defined if using `medany` code model. |
+| __riscv_cmodel_pic    | 1        | Defined if using `PIC` code model.    |
 
 ## Function Attributes
 
