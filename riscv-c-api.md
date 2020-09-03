@@ -37,7 +37,7 @@ https://creativecommons.org/licenses/by/4.0/.
 | ------------------- | ----- | ----------------------------- |
 | __riscv             | 1     | Always defined.               |
 | __riscv_xlen        | <ul><li>32 for rv32</li><li>64 for rv64</li><li>128 for rv128</ul> | Always defined.             |
-| __riscv_flen        | <ul><li>128 if `Q` extension available</li><li>64 if `D` extension available</li><li>32 if `F` extension available<li></ul> | `F` extension is available. |
+| __riscv_flen        | <ul><li>32 if the F extension is available **or**</li><li>64 if `D` extension available **or**</li><li>128 if `Q` extension available</li></ul> | `F` extension is available. |
 | __riscv_32e         | 1     | `E` extension is available.   |
 | __riscv_atomic      | 1     | `A` extension is available.   |
 | __riscv_compressed  | 1     | `C` extension is available.   |
