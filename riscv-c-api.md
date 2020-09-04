@@ -73,7 +73,7 @@ https://creativecommons.org/licenses/by/4.0/.
 
 | Name                  | Value    | When defined                          | Alternative |
 | --------------------- | -------- | ------------------------------------- | ----------- |
-| __riscv_cmodel_pic    | 1        | GCC will defined that when program compile with `-fPIC`, `-fpic`, `-fPIE` or `-fpie`. | `__PIC__` or `__PIE__` |
+| __riscv_cmodel_pic    | 1        | GCC defines this when compiling with `-fPIC`, `-fpic`, `-fPIE` or `-fpie`. | `__PIC__` or `__PIE__` |
 
 ## Function Attributes
 
