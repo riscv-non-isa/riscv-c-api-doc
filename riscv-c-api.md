@@ -68,7 +68,12 @@ https://creativecommons.org/licenses/by/4.0/.
 | --------------------- | -------- | ------------------------------------- |
 | __riscv_cmodel_medlow | 1        | Defined if using `medlow` code model. |
 | __riscv_cmodel_medany | 1        | Defined if using `medany` code model. |
-| __riscv_cmodel_pic    | 1        | Defined if using `PIC` code model.    |
+
+### Deprecated Preprocessor Definitions
+
+| Name                  | Value    | When defined                          | Alternative |
+| --------------------- | -------- | ------------------------------------- | ----------- |
+| __riscv_cmodel_pic    | 1        | GCC will defined that when program compile with `-fPIC`, `-fpic`, `-fPIE` or `-fpie`. | `__PIC__` or `__PIE__` |
 
 ## Function Attributes
 
