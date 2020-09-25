@@ -50,7 +50,7 @@ https://creativecommons.org/licenses/by/4.0/.
 | __riscv_bitmanip    | 1     | `B` extension is available.   |
 | __riscv_zfh         | 1     | `Zfh` extension is available. |
 
-*[1] Not all compiler provide `-mno-div` and `-mno-fdiv` option.
+*[1] Not all compilers provide `-mno-div` and `-mno-fdiv` option.
 
 ### ABI Related Preprocessor Definitions
 
