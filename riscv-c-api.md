@@ -48,9 +48,40 @@ https://creativecommons.org/licenses/by/4.0/.
 | __riscv_fsqrt       | 1     | `F` extension is available and `-mno-fdiv` is not given.*[1]   |
 | __riscv_vector      | 1     | `V` extension is available.   |
 | __riscv_bitmanip    | 1     | `B` extension is available.   |
-| __riscv_zfh         | 1     | `Zfh` extension is available. |
 
 *[1] Not all compilers provide `-mno-div` and `-mno-fdiv` option.
+
+### Architecture Extension Test Macro
+
+Architecture extension test macro is a new set of test macro to checking the
+availability and version for certain extension, however not all compilers are
+supported, so you should check `__riscv_arch_test_macro` to make sure this
+compiler is supporting those preprocessor definitions.
+
+The value of architecture extension test macro are defined as its version,
+which is compute by following formula:
+
+```
+<MAJOR_VERSION> * 1,000,000 + <MINOR_VERSION> * 1,000 + <REVISION_VERSION>
+```
+
+For example:
+- F-extension v2.2 will define `__riscv_f` as `20002000`.
+- B-extension v0.92 will define `__riscv_b` as `92000`.
+
+| Name                    | Value        | When defined                  |
+| ----------------------- | ------------ | ----------------------------- |
+| __riscv_arch_test_macro | 1            | Defined if compiler support new architecture extension test macro. |
+| __riscv_i               | Arch Version | `I` extension is available.   |
+| __riscv_e               | Arch Version | `E` extension is available.   |
+| __riscv_m               | Arch Version | `M` extension is available.   |
+| __riscv_a               | Arch Version | `A` extension is available.   |
+| __riscv_f               | Arch Version | `F` extension is available.   |
+| __riscv_d               | Arch Version | `D` extension is available.   |
+| __riscv_c               | Arch Version | `C` extension is available.   |
+| __riscv_b               | Arch Version | `B` extension is available.   |
+| __riscv_v               | Arch Version | `V` extension is available.   |
+| __riscv_zfh             | Arch Version | `Zfh` extension is available. |
 
 ### ABI Related Preprocessor Definitions
 
