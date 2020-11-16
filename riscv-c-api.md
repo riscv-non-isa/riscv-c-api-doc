@@ -55,8 +55,8 @@ https://creativecommons.org/licenses/by/4.0/.
 
 Architecture extension test macro is a new set of test macro to checking the
 availability and version for certain extension, however not all compilers are
-supported, so you should check `__riscv_arch_test_macro` to make sure this
-compiler is supporting those preprocessor definitions.
+supported, so you should check `__riscv_arch_test` to make sure this compiler
+is supporting those preprocessor definitions.
 
 The value of architecture extension test macro are defined as its version,
 which is compute by following formula:
@@ -71,7 +71,7 @@ For example:
 
 | Name                    | Value        | When defined                  |
 | ----------------------- | ------------ | ----------------------------- |
-| __riscv_arch_test_macro | 1            | Defined if compiler support new architecture extension test macro. |
+| __riscv_arch_test       | 1            | Defined if compiler support new architecture extension test macro. |
 | __riscv_i               | Arch Version | `I` extension is available.   |
 | __riscv_e               | Arch Version | `E` extension is available.   |
 | __riscv_m               | Arch Version | `M` extension is available.   |
