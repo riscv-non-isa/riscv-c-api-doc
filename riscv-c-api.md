@@ -235,6 +235,27 @@ long __riscv_clmul (long a, long b); // clmul rd, rs1, rs2
 vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
 ```
 
+### riscv_intrinsic.h
+
+This file is universal intrinsic header file for all extensions, each extension
+could have their own header files, but should included in this file if
+corresponding extension is enabled.
+
+This header file also defined several common RISC-V specific type and related
+marco could be used in intrinsic interface or user program directly.
+
+| Type Name             | Meaning                              |
+| --------------------- | ------------------------------------ |
+| int_xlen_t            | Signed integer type with XLEN bits   |
+| uint_xlen_t           | Unsigned integer type with XLEN bits |
+
+| Macro Name            | Value                                |
+| --------------------- | ------------------------------------ |
+| INT_XLEN_MAX          | Minimum value of int_xlen_t          |
+| INT_XLEN_MIN          | Minimum value of int_xlen_t          |
+| UINT_XLEN_MAX         | Maximum value of uint_xlen_t         |
+| UINT_XLEN_MIN         | Minimum value of uint_xlen_t         |
+
 ## Constraints on Operands of Inline Assembly Statements
 
 This section lists operand constraints that can be used with inline assembly
