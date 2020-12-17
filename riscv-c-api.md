@@ -21,12 +21,12 @@ https://creativecommons.org/licenses/by/4.0/.
 * `-mtune=MICRO_ARCHITECTURE`
 * `-mplt` `-mno-plt`
 * `-mcmodel=CODE_MODEL`
-* `-mstrict-align` '-mno-strict-align`
+* `-mstrict-align` `-mno-strict-align`
 * `-mfdiv` `-mno-fdiv`
 * `-mdiv` `-mno-div`
 * `-mpreferred-stack-boundary=N`
 * `-msmall-data-limit=N`
-* `-mexplicit-relocs` '-mno-explicit-relocs`
+* `-mexplicit-relocs` `-mno-explicit-relocs`
 * `-mrelax` `-mno-relax`
 * `-msave-restore` `-mno-save-restore`
 * `-mbranch-cost=N`
