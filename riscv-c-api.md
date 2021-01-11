@@ -55,7 +55,7 @@ which is compute by following formula:
 ```
 
 For example:
-- F-extension v2.2 will define `__riscv_f` as `20002000`.
+- F-extension v2.2 will define `__riscv_f` as `2002000`.
 - B-extension v0.92 will define `__riscv_b` as `92000`.
 
 | Name                    | Value        | When defined                  |
