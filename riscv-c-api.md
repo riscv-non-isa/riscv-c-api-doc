@@ -172,5 +172,44 @@ For example:
 
 ## Intrinsic Functions
 
-Do we really have none of these?  I can't figure out
-`gcc/gcc/config/riscv/riscv-builtins.c`...
+Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
+They typically provide access to functionality that is otherwise not synthesizable by compilers.
+Some intrinsics expand to different code sequences depending on the available instructions from the enabled ISA extensions.
+
+Compilers typically come with their own architecture-independent intrinsics (e.g. synchronization primitives, byte-swap, etc.).
+The RISC-V compiler backend can define additional target-specific intrinsics.
+Providing functionality via architecture-independent intrinsics is the preferred method, as it improves code portability.
+
+Some intrinsics are only available if a particular header file is included.
+RISC-V header files that enable intrinsics require the prefix `riscv_` (e.g. `riscv_vector.h` or `riscv_crypto.h`).
+
+RISC-V specific intrinsics use the common prefix "__riscv_" to avoid namespace collisions.
+
+The intrinsic name describes the functional behaviour of the function.
+In case the functionality can be expressed with a single instruction, the instruction's name (any '.' replaced by '_') is the preferred choice.
+Note, that intrinsics that are restricted to RISC-V vendor extensions need to include the vendor prefix (as documented in the RISC-V toolchain conventions).
+
+If intrinsics are available for multiple data types, then function overloading is preferred over multiple type-specific functions.
+If an intrinsic function is has parameters or return values that reference registers with XLEN bits, then the data type `long` should be used.
+In case a function is only available for one data type and this type cannot be derived from the function's name, then the type should be appended to the function name, delimited by a '_' character.
+Typical type postfixes are "32" (32-bit), "i32" (signed 32-bit), "i8m4" (vector register group consisting of 4 signed 8-bit vector registers).
+
+RISC-V intrinsics follow the following naming rule:
+
+```
+INTRINSIC ::= PREFIX NAME [ '_' TYPE ]
+PREFIX ::= "__riscv_"
+NAME ::= Name of the intrinsic function.
+TYPE ::= Optional type postfix.
+```
+
+RISC-V intrinsics examples:
+
+```
+type __riscv_orc_b (type rs); // orc.b rd, rs
+
+long __riscv_clmul (long a, long b); // clmul rd, rs1, rs2
+
+#include <riscv_vector.h> // make RISC-V vector intrinsics available
+vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
+```
