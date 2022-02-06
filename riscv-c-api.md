@@ -116,5 +116,41 @@ For example:
 
 ## Intrinsic Functions
 
-Do we really have none of these?  I can't figure out
-`gcc/gcc/config/riscv/riscv-builtins.c`...
+RISC-V intrinsics allow access to RISC-V-specific instructions from C or C++ that are usually not otherwise synthesizable by compilers.
+Intrinsics typically map to a single instruction that is inlined to avoid function call overhead.
+
+Intrinsics are only available if the corresponding instructions are available (as part of the effective `-march` string).
+Some intrinsics are only available if a particular header file is included.
+RISC-V header files, that enable intrinsics, require the prefix `riscv_` (e.g. `riscv_vector.h` or `riscv_crypto.h`).
+
+RISC-V intrinsics follow the following naming rule:
+
+```
+INTRINSIC ::= PREFIX '_' MNEMONIC [ '_' RET_TYPE ]
+PREFIX ::= "__builtin_riscv" | "__rv" EXTENSION | "_rv" | "_rv32" | "_rv64"
+EXTENSION ::= ISA extension letter or string.
+MNEMONIC ::= Instruction name in the ISA extensions specification. Replace '.' with '_' (if any).
+RET_TYPE ::= Return type indication.
+```
+
+The return type is typically encoded into the intrinsic name as part of the prefix or a postfix.
+In case the return type is encoded into the prefix, then the following prefixes should be used:
+* `_rv`: for intrinsics that operate on the long data type.
+* `_rv32`: for intrinsics that operate on the int32_t data type.
+* `_rv64`: for RV64-only intrinsics that operate on the int64_t data type.
+
+The `PREFIX` has the intention to avoid naming collisions.
+RISC-V header files can provide aliases to the intrinsics without the prefix.
+
+```
+RISC-V intrinsics examples:
+
+orc.b rd, rs:
+int32_t __builtin_riscv_orc_b_32(int32_t rs);
+
+vadd.vv vd, vs2, vs1:
+vint8m1_t __rvv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl);
+
+aes32dsmi rd, rs1, rs2, bs:
+int32_t _rv32_aes32dsi(int32_t rs1, int32_t rs2, int bs);
+```
