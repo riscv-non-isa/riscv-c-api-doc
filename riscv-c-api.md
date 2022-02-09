@@ -67,6 +67,7 @@ For example:
 | __riscv_f               | Arch Version | `F` extension is available.   |
 | __riscv_d               | Arch Version | `D` extension is available.   |
 | __riscv_c               | Arch Version | `C` extension is available.   |
+| __riscv_p               | Arch Version | `P` extension is available.   |
 | __riscv_v               | Arch Version | `V` extension is available.   |
 | __riscv_zba             | Arch Version | `Zba` extension is available. |
 | __riscv_zbb             | Arch Version | `Zbb` extension is available. |
