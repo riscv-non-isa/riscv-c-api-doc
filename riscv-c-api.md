@@ -56,7 +56,6 @@ which is compute by following formula:
 
 For example:
 - F-extension v2.2 will define `__riscv_f` as `2002000`.
-- B-extension v0.92 will define `__riscv_b` as `92000`.
 
 | Name                    | Value        | When defined                  |
 | ----------------------- | ------------ | ----------------------------- |
@@ -68,8 +67,11 @@ For example:
 | __riscv_f               | Arch Version | `F` extension is available.   |
 | __riscv_d               | Arch Version | `D` extension is available.   |
 | __riscv_c               | Arch Version | `C` extension is available.   |
-| __riscv_b               | Arch Version | `B` extension is available.   |
 | __riscv_v               | Arch Version | `V` extension is available.   |
+| __riscv_zba             | Arch Version | `Zba` extension is available. |
+| __riscv_zbb             | Arch Version | `Zbb` extension is available. |
+| __riscv_zbc             | Arch Version | `Zbc` extension is available. |
+| __riscv_zbs             | Arch Version | `Zbs` extension is available. |
 | __riscv_zfh             | Arch Version | `Zfh` extension is available. |
 
 ### ABI Related Preprocessor Definitions
@@ -102,7 +104,6 @@ For example:
 | __riscv_fsqrt         | 1        | `F` extension is available and `-mno-fdiv` is not given.*[1]   | `__riscv_f` or `__riscv_d` |
 | __riscv_compressed    | 1        | `C` extension is available.   | `__riscv_c` |
 | __riscv_vector        | 1        | `V` extension is available.   | `__riscv_v` |
-| __riscv_bitmanip      | 1        | `B` extension is available.   | `__riscv_b` |
 
 *[1] Not all compilers provide `-mno-div` and `-mno-fdiv` option.
 
