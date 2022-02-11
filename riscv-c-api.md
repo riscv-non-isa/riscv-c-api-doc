@@ -39,6 +39,7 @@ https://creativecommons.org/licenses/by/4.0/.
 | __riscv_xlen        | <ul><li>32 for rv32</li><li>64 for rv64</li><li>128 for rv128</ul> | Always defined.             |
 | __riscv_flen        | <ul><li>32 if the F extension is available **or**</li><li>64 if `D` extension available **or**</li><li>128 if `Q` extension available</li></ul> | `F` extension is available. |
 | __riscv_32e         | 1     | `E` extension is available.   |
+| __riscv_vector      | 1     | Implies that any of the vector extensions (`v` or `zve*`) is available |
 
 ### Architecture Extension Test Macro
 
@@ -104,7 +105,6 @@ For example:
 | __riscv_fdiv          | 1        | `F` extension is available and `-mno-fdiv` is not given.*[1]   | `__riscv_f` or `__riscv_d` |
 | __riscv_fsqrt         | 1        | `F` extension is available and `-mno-fdiv` is not given.*[1]   | `__riscv_f` or `__riscv_d` |
 | __riscv_compressed    | 1        | `C` extension is available.   | `__riscv_c` |
-| __riscv_vector        | 1        | `V` extension is available.   | `__riscv_v` |
 
 *[1] Not all compilers provide `-mno-div` and `-mno-fdiv` option.
 
