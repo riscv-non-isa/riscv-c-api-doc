@@ -112,23 +112,40 @@ which is compute by following formula:
 For example:
 - F-extension v2.2 will define `__riscv_f` as `2002000`.
 
-| Name                    | Value        | When defined                  |
-| ----------------------- | ------------ | ----------------------------- |
+| Name                    | Value        | When defined                        |
+| ----------------------- | ------------ | ----------------------------------- |
 | __riscv_arch_test       | 1            | Defined if compiler support new architecture extension test macro. |
-| __riscv_i               | Arch Version | `I` extension is available.   |
-| __riscv_e               | Arch Version | `E` extension is available.   |
-| __riscv_m               | Arch Version | `M` extension is available.   |
-| __riscv_a               | Arch Version | `A` extension is available.   |
-| __riscv_f               | Arch Version | `F` extension is available.   |
-| __riscv_d               | Arch Version | `D` extension is available.   |
-| __riscv_c               | Arch Version | `C` extension is available.   |
-| __riscv_p               | Arch Version | `P` extension is available.   |
-| __riscv_v               | Arch Version | `V` extension is available.   |
-| __riscv_zba             | Arch Version | `Zba` extension is available. |
-| __riscv_zbb             | Arch Version | `Zbb` extension is available. |
-| __riscv_zbc             | Arch Version | `Zbc` extension is available. |
-| __riscv_zbs             | Arch Version | `Zbs` extension is available. |
-| __riscv_zfh             | Arch Version | `Zfh` extension is available. |
+| __riscv_i               | Arch Version | `I` extension is available.         |
+| __riscv_e               | Arch Version | `E` extension is available.         |
+| __riscv_m               | Arch Version | `M` extension is available.         |
+| __riscv_a               | Arch Version | `A` extension is available.         |
+| __riscv_f               | Arch Version | `F` extension is available.         |
+| __riscv_d               | Arch Version | `D` extension is available.         |
+| __riscv_c               | Arch Version | `C` extension is available.         |
+| __riscv_p               | Arch Version | `P` extension is available.         |
+| __riscv_v               | Arch Version | `V` extension is available.         |
+| __riscv_zve32x          | Arch Version | `Zve32x` extension is available.    |
+| __riscv_zve32f          | Arch Version | `Zve32f` extension is available.    |
+| __riscv_zve64x          | Arch Version | `Zve64x` extension is available.    |
+| __riscv_zve64f          | Arch Version | `Zve64f` extension is available.    |
+| __riscv_zve64d          | Arch Version | `Zve64d` extension is available.    |
+| __riscv_zvl32b          | Arch Version | `Zvl32b` extension is available.    |
+| __riscv_zvl64b          | Arch Version | `Zvl64b` extension is available.    |
+| __riscv_zvl128b         | Arch Version | `Zvl128b` extension is available.   |
+| __riscv_zvl256b         | Arch Version | `Zvl256b` extension is available.   |
+| __riscv_zvl512b         | Arch Version | `Zvl512b` extension is available.   |
+| __riscv_zvl1024b        | Arch Version | `Zvl1024b` extension is available.  |
+| __riscv_zvl2048b        | Arch Version | `Zvl2048b` extension is available.  |
+| __riscv_zvl4096b        | Arch Version | `Zvl4096b` extension is available.  |
+| __riscv_zvl8192b        | Arch Version | `Zvl8192b` extension is available.  |
+| __riscv_zvl16384b       | Arch Version | `Zvl16384b` extension is available. |
+| __riscv_zvl32768b       | Arch Version | `Zvl32768b` extension is available. |
+| __riscv_zvl65536b       | Arch Version | `Zvl65536b` extension is available. |
+| __riscv_zba             | Arch Version | `Zba` extension is available.       |
+| __riscv_zbb             | Arch Version | `Zbb` extension is available.       |
+| __riscv_zbc             | Arch Version | `Zbc` extension is available.       |
+| __riscv_zbs             | Arch Version | `Zbs` extension is available.       |
+| __riscv_zfh             | Arch Version | `Zfh` extension is available.       |
 
 ### ABI Related Preprocessor Definitions
 
