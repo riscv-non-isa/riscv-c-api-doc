@@ -102,6 +102,14 @@ availability and version for certain extension, however not all compilers are
 supported, so you should check `__riscv_arch_test` to make sure this compiler
 is supporting those preprocessor definitions.
 
+The naming rule of architecture extension test macros is `__riscv_<ext_name>`,
+e.g. `__riscv_zifencei` for `zifencei` extension and `__riscv_a` for `A`
+extension.
+
+Compilers should define corresponding architecture extension test macros if the
+extension is enabled, and we strongly suggest vendor extensions should follow
+this rule.
+
 The value of architecture extension test macro are defined as its version,
 which is compute by following formula:
 
@@ -129,6 +137,11 @@ For example:
 | __riscv_zbc             | Arch Version | `Zbc` extension is available. |
 | __riscv_zbs             | Arch Version | `Zbs` extension is available. |
 | __riscv_zfh             | Arch Version | `Zfh` extension is available. |
+
+NOTE: The table might not list all architecture extension test macros for
+ratified extensions due to not up-to-date, and might not list unratified
+extensions, but you could assume there is a corresponding architecture extension
+test macro available.
 
 ### ABI Related Preprocessor Definitions
 
