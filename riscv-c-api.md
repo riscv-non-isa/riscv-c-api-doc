@@ -39,6 +39,61 @@ https://creativecommons.org/licenses/by/4.0/.
 | __riscv_xlen        | <ul><li>32 for rv32</li><li>64 for rv64</li><li>128 for rv128</ul> | Always defined.             |
 | __riscv_flen        | <ul><li>32 if the F extension is available **or**</li><li>64 if `D` extension available **or**</li><li>128 if `Q` extension available</li></ul> | `F` extension is available. |
 | __riscv_32e         | 1     | `E` extension is available.   |
+| __riscv_vector      | 1     | Implies that any of the vector extensions (`v` or `zve*`) is available |
+| __riscv_v_min_vlen    | <N> (see [__riscv_v_min_vlen](#__riscv_v_min_vlen)) | The `V` extension or one of the `Zve*` extensions is available. |
+| __riscv_v_elen     | <N> (see [__riscv_v_elen](#__riscv_v_elen)) | The `V` extension or one of the `Zve*` extensions is available. |
+| __riscv_v_elen_fp  | <N> (see [__riscv_v_elen_fp](#__riscv_v_elen_fp)) | The `V` extension or one of the `Zve*` extensions is available. |
+
+### __riscv_v_min_vlen
+
+The `__riscv_v_min_vlen` macro expands to the minimal VLEN, in bits, mandated
+by the available vector extension, if any.
+
+The value of `__riscv_v_min_vlen` is defined by the following rules:
+- 128, if the `V` extension is present;
+- 32, if one of the `Zve32{x,f}` extensions is present;
+- 64, if one of the `Zve64{x,f,d}` extensions is present;
+- `N`, if one of the `Zvl<N>b` extensions, `N` in `{32,64,128,256,512,1024}`,
+is present.
+
+If multiple rules apply, the maximum value is taken.
+If none of the rules apply, `__riscv_v_min_vlen` is undefined.
+
+Examples:
+
+- `__riscv_v_min_vlen` is 128 for `rv64gcv`
+- `__riscv_v_min_vlen` is 512 for `rv32gcv_zvl512b`
+- `__riscv_v_min_vlen` is 256 for `rv32gcv_zvl32b_zvl256b`
+- `__riscv_v_min_vlen` is 128 for `rv64gcv_zvl32b`
+
+### __riscv_v_elen
+
+The `__riscv_v_elen` macro expands to the supported element length, in bits,
+of any non-floating-point vector operand of any vector instruction in the
+available vector extension, if any. (Stricter upper bounds may apply to
+particular operands of particular instructions.)
+
+
+The value of `__riscv_v_elen` is defined by the following rules:
+- 64, if the `V` extension or one of the `Zve64{x,f,d}` extensions is present; and
+- 32, if one of the `Zve32{x,f}` extensions is present.
+If multiple rules apply, the maximum value is taken.
+If none of the rules apply, `__riscv_v_elen` is undefined.
+
+### __riscv_v_elen_fp
+
+The `__riscv_v_elen_fp` macro expands to the supported element length, in bits,
+of any floating-point vector operand of any vector instruction in the available
+vector extension, if any. (Stricter upper bounds may apply to particular
+operands of particular instructions.)
+
+The value of `__riscv_v_elen_fp` is defined by the following rules:
+- 64, if one of the `V` or `Zve64d` extensions is present;
+- 32, if one of the `Zve{32,64}f` extensions is present; and
+- 0, if one of the `Zve{32,64}x` extensions is present.
+If multiple rules apply, the maximum value is taken.
+If none of the rules apply, `__riscv_v_elen_fp` is undefined.
+
 
 ### Architecture Extension Test Macro
 
@@ -56,36 +111,38 @@ which is compute by following formula:
 
 For example:
 - F-extension v2.2 will define `__riscv_f` as `2002000`.
-- B-extension v0.92 will define `__riscv_b` as `92000`.
-
-
-| Name                    | Value        | When defined                                                 |
-| ----------------------- | ------------ | ------------------------------------------------------------ |
-| __riscv_arch_test       | 1            | Compiler supports architecture extension test macros.        |
-| __riscv_i               | Arch Version | `I` extension is available.                                  |
-| __riscv_e               | Arch Version | `E` extension is available.                                  |
-| __riscv_m               | Arch Version | `M` extension is available.                                  |
-| __riscv_a               | Arch Version | `A` extension is available.                                  |
-| __riscv_f               | Arch Version | `F` extension is available.                                  |
-| __riscv_d               | Arch Version | `D` extension is available.                                  |
-| __riscv_c               | Arch Version | `C` extension is available.                                  |
-| __riscv_b               | Arch Version | `B` extension is available.                                  |
-| __riscv_v               | Arch Version | `V` extension is available.                                  |
-| __riscv_zfh             | Arch Version | `Zfh` extension is available.                                |
-| __riscv_zk              | Arch Version | Extensions of `Zkn` are available and `Zkt` is asserted.     |
+             
+=======
+| Name                    | Value        | When defined                  |
+| ----------------------- | ------------ | ----------------------------- |
+| __riscv_arch_test       | 1            | Defined if compiler support new architecture extension test macro. |
+| __riscv_i               | Arch Version | `I` extension is available.   |
+| __riscv_e               | Arch Version | `E` extension is available.   |
+| __riscv_m               | Arch Version | `M` extension is available.   |
+| __riscv_a               | Arch Version | `A` extension is available.   |
+| __riscv_f               | Arch Version | `F` extension is available.   |
+| __riscv_d               | Arch Version | `D` extension is available.   |
+| __riscv_c               | Arch Version | `C` extension is available.   |
+| __riscv_p               | Arch Version | `P` extension is available.   |
+| __riscv_v               | Arch Version | `V` extension is available.   |
+| __riscv_zba             | Arch Version | `Zba` extension is available. |
+| __riscv_zbb             | Arch Version | `Zbb` extension is available. |
+| __riscv_zbc             | Arch Version | `Zbc` extension is available. |
+| __riscv_zbs             | Arch Version | `Zbs` extension is available. |
+| __riscv_zfh             | Arch Version | `Zfh` extension is available. |
+| __riscv_zk              | Arch Version | Extensions of `Zkn` are available and `Zkt` is asserted.          |
 | __riscv_zkn             | Arch Version | Zkn: `Zbkb` `Zbkc` `Zbkx` `Zkne` `Zknd` `Zknh` are all available. |
 | __riscv_zks             | Arch Version | Zks: `Zbkb` `Zbkc` `Zbkx` `Zksed` `Zksh` are all available.       |
-| __riscv_zbkb            | Arch Version | `Zbkb` extension is available.                               |
-| __riscv_zbkc            | Arch Version | `Zbkc` extension is available.                               |
-| __riscv_zbkx            | Arch Version | `Zbkx` extension is available.                               |
-| __riscv_zknd            | Arch Version | `Zknd` extension is available.                               |
-| __riscv_zkne            | Arch Version | `Zkne` extension is available.                               |
-| __riscv_zknh            | Arch Version | `Zknh` extension is available.                               |
-| __riscv_zksed           | Arch Version | `Zksed` extension is available.                              |
-| __riscv_zksh            | Arch Version | `Zksh` extension is available.                               |
-| __riscv_zkt             | Arch Version | Target asserts `Zkt` (data-independent latency extension).   |
-| __riscv_zkr             | Arch Version | `Zkr`  extension is available.                               |
-
+| __riscv_zbkb            | Arch Version | `Zbkb` extension is available.                                    |
+| __riscv_zbkc            | Arch Version | `Zbkc` extension is available.                                    |
+| __riscv_zbkx            | Arch Version | `Zbkx` extension is available.                                    |
+| __riscv_zknd            | Arch Version | `Zknd` extension is available.                                    |
+| __riscv_zkne            | Arch Version | `Zkne` extension is available.                                    |
+| __riscv_zknh            | Arch Version | `Zknh` extension is available.                                    |
+| __riscv_zksed           | Arch Version | `Zksed` extension is available.                                   |
+| __riscv_zksh            | Arch Version | `Zksh` extension is available.                                    |
+| __riscv_zkt             | Arch Version | Target asserts `Zkt` (data-independent latency extension).        |
+| __riscv_zkr             | Arch Version | `Zkr`  extension is available.                                    |
 
 ### ABI Related Preprocessor Definitions
 
@@ -116,8 +173,6 @@ For example:
 | __riscv_fdiv          | 1        | `F` extension is available and `-mno-fdiv` is not given.*[1]   | `__riscv_f` or `__riscv_d` |
 | __riscv_fsqrt         | 1        | `F` extension is available and `-mno-fdiv` is not given.*[1]   | `__riscv_f` or `__riscv_d` |
 | __riscv_compressed    | 1        | `C` extension is available.   | `__riscv_c` |
-| __riscv_vector        | 1        | `V` extension is available.   | `__riscv_v` |
-| __riscv_bitmanip      | 1        | `B` extension is available.   | `__riscv_b` |
 
 *[1] Not all compilers provide `-mno-div` and `-mno-fdiv` option.
 
