@@ -213,3 +213,66 @@ long __riscv_clmul (long a, long b); // clmul rd, rs1, rs2
 #include <riscv_vector.h> // make RISC-V vector intrinsics available
 vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
 ```
+
+## Constraints on Operands of Inline Assembly Statements
+
+This section lists operand constraints that can be used with inline assembly
+statements, including both RISC-V specific and common operand constraints.
+
+
+| Constraint         |                                    | Note        |
+| ------------------ | ---------------------------------- | ----------- |
+| m                  | An address that is held in a general-purpose register with offset.      |      |
+| A                  | An address that is held in a general-purpose register.      |      |
+| r                  | General purpose register                      |      |
+| f                  | Floating-point register                       |      |
+| i                  | Immediate integer operand                     |      |
+| I                  | 12-bit signed immediate integer operand      |      |
+| K                  | 5-bit unsigned immediate integer operand     |      |
+| J                  | Zero integer immediate operand                |      |
+
+NOTE: Immediate value must be a compile-time constant.
+
+### The Difference Between `m` and `A` Constraints
+
+The difference between `m` and `A` is whether the operand can have an offset;
+some instructions in RISC-V do not allow an offset for the address operand,
+such as atomic or vector load/store instructions.
+
+The following example demonstrates the difference; it is trying
+to load value from `foo[10]` and using `m` and `A` to pass that address.
+
+```c
+int *foo;
+void bar() {
+ int x;
+ __asm__ volatile ("lw %0, %1" : "=r"(x) : "m" (foo[10]));
+ __asm__ volatile ("lw %0, %1" : "=r"(x) : "A" (foo[10]));
+}
+```
+
+Then we compile with GCC with `-O` option:
+
+```shell
+$ riscv64-unknown-elf-gcc x.c -o - -O -S
+...
+bar:
+       lui    a5,%hi(foo)
+       ld     a5,%lo(foo)(a5)
+ #APP
+# 4 "x.c" 1
+       lw a4, 40(a5)
+# 0 "" 2
+ #NO_APP
+       addi   a5,a5,40
+ #APP
+# 5 "x.c" 1
+       lw a5, 0(a5)
+# 0 "" 2
+ #NO_APP
+       ret
+
+```
+
+The compiler uses an immediate offset of 40 for the `m` constraint, but for the
+`A` constraint uses an extra addi instruction instead.
