@@ -203,6 +203,65 @@ function declares more than one mode or an undefined mode.
 
 This attribute is incompatible with the `naked` attribute.
 
+### `__attribute__((target("<ATTR-STRING>")))`
+
+`target` attribute used for enable or disable a set of features or extensions
+for the fucntion.
+
+Function with target attribute should not affect the file scope build
+attributes, i.g. File complied with -march=rv64ima and a function declares with
+`__attribute__((target("arch=+zbb")))`, the `Tag_RISCV_arch` build attribute
+should be `rv64ima` rather than `rv64ima_zbb`.
+
+The compiler may emit mapping symbol at the beginning of the function with
+target attribute if the function use different set of ISA extension.
+
+`<ATTR-STRING>` can be specify following target attributes:
+
+- `arch=`: Adding extra extensions, omit certain extension, or specific
+           extension setting for the function.
+- `tune=`: Specify the pipeline mode and cost model with specific
+           microarchitecture or core for the function.
+- `cpu=`: Specify the pipeline mode, cost model and extension setting for the
+          function.
+
+The syntax of `<ATTR-STRING>` describes below:
+
+```
+ATTR-STRING := ATTR ';' ATTR
+             | ATTR
+
+ATTR        := ARCH-ATTR
+             | CPU-ATTR
+             | TUNE-ATTR
+
+ARCH-ATTR   := 'arch=' EXTENSIONS-OR-FULLARCH
+
+EXTENSIONS-OR-FULLARCH := <EXTENSIONS>
+                        | <FULLARCHSTR>
+
+EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
+                        | <EXTENSION>
+
+FULLARCHSTR            := <full-arch-string>
+
+EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                     := '+'
+                        | '-'
+
+VERSION                := [0-9]+ 'p' [0-9]+
+                        | [1-9][0-9]*
+                        |
+
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+
+CPU-ATTR    := 'cpu=' <valid-cpu-name>
+TUNE-ATTR   := 'tune=' <valid-tune-name>
+```
+
+NOTE: The `target` attribute won't effect function name mangling for both C and C++.
+
 ## Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
