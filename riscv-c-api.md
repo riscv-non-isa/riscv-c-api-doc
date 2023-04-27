@@ -225,6 +225,7 @@ statements, including both RISC-V specific and common operand constraints.
 | m                  | An address that is held in a general-purpose register with offset.      |      |
 | A                  | An address that is held in a general-purpose register.      |      |
 | r                  | General purpose register                      |      |
+| R                  | Register pair for GPR, and it must start with an even-numbered register.   |      |
 | f                  | Floating-point register                       |      |
 | i                  | Immediate integer operand                     |      |
 | I                  | 12-bit signed immediate integer operand      |      |
