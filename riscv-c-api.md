@@ -230,6 +230,9 @@ statements, including both RISC-V specific and common operand constraints.
 | I                  | 12-bit signed immediate integer operand      |      |
 | K                  | 5-bit unsigned immediate integer operand     |      |
 | J                  | Zero integer immediate operand                |      |
+| vr                 | Vector register                    |            |
+| vd                 | Vector register, excluding v0      |            |
+| vm                 | Vector register, only v0           |            |
 
 NOTE: Immediate value must be a compile-time constant.
 
