@@ -164,11 +164,32 @@ For example:
 
 ## Function Attributes
 
-* `__attribute__((naked))`
-* `__attribute__((interrupt))`
-* `__attribute__((interrupt("user")))`
-* `__attribute__((interrupt("supervisor")))`
-* `__attribute__((interrupt("machine")))`
+### `__attribute__((naked))`
+
+The compiler won't generate the prologue/epilogue for those functions with
+`naked` attributes. This attribute is usually used when you want to write a
+function with an inline assembly body.
+
+This attribute is incompatible with the `interrupt` attribute.
+
+NOTE: Be aware that compilers might have further restrictions on naked
+functions. Please consult your compiler's manual for more information.
+
+### `__attribute__((interrupt))`, `__attribute__((interrupt("user")))`, `__attribute__((interrupt("supervisor")))` `__attribute__((interrupt("machine")))`
+
+The interrupt attribute specifies that a function is an interrupt handler.
+The compiler will save/restore all used registers in the prologue/epilogue
+regardless of the ABI, all used registers including floating point
+register/vector register if `F` extension/vector extension is enabled.
+
+The interrupt attribute can have an optional parameter to specify the mode.
+The possible values are `user`, `supervisor`, or `machine`.
+The default value `machine` is used, if the mode is not specified.
+
+The function can specify only one mode; the compiler should raise an error if a
+function declares more than one mode or an undefined mode.
+
+This attribute is incompatible with the `naked` attribute.
 
 ## Intrinsic Functions
 
