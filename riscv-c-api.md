@@ -204,7 +204,7 @@ Providing functionality via architecture-independent intrinsics is the preferred
 Some intrinsics are only available if a particular header file is included.
 RISC-V header files that enable intrinsics require the prefix `riscv_` (e.g. `riscv_vector.h` or `riscv_crypto.h`).
 
-RISC-V specific intrinsics use the common prefix "__riscv_" to avoid namespace collisions.
+RISC-V specific intrinsics use the common prefix `__riscv_` to avoid namespace collisions.
 
 The intrinsic name describes the functional behaviour of the function.
 In case the functionality can be expressed with a single instruction, the instruction's name (any '.' replaced by '_') is the preferred choice.
