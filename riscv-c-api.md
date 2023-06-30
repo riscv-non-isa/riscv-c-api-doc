@@ -333,7 +333,6 @@ In case the functionality can be expressed with a single instruction, the instru
 Note, that intrinsics that are restricted to RISC-V vendor extensions need to include the vendor prefix (as documented in the RISC-V toolchain conventions).
 
 If intrinsics are available for multiple data types, then function overloading is preferred over multiple type-specific functions.
-If an intrinsic function is has parameters or return values that reference registers with XLEN bits, then the data type `long` should be used.
 In case a function is only available for one data type and this type cannot be derived from the function's name, then the type should be appended to the function name, delimited by a '_' character.
 Typical type postfixes are "32" (32-bit), "i32" (signed 32-bit), "i8m4" (vector register group consisting of 4 signed 8-bit vector registers).
 
@@ -349,10 +348,6 @@ TYPE ::= Optional type postfix.
 RISC-V intrinsics examples:
 
 ```
-type __riscv_orc_b (type rs); // orc.b rd, rs
-
-long __riscv_clmul (long a, long b); // clmul rd, rs1, rs2
-
 #include <riscv_vector.h> // make RISC-V vector intrinsics available
 vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
 ```
@@ -401,6 +396,95 @@ enum {
 | `__RISCV_NTLH_ALL_PRIVATE`       | `ntl.pall`  |
 | `__RISCV_NTLH_INNERMOST_SHARED`  | `ntl.s1`    |
 | `__RISCV_NTLH_ALL`               | `ntl.all`   |
+
+### Scalar Cryptography Extension Intrinsics
+
+In order to access the RISC-V scalar crypto intrinsics, it is necessary to
+include the header file `riscv_crypto.h`.
+
+The functions are only only available if the compiler's `-march` string
+enables the required ISA extension. (Calling functions for not enabled
+ISA extensions will lead to compile-time and/or link-time errors.)
+
+Intrinsics operating on XLEN sized value are not available as there is no type
+defined. If `xlen_t` is added in the future, this can be revisited. It is
+assumed that cryptographic code will be written using fixed bit widths.
+
+Unsigned types are used as that is the most logical representation for a
+collection of bits.
+
+Only 32-bit and 64-bit types are supported. In order to increase
+compatibility, where it is feasible 32-bit intrinsics will be available on RV64.
+This will sometimes require additional instructions.
+
+No type overloading is supported. This avoids complications from C integer
+promotion rules and how to handle signed types.
+
+Sign extension of 32-bit values on RV64 is not reflected in the interface.
+
+| Prototype                                                               | Instruction          | Extension         | Notes |
+| ---------                                                               | -----------          | ---------         | ----- |
+| `uint32_t __riscv_ror_32(uint32_t x, uint32_t shamt);`                  | `ror[i][w]`          | Zbb, Zbkb         | |
+| `uint64_t __riscv_ror_64(uint64_t x, uint32_t shamt);`                  | `ror[i]`             | Zbb, Zbkb (RV64)  | |
+| `uint32_t __riscv_rol_32(uint32_t x, uint32_t shamt);`                  | `rol[w]`/`ror[i][w]` | Zbb, Zbkb         | |
+| `uint64_t __riscv_rol_64(uint64_t x, uint32_t shamt);`                  | `rol`/`rori`         | Zbb, Zbkb (RV64)  | |
+| `uint32_t __riscv_rev8_32(uint32_t x);`                                 | `rev8`               | Zbb, Zbkb         | Emulated with `rev8`+`srai` on RV64 |
+| `uint64_t __riscv_rev8_64(uint64_t x);`                                 | `rev8`               | Zbb, Zbkb (RV64)  | |
+| `uint32_t __riscv_brev8_32(uint32_t x);`                                | `brev8`              | Zbkb              | Emulated with `clmul`+`sext.w` on RV64 |
+| `uint64_t __riscv_brev8_64(uint64_t x);`                                | `brev8`              | Zbkb (RV64)       | |
+| `uint32_t __riscv_zip_32(uint32_t x);`                                  | `zip`                | Zbkb (RV32)       | No emulation for RV64 |
+| `uint32_t __riscv_unzip_32(uint32_t x);`                                | `unzip`              | Zbkb (RV32)       | No emulation for RV64 |
+| `uint32_t __riscv_clmul_32(uint32_t x);`                                | `clmul`              | Zbc, Zbkc         | Emulated with `clmul`+`sext.w` on RV64 |
+| `uint64_t __riscv_clmul_64(uint64_t x);`                                | `clmul`              | Zbc, Zbkc (RV64)  |                                  |
+| `uint32_t __riscv_clmulh_32(uint32_t x);`                               | `clmulh`             | Zbc, Zbkc (RV32)  | Emulation on RV64 requires 4-6 instructions |
+| `uint64_t __riscv_clmulh_64(uint64_t x);`                               | `clmulh`             | Zbc, Zbkc (RV64)  | |
+| `uint32_t __riscv_xperm4_32(uint32_t rs1, uint32_t rs2);`               | `xperm4`             | Zbkx (RV32)       | No emulation for RV64 |
+| `uint64_t __riscv_xperm4_64(uint64_t rs1, uint64_t rs2);`               | `xperm4`             | Zbkx (RV64)       | |
+| `uint32_t __riscv_xperm8_32(uint32_t rs1, uint32_t rs2);`               | `xperm8`             | Zbkx (RV32)       | No emulation for RV64 |
+| `uint64_t __riscv_xperm8_64(uint64_t rs1, uint64_t rs2);`               | `xperm8`             | Zbkx (RV64)       | |
+| `uint32_t __riscv_aes32dsi(uint32_t rs1, uint32_t rs2, const int bs);`  | `aes32dsi`           | Zknd (RV32)       | `bs`=[0..3] |
+| `uint32_t __riscv_aes32dsmi(uint32_t rs1, uint32_t rs2, const int bs);` | `aes32dsmi`          | Zknd (RV32)       | `bs`=[0..3] |
+| `uint64_t __riscv_aes64ds(uint64 rs1, uint64_t rs2);`                   | `aes64ds`            | Zknd (RV64)       | |
+| `uint64_t __riscv_aes64dsm(uint64 rs1, uint64_t rs2);`                  | `aes64dsm`           | Zknd (RV64)       | |
+| `uint64_t __riscv_aes64im(uint64 rs1);`                                 | `aes64im`            | Zknd (RV64)       | `rnum`=[0..10] |
+| `uint64_t __riscv_aes64ks1i(uint64 rs1, const int rnum);`               | `aes64ks1i`          | Zknd, Zkne (RV64) | `rnum`=[0..10] |
+| `uint64_t __riscv_aes64ks2(uint64 rs1, uint64_t rs2);`                  | `aes64ks2`           | Zknd, Zkne (RV64) | |
+| `uint32_t __riscv_aes32esi(uint32_t rs1, uint32_t rs2, const int bs);`  | `aes32esi`           | Zkne (RV32)       | `bs`=[0..3] |
+| `uint32_t __riscv_aes32esmi(uint32_t rs1, uint32_t rs2, const int bs);` | `aes32esmi`          | Zkne (RV32)       | `bs`=[0..3] |
+| `uint64_t __riscv_aes64es(uint64 rs1, uint64_t rs2);`                   | `aes32es`            | Zkne (RV64)       | |
+| `uint64_t __riscv_aes64esm(uint64 rs1, uint64_t rs2);`                  | `aes32esm`           | Zkne (RV64)       | |
+| `uint32_t __riscv_sha256sig0(uint32_t rs1);`                            | `sha256sig0`         | Zknh              | |
+| `uint32_t __riscv_sha256sig1(uint32_t rs1);`                            | `sha256sig1`         | Zknh              | |
+| `uint32_t __riscv_sha256sum0(uint32_t rs1);`                            | `sha256sum0`         | Zknh              | |
+| `uint32_t __riscv_sha256sum1(uint32_t rs1);`                            | `sha256sum1`         | Zknh              | |
+| `uint32_t __riscv_sha512sig0h(uint32_t rs1, uint32_t rs2);`             | `sha512sig0h`        | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sig0l(uint32_t rs1, uint32_t rs2);`             | `sha512sig0l`        | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sig1h(uint32_t rs1, uint32_t rs2);`             | `sha512sig1h`        | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sig1l(uint32_t rs1, uint32_t rs2);`             | `sha512sig1l`        | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sum0h(uint32_t rs1, uint32_t rs2);`             | `sha512sum0h`        | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sum0l(uint32_t rs1, uint32_t rs2);`             | `sha512sum0l`        | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sum1h(uint32_t rs1, uint32_t rs2);`             | `sha512sum1h`        | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sum1l(uint32_t rs1, uint32_t rs2);`             | `sha512sum1l`        | Zknh (RV32)       | |
+| `uint64_t __riscv_sha512sig0(uint64_t rs1);`                            | `sha512sig0`         | Zknh (RV64)       | |
+| `uint64_t __riscv_sha512sig1(uint64_t rs1);`                            | `sha512sig1`         | Zknh (RV64)       | |
+| `uint64_t __riscv_sha512sum0(uint64_t rs1);`                            | `sha512sum0`         | Zknh (RV64)       | |
+| `uint64_t __riscv_sha512sum1(uint64_t rs1);`                            | `sha512sum1`         | Zknh (RV64)       | |
+| `uint32_t __riscv_sm3p0(uint32_t rs1);`                                 | `sm3p0`              | Zksh              | |
+| `uint32_t __riscv_sm3p1(uint32_t rs1);`                                 | `sm3p1`              | Zksh              | |
+| `uint32_t __riscv_sm4ed(uint32_t rs1, uint32_t rs2, const int bs);`     | `sm4ed`              | Zksed             | `bs`=[0..3] |
+| `uint32_t __riscv_sm4ks(uint32_t rs1, uint32_t rs2, const int bs);`     | `sm4ks`              | Zksed             | `bs`=[0..3] |
+
+### Cryptography Intrinsics Implementation Guarantees
+
+The `riscv_crypto.h` can implement the intrinsics in many ways
+(early implementations used inline assembler). Builtin mapping is a
+compiler and system specific issue.
+
+Due to the data-independent latency ("constant time") assertions of
+the `Zkt` extension, the header file or the compiler can't use table
+lookups, conditional branching, etc., when implementing crypto intrinsics.
+In production (cryptographic implementations), the execution latency of
+all cryptography intrinsics must be independent of input values.
 
 ## Constraints on Operands of Inline Assembly Statements
 
