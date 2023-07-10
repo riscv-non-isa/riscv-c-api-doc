@@ -238,7 +238,7 @@ vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd
 ### riscv_int.h
 
 This header file defined several common RISC-V specific integer type and related
-marco could be used in intrinsic interface or user program directly.
+macro could be used in intrinsic interface or user program directly.
 
 | Type Name             | Meaning                              |
 | --------------------- | ------------------------------------ |
@@ -250,17 +250,17 @@ marco could be used in intrinsic interface or user program directly.
 | __RISCV_INT_XLEN_MAX  | Maximum value of int_xlen_t          |
 | __RISCV_INT_XLEN_MIN  | Minimum value of int_xlen_t          |
 | __RISCV_UINT_XLEN_MAX | Maximum value of uint_xlen_t         |
-| __RISCV_PRIdXLEN      | Expand to a string literal for use as a `d` print specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_PRIiXLEN      | Expand to a string literal for use as a `i` print specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_PRIoXLEN      | Expand to a string literal for use as a `o` print specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_PRIuXLEN      | Expand to a string literal for use as a `u` print specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_PRIxXLEN      | Expand to a string literal for use as a `x` print specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_PRIXXLEN      | Expand to a string literal for use as a `X` print specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_SCNdXLEN      | Expand to a string literal for use as a `d` scan specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_SCNiXLEN      | Expand to a string literal for use as a `i` scan specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_SCNoXLEN      | Expand to a string literal for use as a `o` scan specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_SCNuXLEN      | Expand to a string literal for use as a `u` scan specificier for int_xlen_t/uint_xlen_t. |
-| __RISCV_SCNxXLEN      | Expand to a string literal for use as a `x` scan specificier for int_xlen_t/uint_xlen_t. |
+| __RISCV_PRIdXLEN      | Expand to a string literal for use as a `d` print specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_PRIiXLEN      | Expand to a string literal for use as a `i` print specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_PRIoXLEN      | Expand to a string literal for use as a `o` print specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_PRIuXLEN      | Expand to a string literal for use as a `u` print specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_PRIxXLEN      | Expand to a string literal for use as a `x` print specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_PRIXXLEN      | Expand to a string literal for use as a `X` print specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_SCNdXLEN      | Expand to a string literal for use as a `d` scan specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_SCNiXLEN      | Expand to a string literal for use as a `i` scan specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_SCNoXLEN      | Expand to a string literal for use as a `o` scan specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_SCNuXLEN      | Expand to a string literal for use as a `u` scan specifier for int_xlen_t/uint_xlen_t. |
+| __RISCV_SCNxXLEN      | Expand to a string literal for use as a `x` scan specifier for int_xlen_t/uint_xlen_t. |
 
 
 ## Constraints on Operands of Inline Assembly Statements
