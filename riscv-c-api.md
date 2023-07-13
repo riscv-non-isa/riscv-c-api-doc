@@ -400,6 +400,25 @@ enum {
 | `__RISCV_NTLH_INNERMOST_SHARED`  | `ntl.s1`    |
 | `__RISCV_NTLH_ALL`               | `ntl.all`   |
 
+### Prefetch Intrinsics
+
+The zicbop extension provide the prefetch instruction to allow users to optimize data access patterns by providing hints to the hardware regarding future data accesses. It is supported through a compiler-defined built-in function with three arguments that specify its behavior.
+
+```
+void __builtin_prefetch(const void *addr, int rw, int locality)
+```
+
+The locality for the built-in __builtin_prefetch function in RISC-V can be achieved using the Non-Temporal Locality Hints (NTLH) extension. According to Non-Temporal Locality Hints extension, it indicates that a cache line should be prefetched into a cache that is outer from the level specified by the NTL when a NTL instruction is applied to prefetch instruction.
+
+The following table presents the mapping from the __builtin_prefetch function to the corresponding assembly instructions using the NTL extension.
+
+| Prefetch function                               | Assembly                     | 
+| ----------------------------------------------- | ---------------------------- | 
+| `__builtin_prefetch(ptr, 0, 0 /* locality */);` | `ntl.all + prefetch.r (ptr)` |
+| `__builtin_prefetch(ptr, 0, 1 /* locality */);` | `ntl.pall + prefetch.r (ptr)`|
+| `__builtin_prefetch(ptr, 0, 2 /* locality */);` | `ntl.p1 + prefetch.r (ptr)`  |
+| `__builtin_prefetch(ptr, 0, 3 /* locality */);` | `prefetch.r (ptr)`           |
+
 ### Scalar Bit Manipulation Extension Intrinsics
 
 In order to access the RISC-V scalar bit manipulation intrinsics, it is
@@ -500,6 +519,7 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `uint32_t __riscv_sm3p1(uint32_t rs1);`                                 | `sm3p1`       | Zksh              | |
 | `uint32_t __riscv_sm4ed(uint32_t rs1, uint32_t rs2, const int bs);`     | `sm4ed`       | Zksed             | `bs`=[0..3] |
 | `uint32_t __riscv_sm4ks(uint32_t rs1, uint32_t rs2, const int bs);`     | `sm4ks`       | Zksed             | `bs`=[0..3] |
+
 
 ## Constraints on Operands of Inline Assembly Statements
 
