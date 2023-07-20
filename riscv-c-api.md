@@ -242,7 +242,7 @@ The RISC-V zihintntl extension provides the RISC-V specific intrinsic functions 
 In order to access the RISC-V NTLH intrinsics, it is necessary to
 include the header file `riscv_ntlh.h`.
 
-The functions are only only available if the compiler enables the zihintntl extension.
+The functions are only available if the compiler enables the zihintntl extension.
 
 ```
 type __riscv_ntl_load (type *ptr, int domain);
