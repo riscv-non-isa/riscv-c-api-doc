@@ -43,6 +43,9 @@ https://creativecommons.org/licenses/by/4.0/.
 | __riscv_v_min_vlen    | <N> (see [__riscv_v_min_vlen](#__riscv_v_min_vlen)) | The `V` extension or one of the `Zve*` extensions is available. |
 | __riscv_v_elen     | <N> (see [__riscv_v_elen](#__riscv_v_elen)) | The `V` extension or one of the `Zve*` extensions is available. |
 | __riscv_v_elen_fp  | <N> (see [__riscv_v_elen_fp](#__riscv_v_elen_fp)) | The `V` extension or one of the `Zve*` extensions is available. |
+| __riscv_misaligned_fast | 1  | Misaligned access on cpu are fast. |
+| __riscv_misaligned_slow | 1  | Misaligned access on cpu may not be as fast as aligned access. |
+| __riscv_misaligned_avoid | 1  | Misaligned access are not supported by cpu and could trap. (see [ __riscv_misaligned_{fast,slow,avoid}](#__riscv_misaligned_{fast,slow,avoid}) |
 
 ### __riscv_v_min_vlen
 
@@ -93,6 +96,15 @@ The value of `__riscv_v_elen_fp` is defined by the following rules:
 - 0, if one of the `Zve{32,64}x` extensions is present.
 If multiple rules apply, the maximum value is taken.
 If none of the rules apply, `__riscv_v_elen_fp` is undefined.
+
+### __riscv_misaligned_{fast,slow,avoid}
+
+These can be used in common library code to compile time segregate code which relies
+on misaligned access being fast or not.
+A typical complier could (but not necessarily) map fast variant to -mno-strict-align
+and avoid to -mstrict-align, if specified.
+Perhaps obvious, but these are mutually exclusive, so only one is defined at a time
+for a compilation unit.
 
 
 ### Architecture Extension Test Macro
