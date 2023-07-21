@@ -249,6 +249,13 @@ type __riscv_ntl_load (type *ptr, int domain);
 void __riscv_ntl_store (type *ptr, type val, int domain);
 ```
 
+There are overloaded functions of `__riscv_ntl_load` and `__riscv_ntl_store`. When these intrinsic functions omit the `domain` argument, the `domain` is implied as `__RISCV_NTLH_ALL`.
+
+```
+type __riscv_ntl_load (type *ptr);
+void __riscv_ntl_store (type *ptr, type val);
+```
+
 The types currently supported are:
 
 - Integer types.
