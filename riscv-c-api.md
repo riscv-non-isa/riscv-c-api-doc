@@ -247,6 +247,51 @@ long __riscv_clmul (long a, long b); // clmul rd, rs1, rs2
 vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
 ```
 
+### NTLH Intrisics 
+
+The RISC-V zihintntl extension provides the RISC-V specific intrinsic functions for generating non-temporal memory accesses. These intrinsic functions provide the domain parameter to specify the behavior of memory accesses.
+
+In order to access the RISC-V NTLH intrinsics, it is necessary to
+include the header file `riscv_ntlh.h`.
+
+The functions are only available if the compiler enables the zihintntl extension.
+
+```
+type __riscv_ntl_load (type *ptr, int domain);
+void __riscv_ntl_store (type *ptr, type val, int domain);
+```
+
+There are overloaded functions of `__riscv_ntl_load` and `__riscv_ntl_store`. When these intrinsic functions omit the `domain` argument, the `domain` is implied as `__RISCV_NTLH_ALL`.
+
+```
+type __riscv_ntl_load (type *ptr);
+void __riscv_ntl_store (type *ptr, type val);
+```
+
+The types currently supported are:
+
+- Integer types.
+- Floating-point types.
+- Fixed-length vector types.
+
+The `domain` parameter could pass the following values. Each one is mapped to the specific zihintntl instruction.
+
+```
+enum {
+  __RISCV_NTLH_INNERMOST_PRIVATE = 2,
+  __RISCV_NTLH_ALL_PRIVATE,
+  __RISCV_NTLH_INNERMOST_SHARED,
+  __RISCV_NTLH_ALL
+};
+```
+
+| Domain Value                     | Instruction | 
+| ---------------------------------| ------------| 
+| `__RISCV_NTLH_INNERMOST_PRIVATE` | `ntl.p1`    |
+| `__RISCV_NTLH_ALL_PRIVATE`       | `ntl.pall`  |
+| `__RISCV_NTLH_INNERMOST_SHARED`  | `ntl.s1`    |
+| `__RISCV_NTLH_ALL`               | `ntl.all`   |
+
 ## Constraints on Operands of Inline Assembly Statements
 
 This section lists operand constraints that can be used with inline assembly
