@@ -419,6 +419,8 @@ The following table presents the mapping from the __builtin_prefetch function to
 | `__builtin_prefetch(ptr, 0, 2 /* locality */);` | `ntl.p1 + prefetch.r (ptr)`  |
 | `__builtin_prefetch(ptr, 0, 3 /* locality */);` | `prefetch.r (ptr)`           |
 
+Compiler only emits the ntlh hints if the Zihintntl extension is enabled.
+
 ### Scalar Bit Manipulation Extension Intrinsics
 
 In order to access the RISC-V scalar bit manipulation intrinsics, it is
