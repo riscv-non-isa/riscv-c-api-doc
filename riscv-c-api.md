@@ -617,3 +617,26 @@ statements, including both RISC-V specific and common operand modifiers.
 | ------------ | --------------------------------------------------------------------------------- | ----------- |
 | z            | Print `zero` (`x0`) register for immediate 0, typically used with constraints `J` |             |
 | i            | Print `i` if corresponding operand is immediate.                                  |             |
+
+## Function Multi-version
+
+Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. This feature is triggered by `target/target_clones` function attribute. The compiler generates the resolver function based on the IFUNC mechanism. It expects that there is an API in the runtime environment for FMV to check if it fulfils all extension requirements.
+
+Here is the prototype of that API.
+
+```
+bool __riscv_ifunc_select(char *FeatureString)
+```
+
+Where FeatureString is a string that concatenating all target features belonging to a particular function. The form can be described in the following BNF form. 
+
+```
+FeatureString          := EXTENSIONS
+EXTENSIONS             := <EXTENSION-NAME> ';' <EXTENSIONS>
+                        | <EXTENSION-NAME>
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+```
+
+If all features are available for the current runtime environment, it returns true. Otherwise, it returns false.
+
+This function is placed on compiler-rt/libgcc. And use the [RISC-V Hardware Probing Interface](https://docs.kernel.org/riscv/hwprobe.html) to implement this function. Because RISC-V Hardware Probing Interface doesn't support full extension set, it also uses the cpuinfo for the hardware information.
