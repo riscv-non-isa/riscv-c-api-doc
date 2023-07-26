@@ -290,6 +290,104 @@ __attribute__((target("arch=+v"))) int foo(void) { return 0; }
 __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 ```
 
+### `__attribute__((target_clones("<TARGET-CLONES-ATTR-STRING>", ...)))
+
+The `target_clones` attribute is used to create multiple versions of a function. The compiler will emit multiple versions based on the provided arguments. 
+
+Each `TARGET-CLONES-ATTR-STRING` defines a distinguished version of the function.  The `TARGET-CLONES-ATTR-STRING` list must include `default` indicating the translation unit scope build attributes.
+
+The syntax of `<TARGET-CLONES-ATTR-STRING>` describes below:
+
+```
+TARGET-CLONES-ATTR-STRING := 'arch=' EXTENSIONS
+                           | 'default'
+
+EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
+                        | <EXTENSION>
+
+EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                     := '+'
+
+VERSION                := [0-9]+ 'p' [0-9]+
+                        | [1-9][0-9]*
+                        |
+
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+```
+
+For example, the following `foo` function will have three versions but share the same function signature.
+
+```c
+__attribute__((target_clones("arch=+v", "default", "arch=rv64gc_zbb")))
+int foo(int a)
+{
+  return a + 5;
+}
+
+int bar() {
+  // foo will be resolved by ifunc
+  return foo(1);
+}
+```
+
+It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
+
+### `__attribute__((target_version("<TARGET-VERSION-ATTR-STRING>")))
+
+The `target_version` attribute is used to create one version of a function. Functions with the same signature may exist with multiple versions in the same translation unit.
+
+Each `TARGET-VERSION-ATTR-STRING` defines a distinguished version of the function. If there is more than one version for the same function, it must have `default` one that indicating the translation unit scope build attributes.
+
+The syntax of `<TARGET-VERSION-ATTR-STRING>` describes below:
+
+```
+TARGET-VERSION-ATTR-STRING := 'arch=' EXTENSIONS
+                            | 'default'
+
+EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
+                        | <EXTENSION>
+
+EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                     := '+'
+
+VERSION                := [0-9]+ 'p' [0-9]+
+                        | [1-9][0-9]*
+                        |
+
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+```
+
+For example, the following foo function has three versions.
+
+```c
+__attribute__((target_version("arch=+v")))
+int foo(int a)
+{
+  return a + 5;
+}
+
+__attribute__((target_version("arch=+zbb")))
+int foo(int a)
+{
+  return a + 5;
+}
+
+__attribute__((target_version("default")))
+int foo(int a)
+{
+  return a + 5;
+}
+
+int bar() {
+  // foo will be resolved by ifunc
+  return foo(1);
+}
+```
+
+It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
+
 ### riscv_vector_cc
 
 Supported Syntaxes:
@@ -604,3 +702,9 @@ statements, including both RISC-V specific and common operand modifiers.
 | ------------ | --------------------------------------------------------------------------------- | ----------- |
 | z            | Print `zero` (`x0`) register for immediate 0, typically used with constraints `J` |             |
 | i            | Print `i` if corresponding operand is immediate.                                  |             |
+
+## Function Multi-version
+
+Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. The final binary may contain all versions of the function, with the compiler generating all supported versions and the runtime selecting the appropriate one.
+
+This feature is triggered by `target_version/target_clones` function attribute.
