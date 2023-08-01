@@ -43,9 +43,9 @@ https://creativecommons.org/licenses/by/4.0/.
 | __riscv_v_min_vlen    | <N> (see [__riscv_v_min_vlen](#__riscv_v_min_vlen)) | The `V` extension or one of the `Zve*` extensions is available. |
 | __riscv_v_elen     | <N> (see [__riscv_v_elen](#__riscv_v_elen)) | The `V` extension or one of the `Zve*` extensions is available. |
 | __riscv_v_elen_fp  | <N> (see [__riscv_v_elen_fp](#__riscv_v_elen_fp)) | The `V` extension or one of the `Zve*` extensions is available. |
-| __riscv_misaligned_fast | 1  | Misaligned access on cpu are fast. |
-| __riscv_misaligned_slow | 1  | Misaligned access on cpu may not be as fast as aligned access. |
-| __riscv_misaligned_avoid | 1  | Misaligned access are not supported by cpu and could trap. (see [ __riscv_misaligned_{fast,slow,avoid}](#__riscv_misaligned_{fast,slow,avoid}) |
+| __riscv_misaligned_fast | 1  | Misaligned accesses are fast. |
+| __riscv_misaligned_slow | 1  | Misaligned accesses are supported, but may be substantially slower than aligned accesses. |
+| __riscv_misaligned_avoid | 1  | Misaligned accesses are not supported and could trap. (see [ __riscv_misaligned_{fast,slow,avoid}](#__riscv_misaligned_{fast,slow,avoid}) |
 
 ### __riscv_v_min_vlen
 
