@@ -328,7 +328,7 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `uint64_t __riscv_rol_64(uint64_t x, uint32_t shamt);`                  | `rol`/`rori`       | Zbb, Zbkb (RV64)  | |
 | `uint32_t __riscv_rev8_32(uint32_t x);`                                 | `rev8`             | Zbb, Zbkb         | Emulated with `rev8`+`srai` on RV64 |
 | `uint64_t __riscv_rev8_64(uint64_t x);`                                 | `rev8`             | Zbb, Zbkb (RV64)  | |
-| `uint32_t __riscv_brev8_32(uint32_t x);`                                | `brev8`            | Zbkb              | Emulated with `clmul`+`sext.w` on RV64 |
+| `uint32_t __riscv_brev8_32(uint32_t x);`                                | `brev8`            | Zbkb              | Emulated with `brev8`+`sext.w` on RV64 |
 | `uint64_t __riscv_brev8_64(uint64_t x);`                                | `brev8`            | Zbkb (RV64)       | |
 | `uint32_t __riscv_zip_32(uint32_t x);`                                  | `zip`              | Zbkb (RV32)       | No emulation for RV64 |
 | `uint32_t __riscv_unzip_32(uint32_t x);`                                | `unzip`            | Zbkb (RV32)       | No emulation for RV64 |
