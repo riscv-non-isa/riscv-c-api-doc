@@ -248,7 +248,6 @@ FULLARCHSTR            := <full-arch-string>
 EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
 
 OP                     := '+'
-                        | '-'
 
 VERSION                := [0-9]+ 'p' [0-9]+
                         | [1-9][0-9]*
