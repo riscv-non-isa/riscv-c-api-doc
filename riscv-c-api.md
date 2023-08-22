@@ -391,18 +391,6 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `uint32_t __riscv_sm4ed(uint32_t rs1, uint32_t rs2, const int bs);`     | `sm4ed`       | Zksed             | `bs`=[0..3] |
 | `uint32_t __riscv_sm4ks(uint32_t rs1, uint32_t rs2, const int bs);`     | `sm4ks`       | Zksed             | `bs`=[0..3] |
 
-### Cryptography Intrinsics Implementation Guarantees
-
-The `riscv_crypto.h` can implement the intrinsics in many ways
-(early implementations used inline assembler). Builtin mapping is a
-compiler and system specific issue.
-
-Due to the data-independent latency ("constant time") assertions of
-the `Zkt` extension, the header file or the compiler can't use table
-lookups, conditional branching, etc., when implementing crypto intrinsics.
-In production (cryptographic implementations), the execution latency of
-all cryptography intrinsics must be independent of input values.
-
 ## Constraints on Operands of Inline Assembly Statements
 
 This section lists operand constraints that can be used with inline assembly
