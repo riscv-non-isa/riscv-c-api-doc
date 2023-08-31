@@ -208,8 +208,20 @@ This attribute is incompatible with the `naked` attribute.
 `target` attribute used for enable or disable a set of features or extensions
 for the fucntion.
 
+For instance, you can enable the `v` extension for a specific function even if
+`-march` or `-mcpu` does not include the `v` extension. Additionally,
+this won't alter the global setting.
+```c
+__attribute__((target("+v")))
+int
+foo (int a)
+{
+  return a + 5;
+}
+```
+
 Function with target attribute should not affect the file scope build
-attributes, i.g. File complied with -march=rv64ima and a function declares with
+attributes, i.g. File complied with `-march=rv64ima` and a function declares with
 `__attribute__((target("arch=+zbb")))`, the `Tag_RISCV_arch` build attribute
 should be `rv64ima` rather than `rv64ima_zbb`.
 
@@ -225,10 +237,22 @@ target attribute if the function use different set of ISA extension.
 - `cpu=`: Specify the pipeline mode, cost model and extension setting for the
           function.
 
+The interactions among `arch`, `tune`, and `cpu` are the same as the `-march`,
+`-mtune`, and `-mcpu` options. The `cpu` can be treated as a combination of
+`arch` + `tune` but has a lower priority than the other two. For instance,
+`cpu=sifive-u74` is equivalent to `arch=rv64gc` and `tune=sifive-7-series`.
+However, if `arch=` or `tune=` values are provided, they will override the `cpu`
+value. Therefore, `cpu=sifive-u74;arch=rv64g` will be equivalent to
+`arch=rv64g;tune=sifive-7-series`, and `cpu=sifive-u74;tune=sifive-5-series`
+will be equivalent to `arch=rv64gc;tune=sifive-5-series`.
+
+If the same type of attribute is given more than once, only the latest one
+takes effect, e.g. `arch=+zbb;arch=+zba` will be equivalent to `arch=+zba`.
+
 The syntax of `<ATTR-STRING>` describes below:
 
 ```
-ATTR-STRING := ATTR ';' ATTR
+ATTR-STRING := ATTR-STRING ';' ATTR
              | ATTR
 
 ATTR        := ARCH-ATTR
@@ -260,6 +284,8 @@ TUNE-ATTR   := 'tune=' <valid-tune-name>
 ```
 
 NOTE: The `target` attribute won't effect function name mangling for both C and C++.
+NOTE: The compiler should always generate the function with the `target`
+attribute, even if it produces the same code without the attribute.
 
 ## Intrinsic Functions
 
