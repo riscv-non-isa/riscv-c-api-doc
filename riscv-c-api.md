@@ -622,6 +622,33 @@ statements, including both RISC-V specific and common operand modifiers.
 
 Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. This feature is triggered by `target/target_clones` function attribute. The compiler generates the resolver function based on the IFUNC mechanism. It expects that there is an API in the runtime environment for FMV to check if it fulfils all extension requirements.
 
+### Function Mangling
+
+The compiler generates the different names for the candidate functions. This is used to distinguish the implementation of the function during the selection.
+
+The mangling rule as following:
+
+```
+FUNCNAME     := BASEFUNCNAME '.' FEATS
+              | BASEFUNCNAME
+FEATS        := FEAT '_' FEATS
+              | FEAT
+FEAT         := <FEATURE-NAME>
+BASEFUNCNAME := <USER-DEFINED-FUNC-NAME>
+```
+
+Here is a example 
+
+| Target Attribute                  | Mangling Name                              |
+|-----------------------------------|--------------------------------------------|
+| target("arch=+v,+zbb,+zicond1p0") | "BASE-FUNC-NAME".experimental-zicond_zbb_v |
+| target("arch=rv64gc")             | "BASE-FUNC-NAME".zifencei_zicsr_m_f_d_c_a  |
+| target("default")                 | "BASE-FUNC-NAME"                           |
+
+NOTE: Should mangling name need to consider the feature come form extension dependency?
+
+### Runtime Featrue API
+
 Here is the prototype of that API.
 
 ```
