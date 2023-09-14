@@ -212,7 +212,7 @@ For instance, you can enable the `v` extension for a specific function even if
 `-march` or `-mcpu` does not include the `v` extension. Additionally,
 this won't alter the global setting.
 ```c
-__attribute__((target("+v")))
+__attribute__((target("arch=+v")))
 int
 foo (int a)
 {
@@ -221,7 +221,7 @@ foo (int a)
 ```
 
 Function with target attribute should not affect the file scope build
-attributes, i.g. File complied with `-march=rv64ima` and a function declares with
+attributes, e.g. File compiled with `-march=rv64ima` and a function declares with
 `__attribute__((target("arch=+zbb")))`, the `Tag_RISCV_arch` build attribute
 should be `rv64ima` rather than `rv64ima_zbb`.
 
