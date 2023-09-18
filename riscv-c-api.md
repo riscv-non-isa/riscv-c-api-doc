@@ -205,49 +205,63 @@ This attribute is incompatible with the `naked` attribute.
 
 ### `__attribute__((target("<ATTR-STRING>")))`
 
-`target` attribute used for enable or disable a set of features or extensions
-for the fucntion.
+The `target` attribute is used to enable or disable a set of features or
+extensions for a function.
 
 For instance, you can enable the `v` extension for a specific function even if
-`-march` or `-mcpu` does not include the `v` extension. Additionally,
-this won't alter the global setting.
+the `-march` or `-mcpu` options do not include the `v` extension. Importantly,
+this won't alter the global settings. Here is an example:
+
 ```c
 __attribute__((target("arch=+v")))
-int
-foo (int a)
+int foo(int a)
 {
   return a + 5;
 }
 ```
 
-Function with target attribute should not affect the file scope build
-attributes, e.g. File compiled with `-march=rv64ima` and a function declares with
-`__attribute__((target("arch=+zbb")))`, the `Tag_RISCV_arch` build attribute
-should be `rv64ima` rather than `rv64ima_zbb`.
+Using the `target` attribute for a function should not affect the file scope
+build attributes. For example, if a file is compiled with `-march=rv64ima` and
+a function is declared with `__attribute__((target("arch=+zbb")))`, the
+`Tag_RISCV_arch` build attribute should remain `rv64ima`, not `rv64ima_zbb`.
 
-The compiler may emit mapping symbol at the beginning of the function with
-target attribute if the function use different set of ISA extension.
+The compiler may emit a mapping symbol at the beginning of a function with the
+target attribute if the function utilizes a different set of ISA extensions.
 
-`<ATTR-STRING>` can be specify following target attributes:
+`<ATTR-STRING>` can specify the following target attributes:
 
-- `arch=`: Adding extra extensions, omit certain extension, or specific
-           extension setting for the function.
-- `tune=`: Specify the pipeline mode and cost model with specific
-           microarchitecture or core for the function.
-- `cpu=`: Specify the pipeline mode, cost model and extension setting for the
-          function.
+- `arch=`: Adds extra extensions and overrides the `-march` value specified via
+           the command line for the function.
+- `tune=`: Specifies the pipeline model and cost model associated with a
+           specific microarchitecture or core for the function.
+- `cpu=`: Specifies the pipeline mode, cost model, and extension settings for
+          the function.
 
-The interactions among `arch`, `tune`, and `cpu` are the same as the `-march`,
-`-mtune`, and `-mcpu` options. The `cpu` can be treated as a combination of
-`arch` + `tune` but has a lower priority than the other two. For instance,
-`cpu=sifive-u74` is equivalent to `arch=rv64gc` and `tune=sifive-7-series`.
-However, if `arch=` or `tune=` values are provided, they will override the `cpu`
-value. Therefore, `cpu=sifive-u74;arch=rv64g` will be equivalent to
-`arch=rv64g;tune=sifive-7-series`, and `cpu=sifive-u74;tune=sifive-5-series`
-will be equivalent to `arch=rv64gc;tune=sifive-5-series`.
+The interactions among the `arch`, `tune`, and `cpu` attributes mirror those of
+the `-march`, `-mtune`, and `-mcpu` options. The `cpu` attribute can be seen as
+a combination of `arch` + `tune` but holds a lower priority than the other two.
+For instance, `cpu=sifive-u74` equates to `arch=rv64gc` and
+`tune=sifive-7-series`. However, if values for `arch=` or `tune=` are provided,
+they will override the `cpu` value. Therefore, `cpu=sifive-u74;arch=rv64g` is
+equivalent to `arch=rv64g;tune=sifive-7-series`, and
+`cpu=sifive-u74;tune=sifive-5-series` is equivalent to
+`arch=rv64gc;tune=sifive-5-series`.
 
-If the same type of attribute is given more than once, only the latest one
-takes effect, e.g. `arch=+zbb;arch=+zba` will be equivalent to `arch=+zba`.
+If the same type of attribute is specified more than once, only the latest one
+takes effect. For example, `arch=+zbb;arch=+zba` will be equivalent to
+`arch=+zba`.
+
+The interactions between the attribute and the command-line option are
+specified below:
+
+- `arch=`: Combines the extension list with the `-march` option; however,
+           it necessitates overriding the `-march` option if a full architecture
+           string is specified by `arch=`.
+- `tune=`: Overrides the `-mtune` option and the pipeline model and cost model
+           part of `-mcpu`.
+- `cpu=`: Overrides the `-mcpu` option, overrides the `-mtune` option if `tune=`
+          is not present, and overrides the `-march` option if `arch=` is not
+          present.
 
 The syntax of `<ATTR-STRING>` describes below:
 
@@ -283,9 +297,11 @@ CPU-ATTR    := 'cpu=' <valid-cpu-name>
 TUNE-ATTR   := 'tune=' <valid-tune-name>
 ```
 
-NOTE: The `target` attribute won't effect function name mangling for both C and C++.
 NOTE: The compiler should always generate the function with the `target`
-attribute, even if it produces the same code without the attribute.
+attribute, even if it would produce the same code without the attribute.
+For instance, when the function `foo` with `__attribute__((target("arch=+g")))`
+is compiled with `-march=rv64gc`, it will produce identical output, but the
+compiler should still generate the function.
 
 ## Intrinsic Functions
 
