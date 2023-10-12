@@ -358,3 +358,13 @@ bar:
 
 The compiler uses an immediate offset of 40 for the `m` constraint, but for the
 `A` constraint uses an extra addi instruction instead.
+
+### Operand Modifiers
+
+This section lists operand modifiers that can be used with inline assembly
+statements, including both RISC-V specific and common operand modifiers.
+
+| Modifiers    | Description                                                                       | Note        |
+| ------------ | --------------------------------------------------------------------------------- | ----------- |
+| z            | Print `zero` (`x0`) register for immediate 0, typically used with constraints `J` |             |
+| i            | Print `i` if corresponding operand is immediate.                                  |             |
