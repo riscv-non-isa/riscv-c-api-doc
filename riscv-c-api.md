@@ -205,8 +205,8 @@ This attribute is incompatible with the `naked` attribute.
 
 ### `__attribute__((target("<ATTR-STRING>")))`
 
-The `target` attribute is used to enable or disable a set of features or
-extensions for a function.
+The `target` attribute is used to enable a set of features or extensions for a
+function.
 
 For instance, you can enable the `v` extension for a specific function even if
 the `-march` or `-mcpu` options do not include the `v` extension. Importantly,
@@ -230,7 +230,7 @@ target attribute if the function utilizes a different set of ISA extensions.
 
 `<ATTR-STRING>` can specify the following target attributes:
 
-- `arch=`: Adds extra extensions and overrides the `-march` value specified via
+- `arch=`: Adds extra extensions or overrides the `-march` value specified via
            the command line for the function.
 - `tune=`: Specifies the pipeline model and cost model associated with a
            specific microarchitecture or core for the function.
@@ -254,9 +254,11 @@ takes effect. For example, `arch=+zbb;arch=+zba` will be equivalent to
 The interactions between the attribute and the command-line option are
 specified below:
 
-- `arch=`: Combines the extension list with the `-march` option; however,
-           it necessitates overriding the `-march` option if a full architecture
-           string is specified by `arch=`.
+Here's a refined version of your statement:
+
+- `arch=`: Its behavior depends on the syntax used:
+           1) Adding extra extensions: It will merge the extension list with the `-march` option.
+           2) If a full architecture string is specified by `arch=`, it will override the `-march` option.
 - `tune=`: Overrides the `-mtune` option and the pipeline model and cost model
            part of `-mcpu`.
 - `cpu=`: Overrides the `-mcpu` option, overrides the `-mtune` option if `tune=`
@@ -296,12 +298,6 @@ EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 CPU-ATTR    := 'cpu=' <valid-cpu-name>
 TUNE-ATTR   := 'tune=' <valid-tune-name>
 ```
-
-NOTE: The compiler should always generate the function with the `target`
-attribute, even if it would produce the same code without the attribute.
-For instance, when the function `foo` with `__attribute__((target("arch=+g")))`
-is compiled with `-march=rv64gc`, it will produce identical output, but the
-compiler should still generate the function.
 
 ## Intrinsic Functions
 
