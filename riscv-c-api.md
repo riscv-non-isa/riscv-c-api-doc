@@ -254,8 +254,6 @@ takes effect. For example, `arch=+zbb;arch=+zba` will be equivalent to
 The interactions between the attribute and the command-line option are
 specified below:
 
-Here's a refined version of your statement:
-
 - `arch=`: Its behavior depends on the syntax used:
            1) Adding extra extensions: It will merge the extension list with the `-march` option.
            2) If a full architecture string is specified by `arch=`, it will override the `-march` option.
