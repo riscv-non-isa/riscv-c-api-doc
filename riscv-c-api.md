@@ -38,7 +38,8 @@ https://creativecommons.org/licenses/by/4.0/.
 | __riscv             | 1     | Always defined.               |
 | __riscv_xlen        | <ul><li>32 for rv32</li><li>64 for rv64</li><li>128 for rv128</ul> | Always defined.             |
 | __riscv_flen        | <ul><li>32 if the F extension is available **or**</li><li>64 if `D` extension available **or**</li><li>128 if `Q` extension available</li></ul> | `F` extension is available. |
-| __riscv_32e         | 1     | `E` extension is available.   |
+| __riscv_32e         | 1     | RV32E is available.           |
+| __riscv_64e         | 1     | RV64E is available.           |
 | __riscv_vector      | 1     | Implies that any of the vector extensions (`v` or `zve*`) is available |
 | __riscv_v_min_vlen    | <N> (see [__riscv_v_min_vlen](#__riscv_v_min_vlen)) | The `V` extension or one of the `Zve*` extensions is available. |
 | __riscv_v_elen     | <N> (see [__riscv_v_elen](#__riscv_v_elen)) | The `V` extension or one of the `Zve*` extensions is available. |
@@ -147,8 +148,8 @@ For example:
 
 | Name                     | Value | When defined                  |
 | ------------------------ | ----- | ----------------------------- |
-| __riscv_abi_rve          | 1     | Defined if using `ilp32e` ABI |
-| __riscv_float_abi_soft   | 1     | Defined if using `ilp32`, `ilp32e` or `lp64` ABI. |
+| __riscv_abi_rve          | 1     | Defined if using `ilp32e` or `lp64e` ABI |
+| __riscv_float_abi_soft   | 1     | Defined if using `ilp32`, `ilp32e`, `lp64` or `lp64e` ABI. |
 | __riscv_float_abi_single | 1     | Defined if using `ilp32f` or `lp64f` ABI. |
 | __riscv_float_abi_double | 1     | Defined if using `ilp32d` or `lp64d` ABI. |
 | __riscv_float_abi_quad   | 1     | Defined if using `ilp32q` or `lp64q` ABI. |
