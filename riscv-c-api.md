@@ -220,12 +220,13 @@ int foo(int a)
 }
 ```
 
-Using the `target` attribute for a function should not affect the file scope
+Using the `target` attribute for a function should not affect the translation unit scope
 build attributes. For example, if a file is compiled with `-march=rv64ima` and
 a function is declared with `__attribute__((target("arch=+zbb")))`, the
 `Tag_RISCV_arch` build attribute should remain `rv64ima`, not `rv64ima_zbb`.
 
-The compiler may emit a mapping symbol at the beginning of a function with the
+The compiler may emit a [mapping symbol](https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-elf.adoc#mapping-symbol)
+at the beginning of a function with the
 target attribute if the function utilizes a different set of ISA extensions.
 
 `<ATTR-STRING>` can specify the following target attributes:
