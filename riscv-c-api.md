@@ -183,7 +183,7 @@ The compiler won't generate the prologue/epilogue for those functions with
 `naked` attributes. This attribute is usually used when you want to write a
 function with an inline assembly body.
 
-This attribute is incompatible with the `interrupt` attribute.
+This attribute is incompatible with the `interrupt` and `prestacked` attribute.
 
 NOTE: Be aware that compilers might have further restrictions on naked
 functions. Please consult your compiler's manual for more information.
@@ -201,6 +201,10 @@ The default value `machine` is used, if the mode is not specified.
 
 The function can specify only one mode; the compiler should raise an error if a
 function declares more than one mode or an undefined mode.
+
+This attribute is incompatible with the `naked` attribute.
+
+### `__attribute__((prestacked("<reglist>"))`
 
 This attribute is incompatible with the `naked` attribute.
 
