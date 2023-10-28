@@ -206,6 +206,36 @@ This attribute is incompatible with the `naked` attribute.
 
 ### `__attribute__((prestacked("<reglist>"))`
 
+The prestacked attribute instructs the compiler which registers can be
+used without saving/restoring them. It enables efficient use of 
+custom interrupt controllers that stack some of the architectural registers.
+Without the need for compiler builds with a custom attributes.
+
+If used together with `interrupt` attribute, `prestacked` annotation overrides
+its register preservation functionality.
+
+`<reglist>` is a string literal, listing all registers available for use 
+in a given function, with a following syntax rules:
+
+- no whitespaces
+- raw register names rather than ABI mnemonics
+- register range cover all registers between and including specified ("x4-x6"
+is equivalent to "x4,x5,x6")
+- registers/ranges are separated by comma
+- annotated callee saved registers have to be properly handled as a temporary ones
+- CSRs taking part in calling conventions are also subject to this mechanism
+- registers must be sorted (integer, floating point, vector, custom, then by 
+lowest numbered)
+- CSRs must be put after the architectural regfiles, those don’t have to be sorted
+- shall not imply `interrupt` attribute
+
+NOTE: strict syntax rules allow better portability across compilers and ABIs.
+
+Annotated functions should be callable by regular code, to support auxiliary purposes
+
+NOTE: if `x1` (aka `ra`) is included in the list then a special return
+mechanism must be used (e.g. `mret` from `interrupt` attribute)
+
 This attribute is incompatible with the `naked` attribute.
 
 #### usage examples
