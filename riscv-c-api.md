@@ -229,11 +229,11 @@ lowest numbered)
 - CSRs must be put after the architectural regfiles, those don’t have to be sorted
 - shall not imply `interrupt` attribute
 
-NOTE: Strict syntax rules allow better portability across compilers and ABIs.
+> **_NOTE:_** Strict syntax rules allow better portability across compilers and ABIs.
 
 To support auxiliary purposes, annotated functions should be callable by regular code.
 
-NOTE: If `x1` (aka `ra`) is included in the list then a special return
+> **_NOTE:_** If `x1` (aka `ra`) is included in the list then a special return
 mechanism must be used (e.g. `mret` from `interrupt` attribute)
 
 This attribute is incompatible with the `naked` attribute.
