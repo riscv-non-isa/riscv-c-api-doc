@@ -256,7 +256,7 @@ where bit 2 of register operand is set):\
 optimization for `noreturn` functions (psABI with F extension):\
 `__attribute__((noreturn, prestacked("x1,x5-x31,f0-f31,fcsr")))`
 
-NOTE: Compilers are intentionally preserving full prologues, of `noreturn` functions, to 
+> **_NOTE:_** Compilers are intentionally preserving full prologues, of `noreturn` functions, to 
 allow backtracing and throwing exceptions. Which leads to stack and codespace
 bloating. Prestacked annotation can be abused to get rid of the prologues stacking
 without the risk of underflowing the stack as would happen with `naked` attribute.
@@ -265,7 +265,7 @@ pure assembly function (FP compute kernel) using only subset of caller saved
 registers (`a0` argument not modified during execution):\
 `__attribute__((prestacked("x5,x11-x15,f8-f11,v0,v1,v8-v31,fcsr,vl,vtype,vstart")))`
 
-NOTE: This use case is necessary for efficient IPRA compilations. Beneficial even without IPRA.
+> **_NOTE:_** This use case is necessary for efficient IPRA compilations. Beneficial even without IPRA.
 
 ## Intrinsic Functions
 
