@@ -263,7 +263,7 @@ without the risk of underflowing the stack as would happen with `naked` attribut
 
 pure assembly function (FP compute kernel) using only subset of caller saved
 registers (`a0` argument not modified during execution):\
-`__attribute__((prestacked("x5,x11-x15,f8-f11,v0,v1,v8-v31,fcsr,vl,vtype,vstart")))`
+`__attribute__((prestacked("x5,x11-x15,f10-f13,v0,v1,v8-v31,fcsr,vl,vtype,vstart")))`
 
 > **_NOTE:_** This use case is necessary for efficient IPRA compilations. Beneficial even without IPRA.
 
