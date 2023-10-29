@@ -258,7 +258,7 @@ optimization for `noreturn` functions (psABI with F extension):\
 
 > **_NOTE:_** Compilers are intentionally preserving full prologues, of `noreturn` functions, to 
 allow backtracing and throwing exceptions. Which leads to stack and codespace
-bloating. Prestacked annotation can be abused to get rid of the prologues stacking
+bloating. Prestacked annotation can be abused to get rid of the prologue stacking
 without the risk of underflowing the stack as would happen with `naked` attribute.
 
 pure assembly function (FP compute kernel) using only subset of caller saved
