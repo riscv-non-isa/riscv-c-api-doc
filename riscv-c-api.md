@@ -233,7 +233,7 @@ lowest numbered)
 
 To support auxiliary purposes, annotated functions should be callable by regular code.
 
-> **_NOTE:_** If `x1` (aka `ra`) is included in the list then a special return
+> **_NOTE:_** If `x1` (aka `ra`) is included in the list, then a special return
 mechanism must be used (e.g. `mret` from `interrupt` attribute)
 
 This attribute is incompatible with the `naked` attribute.
