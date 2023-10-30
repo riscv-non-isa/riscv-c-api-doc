@@ -303,6 +303,15 @@ CPU-ATTR    := 'cpu=' <valid-cpu-name>
 TUNE-ATTR   := 'tune=' <valid-tune-name>
 ```
 
+The target attribute does not support multi-versioning. The compiler should
+emit an error if a function is defined more than once. For example, the
+following code should trigger an error because foo is declared twice:
+
+```
+__attribute__((target("arch=+v"))) int foo(void) { return 0; }
+__attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
+```
+
 ## Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
