@@ -248,9 +248,14 @@ equivalent to `arch=rv64g;tune=sifive-7-series`, and
 `cpu=sifive-u74;tune=sifive-5-series` is equivalent to
 `arch=rv64gc;tune=sifive-5-series`.
 
-If the same type of attribute is specified more than once, only the latest one
-takes effect. For example, `arch=+zbb;arch=+zba` will be equivalent to
-`arch=+zba`.
+The compiler should emit error if the same type of attribute is specified more
+than once. For example, `arch=+zbb;arch=+zba`, compiler should emit error
+because `arch` has specified twice.
+
+The compiler should emit errof if target attribute has specified more than once.
+For example,
+`__attribute__((target("arch=+v"))) __attribute__((target("arch=+zbb"))) int foo(int a)`
+, compiler should emit error because target attribute has specified twice.
 
 The interactions between the attribute and the command-line option are
 specified below:
