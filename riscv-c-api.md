@@ -240,7 +240,7 @@ This attribute is incompatible with the `naked` attribute.
 
 #### usage examples
 
-psABI with F extension, caller saved:\
+ilp32 with F extension, caller saved:\
 `__attribute__((prestacked("x5-x7,x10-x17,x28-x31,f0-f7,f10-f17,f28-f31,fcsr")))`
 
 standard risc-v irq, ilp32e, caller saved and `ra`:\
@@ -253,7 +253,7 @@ custom irq controller, F + P extensions (`ra`,`a0`,`a1` pushed on stack, shadow 
 where bit 2 of register operand is set):\
 `__attribute__((prestacked("x4-x7,x10,x11,x12-x15,x20-x23,x28-x31,fcsr,vxsat")))`
 
-optimization for `noreturn` functions (psABI with F extension):\
+optimization for `noreturn` functions (ilp32 with F extension):\
 `__attribute__((noreturn, prestacked("x1,x5-x31,f0-f31,fcsr")))`
 
 > **_NOTE:_** Compilers are intentionally preserving full prologues, of `noreturn` functions, to 
