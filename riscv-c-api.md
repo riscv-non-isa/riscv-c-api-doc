@@ -402,13 +402,13 @@ enum {
 
 ### Prefetch Intrinsics
 
-The Zicbop extension provide the prefetch instruction to allow users to optimize data access patterns by providing hints to the hardware regarding future data accesses. It is supported through a compiler-defined built-in function with three arguments that specify its behavior.
+The Zicbop extension provides the prefetch instruction to allow users to optimize data access patterns by providing hints to the hardware regarding future data accesses. It is supported through a compiler-defined built-in function with three arguments that specify its behavior.
 
 ```
 void __builtin_prefetch(const void *addr, int rw, int locality)
 ```
 
-The locality for the built-in `__builtin_prefetch` function in RISC-V can be achieved using the Non-Temporal Locality Hints (Zihintntl) extension. According to Non-Temporal Locality Hints extension, it indicates that a cache line should be prefetched into a cache that is outer from the level specified by the NTL when a NTL instruction is applied to prefetch instruction.
+The locality for the built-in `__builtin_prefetch` function in RISC-V can be achieved using the Non-Temporal Locality Hints (Zihintntl) extension. When a Non-Temporal Locality (NTL) Hints instruction is applied to prefetch instruction, a cache line should be prefetched into a cache level that is higher than the level specified by the NTL.
 
 The following table presents the mapping from the `__builtin_prefetch` function to the corresponding assembly instructions assuming the presence of the Zihintntl and Zicbop extensions.
 
