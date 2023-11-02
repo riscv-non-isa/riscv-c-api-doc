@@ -240,7 +240,7 @@ This attribute is incompatible with the `naked` attribute.
 
 #### usage examples
 
-ilp32 with F extension, caller saved:\
+ilp32f, caller saved:\
 `__attribute__((prestacked("x5-x7,x10-x17,x28-x31,f0-f7,f10-f17,f28-f31,fcsr")))`
 
 standard risc-v irq, ilp32e, caller saved and `ra`:\
