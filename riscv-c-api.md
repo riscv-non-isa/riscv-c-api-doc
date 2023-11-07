@@ -267,6 +267,115 @@ registers (`a0` argument not modified during execution):\
 
 > **_NOTE:_** This use case is necessary for efficient IPRA compilations. Beneficial even without IPRA.
 
+### `__attribute__((target("<ATTR-STRING>")))`
+
+The `target` attribute is used to enable a set of features or extensions for a
+function.
+
+For instance, you can enable the `v` extension for a specific function even if
+the `-march` or `-mcpu` options do not include the `v` extension. Importantly,
+this won't alter the global settings. Here is an example:
+
+```c
+__attribute__((target("arch=+v")))
+int foo(int a)
+{
+  return a + 5;
+}
+```
+
+Using the `target` attribute for a function should not affect the translation unit scope
+build attributes. For example, if a file is compiled with `-march=rv64ima` and
+a function is declared with `__attribute__((target("arch=+zbb")))`, the
+`Tag_RISCV_arch` build attribute should remain `rv64ima`, not `rv64ima_zbb`.
+
+The compiler may emit a [mapping symbol](https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-elf.adoc#mapping-symbol)
+at the beginning of a function with the
+target attribute if the function utilizes a different set of ISA extensions.
+
+`<ATTR-STRING>` can specify the following target attributes:
+
+- `arch=`: Adds extra extensions or overrides the `-march` value specified via
+           the command line for the function.
+- `tune=`: Specifies the pipeline model and cost model associated with a
+           specific microarchitecture or core for the function.
+- `cpu=`: Specifies the pipeline mode, cost model, and extension settings for
+          the function.
+
+The interactions among the `arch`, `tune`, and `cpu` attributes mirror those of
+the `-march`, `-mtune`, and `-mcpu` options. The `cpu` attribute can be seen as
+a combination of `arch` + `tune` but holds a lower priority than the other two.
+For instance, `cpu=sifive-u74` equates to `arch=rv64gc` and
+`tune=sifive-7-series`. However, if values for `arch=` or `tune=` are provided,
+they will override the `cpu` value. Therefore, `cpu=sifive-u74;arch=rv64g` is
+equivalent to `arch=rv64g;tune=sifive-7-series`, and
+`cpu=sifive-u74;tune=sifive-5-series` is equivalent to
+`arch=rv64gc;tune=sifive-5-series`.
+
+The compiler should emit error if the same type of attribute is specified more
+than once. For example, `arch=+zbb;arch=+zba`, compiler should emit error
+because `arch` has specified twice.
+
+The compiler should emit errof if target attribute has specified more than once.
+For example,
+`__attribute__((target("arch=+v"))) __attribute__((target("arch=+zbb"))) int foo(int a)`
+, compiler should emit error because target attribute has specified twice.
+
+The interactions between the attribute and the command-line option are
+specified below:
+
+- `arch=`: Its behavior depends on the syntax used:
+           1) Adding extra extensions: It will merge the extension list with the `-march` option.
+           2) If a full architecture string is specified by `arch=`, it will override the `-march` option.
+- `tune=`: Overrides the `-mtune` option and the pipeline model and cost model
+           part of `-mcpu`.
+- `cpu=`: Overrides the `-mcpu` option, overrides the `-mtune` option if `tune=`
+          is not present, and overrides the `-march` option if `arch=` is not
+          present.
+
+The syntax of `<ATTR-STRING>` describes below:
+
+```
+ATTR-STRING := ATTR-STRING ';' ATTR
+             | ATTR
+
+ATTR        := ARCH-ATTR
+             | CPU-ATTR
+             | TUNE-ATTR
+
+ARCH-ATTR   := 'arch=' EXTENSIONS-OR-FULLARCH
+
+EXTENSIONS-OR-FULLARCH := <EXTENSIONS>
+                        | <FULLARCHSTR>
+
+EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
+                        | <EXTENSION>
+
+FULLARCHSTR            := <full-arch-string>
+
+EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                     := '+'
+
+VERSION                := [0-9]+ 'p' [0-9]+
+                        | [1-9][0-9]*
+                        |
+
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+
+CPU-ATTR    := 'cpu=' <valid-cpu-name>
+TUNE-ATTR   := 'tune=' <valid-tune-name>
+```
+
+The target attribute does not support multi-versioning. The compiler should
+emit an error if a function is defined more than once. For example, the
+following code should trigger an error because foo is declared twice:
+
+```
+__attribute__((target("arch=+v"))) int foo(void) { return 0; }
+__attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
+```
+
 ## Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
