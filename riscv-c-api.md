@@ -490,10 +490,8 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `uint32_t __riscv_sha512sig0l(uint32_t rs1, uint32_t rs2);`             | `sha512sig0l` | Zknh (RV32)       | |
 | `uint32_t __riscv_sha512sig1h(uint32_t rs1, uint32_t rs2);`             | `sha512sig1h` | Zknh (RV32)       | |
 | `uint32_t __riscv_sha512sig1l(uint32_t rs1, uint32_t rs2);`             | `sha512sig1l` | Zknh (RV32)       | |
-| `uint32_t __riscv_sha512sum0h(uint32_t rs1, uint32_t rs2);`             | `sha512sum0h` | Zknh (RV32)       | |
-| `uint32_t __riscv_sha512sum0l(uint32_t rs1, uint32_t rs2);`             | `sha512sum0l` | Zknh (RV32)       | |
-| `uint32_t __riscv_sha512sum1h(uint32_t rs1, uint32_t rs2);`             | `sha512sum1h` | Zknh (RV32)       | |
-| `uint32_t __riscv_sha512sum1l(uint32_t rs1, uint32_t rs2);`             | `sha512sum1l` | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sum0r(uint32_t rs1, uint32_t rs2);`             | `sha512sum0r` | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sum1r(uint32_t rs1, uint32_t rs2);`             | `sha512sum1r` | Zknh (RV32)       | |
 | `uint64_t __riscv_sha512sig0(uint64_t rs1);`                            | `sha512sig0`  | Zknh (RV64)       | |
 | `uint64_t __riscv_sha512sig1(uint64_t rs1);`                            | `sha512sig1`  | Zknh (RV64)       | |
 | `uint64_t __riscv_sha512sum0(uint64_t rs1);`                            | `sha512sum0`  | Zknh (RV64)       | |
