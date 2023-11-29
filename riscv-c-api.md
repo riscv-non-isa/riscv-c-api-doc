@@ -108,15 +108,25 @@ Perhaps obvious, but these are mutually exclusive, so only one is defined at a t
 for a compilation unit.
 
 
-### Architecture Extension Test Macro
+### Architecture Extension Test Macros
 
-Architecture extension test macro is a new set of test macro to checking the
-availability and version for certain extension, however not all compilers are
-supported, so you should check `__riscv_arch_test` to make sure this compiler
-is supporting those preprocessor definitions.
+Architecture extension test macros allow checking the availability and version
+of extensions at compile-time. These feature macros are optional, and compilers
+that support them provide a `__riscv_arch_test` macro (with the value `1`).
 
-The value of architecture extension test macro are defined as its version,
-which is compute by following formula:
+The naming rule for the test macros is `__riscv_<ext_name>`,
+where `<ext_name>` is all lower-case. Examples:
+- The test macro for the `A` extension is `__riscv_a`.
+- The test macro for the `Zifencei` extension is `__riscv_zifencei`.
+- The test macro for the `XVentanaCondOps` extension is `__riscv_xventantacondops`.
+
+Besides extensions, test macros also exist for ISA bases following the same pattern.
+Examples:
+- The test macro for the `I` base is `__riscv_i`.
+- The test macro for the `E` base is `__riscv_e`.
+
+The value of the test macros is derived from its version using the following
+formula:
 
 ```
 <MAJOR_VERSION> * 1,000,000 + <MINOR_VERSION> * 1,000 + <REVISION_VERSION>
@@ -124,29 +134,6 @@ which is compute by following formula:
 
 For example:
 - F-extension v2.2 will define `__riscv_f` as `2002000`.
-
-| Name                    | Value        | When defined                  |
-| ----------------------- | ------------ | ----------------------------- |
-| __riscv_arch_test       | 1            | Defined if compiler support new architecture extension test macro. |
-| __riscv_i               | Arch Version | `I` extension is available.   |
-| __riscv_e               | Arch Version | `E` extension is available.   |
-| __riscv_m               | Arch Version | `M` extension is available.   |
-| __riscv_a               | Arch Version | `A` extension is available.   |
-| __riscv_f               | Arch Version | `F` extension is available.   |
-| __riscv_d               | Arch Version | `D` extension is available.   |
-| __riscv_q               | Arch Version | `Q` extension is available.   |
-| __riscv_c               | Arch Version | `C` extension is available.   |
-| __riscv_p               | Arch Version | `P` extension is available.   |
-| __riscv_v               | Arch Version | `V` extension is available.   |
-| __riscv_zicsr           | Arch Version | `Zicsr` extension is available. |
-| __riscv_zifencei        | Arch Version | `Zifencei` extension is available. |
-| __riscv_zawrs           | Arch Version | `Zawrs` extension is available. |
-| __riscv_zba             | Arch Version | `Zba` extension is available. |
-| __riscv_zbb             | Arch Version | `Zbb` extension is available. |
-| __riscv_zbc             | Arch Version | `Zbc` extension is available. |
-| __riscv_zbs             | Arch Version | `Zbs` extension is available. |
-| __riscv_zfh             | Arch Version | `Zfh` extension is available. |
-| __riscv_zimop           | Arch Version | `Zimop` extension is available. |
 
 ### ABI Related Preprocessor Definitions
 
