@@ -444,12 +444,12 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `uint64_t __riscv_brev8_64(uint64_t x);`                                | `brev8`            | Zbkb (RV64)       | |
 | `uint32_t __riscv_zip_32(uint32_t x);`                                  | `zip`              | Zbkb (RV32)       | No emulation for RV64 |
 | `uint32_t __riscv_unzip_32(uint32_t x);`                                | `unzip`            | Zbkb (RV32)       | No emulation for RV64 |
-| `uint32_t __riscv_clmul_32(uint32_t x);`                                | `clmul`            | Zbc, Zbkc         | Emulated with `clmul`+`sext.w` on RV64 |
-| `uint64_t __riscv_clmul_64(uint64_t x);`                                | `clmul`            | Zbc, Zbkc (RV64)  |                                  |
-| `uint32_t __riscv_clmulh_32(uint32_t x);`                               | `clmulh`           | Zbc, Zbkc (RV32)  | Emulation on RV64 requires 4-6 instructions |
-| `uint64_t __riscv_clmulh_64(uint64_t x);`                               | `clmulh`           | Zbc, Zbkc (RV64)  | |
-| `uint32_t __riscv_clmulr_32(uint32_t x);`                               | `clmulr`           | Zbc               | Emulation on RV64 requires 4-6 instructions |
-| `uint64_t __riscv_clmulr_64(uint64_t x);`                               | `clmulr`           | Zbc (RV64)        | |
+| `uint32_t __riscv_clmul_32(uint32_t rs1, uint32_t rs2);`                | `clmul`            | Zbc, Zbkc         | Emulated with `clmul`+`sext.w` on RV64 |
+| `uint64_t __riscv_clmul_64(uint64_t rs1, uint64_t rs2);`                | `clmul`            | Zbc, Zbkc (RV64)  |                                  |
+| `uint32_t __riscv_clmulh_32(uint32_t rs1, uint32_t rs2);`               | `clmulh`           | Zbc, Zbkc (RV32)  | Emulation on RV64 requires 4-6 instructions |
+| `uint64_t __riscv_clmulh_64(uint64_t rs1, uint64_t rs2);`               | `clmulh`           | Zbc, Zbkc (RV64)  | |
+| `uint32_t __riscv_clmulr_32(uint32_t rs1, uint32_t rs2);`               | `clmulr`           | Zbc               | Emulation on RV64 requires 4-6 instructions |
+| `uint64_t __riscv_clmulr_64(uint64_t rs1, uint64_t rs2);`               | `clmulr`           | Zbc (RV64)        | |
 | `uint32_t __riscv_xperm4_32(uint32_t rs1, uint32_t rs2);`               | `xperm4`           | Zbkx (RV32)       | No emulation for RV64 |
 | `uint64_t __riscv_xperm4_64(uint64_t rs1, uint64_t rs2);`               | `xperm4`           | Zbkx (RV64)       | |
 | `uint32_t __riscv_xperm8_32(uint32_t rs1, uint32_t rs2);`               | `xperm8`           | Zbkx (RV32)       | No emulation for RV64 |
