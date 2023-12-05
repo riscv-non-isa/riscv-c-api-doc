@@ -510,15 +510,20 @@ The functions are only available if the compiler's `-march` string
 enables the required ISA extension. (Calling functions for not enabled
 ISA extensions will lead to compile-time and/or link-time errors.)
 
+Intrinsics operating on XLEN sized value are not available as there is no type
+defined. If `xlen_t` is added in the future, this can be revisited.
+
 Unsigned types are used as that is the most logical representation for a
 collection of bits.
 
 Sign extension of 32-bit values on RV64 is not reflected in the interface.
 
-| Prototype                                                               | Instruction   | Extension  | Notes          |
-|-------------------------------------------------------------------------|---------------|------------|----------------|
-| `uint32_t __riscv_mopr(uint32_t rs1, const int n);`                     | `mop.r.[n]`   | Zimop      | `n`=[0..31]    |
-| `uint32_t __riscv_moprr(uint32_t rs1, uint32_t rs2, const int n);`      | `mop.rr.[n]`  | Zimop      | `n`=[0..8]     |
+| Prototype                                                               | Instruction   | Extension    | Notes                                                         |
+|-------------------------------------------------------------------------|---------------|--------------|---------------------------------------------------------------|
+| `uint32_t __riscv_mopr_32(uint32_t rs1, const int n);`                  | `mop.r.[n]`   | Zimop        | Emulated with `mopr.r.[n]`+`sext.w` on RV64 <br/> `n`=[0..31] |
+| `uint64_t __riscv_mopr_64(uint64_t rs1, const int n);`                  | `mop.r.[n]`   | Zimop (RV64) | `n`=[0..31]                                                   |
+| `uint32_t __riscv_moprr_32(uint32_t rs1, uint32_t rs2, const int n);`   | `mop.rr.[n]`  | Zimop        | Emulated with `mopr.rr.[n]`+`sext.w` on RV64 <br/> `n`=[0..7] |
+| `uint64_t __riscv_moprr_64(uint64_t rs1, uint64_t rs2, const int n);`   | `mop.rr.[n]`  | Zimop (RV64) | `n`=[0..7]                                                    |
 
 ## Constraints on Operands of Inline Assembly Statements
 
