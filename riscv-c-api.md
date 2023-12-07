@@ -620,7 +620,7 @@ statements, including both RISC-V specific and common operand modifiers.
 
 ## Function Multi-version
 
-Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. This feature is triggered by `target/target_clones` function attribute. The compiler generates the resolver function based on the IFUNC mechanism. It expects that there is an API in the runtime environment for FMV to check if it fulfils all extension requirements.
+Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. This feature is triggered by `target/target_clones` function attribute. The compiler generates the resolver function based on the IFUNC mechanism. It expects that there is an API in the runtime environment for FMV to check if it fulfills all extension requirements.
 
 ### Function Mangling
 
@@ -645,9 +645,9 @@ Here is a example
 | target("arch=rv64gc")             | "BASE-FUNC-NAME".zifencei_zicsr_m_f_d_c_a  |
 | target("default")                 | "BASE-FUNC-NAME"                           |
 
-NOTE: Should mangling name need to consider the feature come form extension dependency?
+NOTE: Should mangling name need to consider the feature come from extension dependency?
 
-### Runtime Featrue API
+### Runtime Feature API
 
 Here is the prototype of that API.
 
@@ -655,7 +655,7 @@ Here is the prototype of that API.
 bool __riscv_ifunc_select(char *FeatureString)
 ```
 
-Where FeatureString is a string that concatenating all target features belonging to a particular function. The form can be described in the following BNF form. 
+Where FeatureString is a string that concatenates all target features belonging to a particular function. The form can be described in the following BNF form. 
 
 ```
 FeatureString          := EXTENSIONS
