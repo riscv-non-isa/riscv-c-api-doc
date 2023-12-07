@@ -145,6 +145,7 @@ For example:
 | __riscv_zbc             | Arch Version | `Zbc` extension is available. |
 | __riscv_zbs             | Arch Version | `Zbs` extension is available. |
 | __riscv_zfh             | Arch Version | `Zfh` extension is available. |
+| __riscv_zimop           | Arch Version | `Zimop` extension is available. |
 
 ### ABI Related Preprocessor Definitions
 
@@ -520,6 +521,26 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `uint32_t __riscv_sm4ed(uint32_t rs1, uint32_t rs2, const int bs);`     | `sm4ed`       | Zksed             | `bs`=[0..3] |
 | `uint32_t __riscv_sm4ks(uint32_t rs1, uint32_t rs2, const int bs);`     | `sm4ks`       | Zksed             | `bs`=[0..3] |
 
+### May-Be-Operations Extension Intrinsics
+
+The functions are only available if the compiler's `-march` string
+enables the required ISA extension. (Calling functions for not enabled
+ISA extensions will lead to compile-time and/or link-time errors.)
+
+Intrinsics operating on XLEN sized value are not available as there is no type
+defined. If `xlen_t` is added in the future, this can be revisited.
+
+Unsigned types are used as that is the most logical representation for a
+collection of bits.
+
+Sign extension of 32-bit values on RV64 is not reflected in the interface.
+
+| Prototype                                                               | Instruction   | Extension    | Notes                                                         |
+|-------------------------------------------------------------------------|---------------|--------------|---------------------------------------------------------------|
+| `uint32_t __riscv_mopr_32(uint32_t rs1, const int n);`                  | `mop.r.[n]`   | Zimop        | Emulated with `mopr.r.[n]`+`sext.w` on RV64 <br/> `n`=[0..31] |
+| `uint64_t __riscv_mopr_64(uint64_t rs1, const int n);`                  | `mop.r.[n]`   | Zimop (RV64) | `n`=[0..31]                                                   |
+| `uint32_t __riscv_moprr_32(uint32_t rs1, uint32_t rs2, const int n);`   | `mop.rr.[n]`  | Zimop        | Emulated with `mopr.rr.[n]`+`sext.w` on RV64 <br/> `n`=[0..7] |
+| `uint64_t __riscv_moprr_64(uint64_t rs1, uint64_t rs2, const int n);`   | `mop.rr.[n]`  | Zimop (RV64) | `n`=[0..7]                                                    |
 
 ## Constraints on Operands of Inline Assembly Statements
 
