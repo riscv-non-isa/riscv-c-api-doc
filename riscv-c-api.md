@@ -401,6 +401,25 @@ enum {
 | `__RISCV_NTLH_INNERMOST_SHARED`  | `ntl.s1`    |
 | `__RISCV_NTLH_ALL`               | `ntl.all`   |
 
+### Prefetch Intrinsics
+
+The Zicbop extension provides the prefetch instruction to allow users to optimize data access patterns by providing hints to the hardware regarding future data accesses. It is supported through a compiler-defined built-in function with three arguments that specify its behavior.
+
+```
+void __builtin_prefetch(const void *addr, int rw, int locality)
+```
+
+The locality for the built-in `__builtin_prefetch` function in RISC-V can be achieved using the Non-Temporal Locality Hints (Zihintntl) extension. When a Non-Temporal Locality (NTL) Hints instruction is applied to prefetch instruction, a cache line should be prefetched into a cache level that is higher than the level specified by the NTL.
+
+The following table presents the mapping from the `__builtin_prefetch` function to the corresponding assembly instructions assuming the presence of the Zihintntl and Zicbop extensions.
+
+| Prefetch function                               | Assembly                     | 
+| ----------------------------------------------- | ---------------------------- | 
+| `__builtin_prefetch(ptr, 0, 0 /* locality */);` | `ntl.all + prefetch.r (ptr)` |
+| `__builtin_prefetch(ptr, 0, 1 /* locality */);` | `ntl.pall + prefetch.r (ptr)`|
+| `__builtin_prefetch(ptr, 0, 2 /* locality */);` | `ntl.p1 + prefetch.r (ptr)`  |
+| `__builtin_prefetch(ptr, 0, 3 /* locality */);` | `prefetch.r (ptr)`           |
+
 ### Scalar Bit Manipulation Extension Intrinsics
 
 In order to access the RISC-V scalar bit manipulation intrinsics, it is
@@ -445,12 +464,12 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `uint64_t __riscv_brev8_64(uint64_t x);`                                | `brev8`            | Zbkb (RV64)       | |
 | `uint32_t __riscv_zip_32(uint32_t x);`                                  | `zip`              | Zbkb (RV32)       | No emulation for RV64 |
 | `uint32_t __riscv_unzip_32(uint32_t x);`                                | `unzip`            | Zbkb (RV32)       | No emulation for RV64 |
-| `uint32_t __riscv_clmul_32(uint32_t x);`                                | `clmul`            | Zbc, Zbkc         | Emulated with `clmul`+`sext.w` on RV64 |
-| `uint64_t __riscv_clmul_64(uint64_t x);`                                | `clmul`            | Zbc, Zbkc (RV64)  |                                  |
-| `uint32_t __riscv_clmulh_32(uint32_t x);`                               | `clmulh`           | Zbc, Zbkc (RV32)  | Emulation on RV64 requires 4-6 instructions |
-| `uint64_t __riscv_clmulh_64(uint64_t x);`                               | `clmulh`           | Zbc, Zbkc (RV64)  | |
-| `uint32_t __riscv_clmulr_32(uint32_t x);`                               | `clmulr`           | Zbc               | Emulation on RV64 requires 4-6 instructions |
-| `uint64_t __riscv_clmulr_64(uint64_t x);`                               | `clmulr`           | Zbc (RV64)        | |
+| `uint32_t __riscv_clmul_32(uint32_t rs1, uint32_t rs2);`                | `clmul`            | Zbc, Zbkc         | Emulated with `clmul`+`sext.w` on RV64 |
+| `uint64_t __riscv_clmul_64(uint64_t rs1, uint64_t rs2);`                | `clmul`            | Zbc, Zbkc (RV64)  |                                  |
+| `uint32_t __riscv_clmulh_32(uint32_t rs1, uint32_t rs2);`               | `clmulh`           | Zbc, Zbkc (RV32)  | Emulation on RV64 requires 4-6 instructions |
+| `uint64_t __riscv_clmulh_64(uint64_t rs1, uint64_t rs2);`               | `clmulh`           | Zbc, Zbkc (RV64)  | |
+| `uint32_t __riscv_clmulr_32(uint32_t rs1, uint32_t rs2);`               | `clmulr`           | Zbc               | Emulation on RV64 requires 4-6 instructions |
+| `uint64_t __riscv_clmulr_64(uint64_t rs1, uint64_t rs2);`               | `clmulr`           | Zbc (RV64)        | |
 | `uint32_t __riscv_xperm4_32(uint32_t rs1, uint32_t rs2);`               | `xperm4`           | Zbkx (RV32)       | No emulation for RV64 |
 | `uint64_t __riscv_xperm4_64(uint64_t rs1, uint64_t rs2);`               | `xperm4`           | Zbkx (RV64)       | |
 | `uint32_t __riscv_xperm8_32(uint32_t rs1, uint32_t rs2);`               | `xperm8`           | Zbkx (RV32)       | No emulation for RV64 |
@@ -491,10 +510,8 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `uint32_t __riscv_sha512sig0l(uint32_t rs1, uint32_t rs2);`             | `sha512sig0l` | Zknh (RV32)       | |
 | `uint32_t __riscv_sha512sig1h(uint32_t rs1, uint32_t rs2);`             | `sha512sig1h` | Zknh (RV32)       | |
 | `uint32_t __riscv_sha512sig1l(uint32_t rs1, uint32_t rs2);`             | `sha512sig1l` | Zknh (RV32)       | |
-| `uint32_t __riscv_sha512sum0h(uint32_t rs1, uint32_t rs2);`             | `sha512sum0h` | Zknh (RV32)       | |
-| `uint32_t __riscv_sha512sum0l(uint32_t rs1, uint32_t rs2);`             | `sha512sum0l` | Zknh (RV32)       | |
-| `uint32_t __riscv_sha512sum1h(uint32_t rs1, uint32_t rs2);`             | `sha512sum1h` | Zknh (RV32)       | |
-| `uint32_t __riscv_sha512sum1l(uint32_t rs1, uint32_t rs2);`             | `sha512sum1l` | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sum0r(uint32_t rs1, uint32_t rs2);`             | `sha512sum0r` | Zknh (RV32)       | |
+| `uint32_t __riscv_sha512sum1r(uint32_t rs1, uint32_t rs2);`             | `sha512sum1r` | Zknh (RV32)       | |
 | `uint64_t __riscv_sha512sig0(uint64_t rs1);`                            | `sha512sig0`  | Zknh (RV64)       | |
 | `uint64_t __riscv_sha512sig1(uint64_t rs1);`                            | `sha512sig1`  | Zknh (RV64)       | |
 | `uint64_t __riscv_sha512sum0(uint64_t rs1);`                            | `sha512sum0`  | Zknh (RV64)       | |
