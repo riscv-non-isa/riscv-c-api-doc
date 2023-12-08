@@ -452,7 +452,7 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 | `unsigned __riscv_ctz_64(uint64_t x);`                                  | `ctz`              | Zbb (RV64)        | |
 | `unsigned __riscv_cpop_32(uint32_t x);`                                 | `cpop[w]`          | Zbb               | |
 | `unsigned __riscv_cpop_64(uint64_t x);`                                 | `cpop`             | Zbb (RV64)        | |
-| `uint32_t __riscv_orc_b_32(uint32_t x);`                                | `orc.b`            | Zbb               | Emulated with `rev8`+`sext.w` on RV64 |
+| `uint32_t __riscv_orc_b_32(uint32_t x);`                                | `orc.b`            | Zbb               | Emulated with `orc.b`+`sext.w` on RV64 |
 | `uint64_t __riscv_orc_b_64(uint64_t x);`                                | `orc.b`            | Zbb (RV64)        | |
 | `uint32_t __riscv_ror_32(uint32_t x, uint32_t shamt);`                  | `ror[i][w]`        | Zbb, Zbkb         | |
 | `uint64_t __riscv_ror_64(uint64_t x, uint32_t shamt);`                  | `ror[i]`           | Zbb, Zbkb (RV64)  | |
