@@ -317,6 +317,24 @@ __attribute__((target("arch=+v"))) int foo(void) { return 0; }
 __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 ```
 
+### `__attribute__((target_clones("<ATTR-STRING>", ...)))
+
+The `target_clones` attribute is used to create multiple versions of a function. The compiler emits multiple versions based on the provided arguments.
+
+Each `ATTR-STRING` defines the distinguished version for the current function. Notably, the ATTR-STRING list must include `default` implying the translation unit scope build attributes.
+
+The syntax and constraints of `ATTR-STRING` are identical to [target attribute](#__attribute__targetattr-string).
+
+For example, the following `foo` function will have three versions but share the same function signature.
+
+```c
+__attribute__((target_clones("arch=+v", "default", "arch=rv64gc_zbb")))
+int foo(int a)
+{
+  return a + 5;
+}
+```
+
 ## Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
