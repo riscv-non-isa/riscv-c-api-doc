@@ -335,6 +335,8 @@ int foo(int a)
 }
 ```
 
+It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
+
 ### `__attribute__((target_version("<ATTR-STRING>")))
 
 The `target_version` attribute is used to create one version of a function. Functions with the same signature may exist with multiple versions in the same translation unit.
@@ -350,6 +352,8 @@ int foo(int a)
   return a + 5;
 }
 ```
+
+It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
 ## Intrinsic Functions
 
