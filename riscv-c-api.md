@@ -658,7 +658,7 @@ statements, including both RISC-V specific and common operand modifiers.
 
 ## Function Multi-version
 
-Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. This feature is triggered by `target/target_clones` function attribute. The compiler generates the resolver function based on the IFUNC mechanism. It expects that there is an API in the runtime environment for FMV to check if it fulfills all extension requirements.
+Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. This feature is triggered by `target_version/target_clones` function attribute. The compiler generates the resolver function based on the IFUNC mechanism. It expects that there is an API in the runtime environment for FMV to check if it fulfills all extension requirements.
 
 ### Runtime Feature API
 
