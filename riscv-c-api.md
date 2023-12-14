@@ -335,6 +335,22 @@ int foo(int a)
 }
 ```
 
+### `__attribute__((target_version("<ATTR-STRING>")))
+
+The `target_version` attribute is used to create one version of a function. Functions with the same signature may exist with multiple versions in the same translation unit.
+
+The syntax and constraints of `ATTR-STRING` are identical to the [target attribute](#__attribute__targetattr-string). Notably, the version of the function must include `default`, that implying the translation unit scope build attributes.
+
+For example, the following foo function creates one version.
+
+```c
+__attribute__((target_version("arch=+v")))
+int foo(int a)
+{
+  return a + 5;
+}
+```
+
 ## Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
