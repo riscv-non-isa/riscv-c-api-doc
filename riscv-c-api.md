@@ -257,7 +257,7 @@ The compiler should emit error if the same type of attribute is specified more
 than once. For example, `arch=+zbb;arch=+zba`, compiler should emit error
 because `arch` has specified twice.
 
-The compiler should emit errof if target attribute has specified more than once.
+The compiler should emit error if target attribute has specified more than once.
 For example,
 `__attribute__((target("arch=+v"))) __attribute__((target("arch=+zbb"))) int foo(int a)`
 , compiler should emit error because target attribute has specified twice.
