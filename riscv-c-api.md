@@ -21,7 +21,7 @@ https://creativecommons.org/licenses/by/4.0/.
 * `-mtune=MICRO_ARCHITECTURE`
 * `-mplt` `-mno-plt`
 * `-mcmodel=CODE_MODEL`
-* `-mstrict-align` `-mno-strict-align` `-munaligned-access` `-mno-unaligned-access`
+* `-mstrict-align` `-mno-strict-align` and `-munaligned-access` `-mno-unaligned-access`
 * `-mfdiv` `-mno-fdiv`
 * `-mdiv` `-mno-div`
 * `-mpreferred-stack-boundary=N`
@@ -30,6 +30,10 @@ https://creativecommons.org/licenses/by/4.0/.
 * `-mrelax` `-mno-relax`
 * `-msave-restore` `-mno-save-restore`
 * `-mbranch-cost=N`
+
+NOTE: `-munaligned-access` and `-mno-unaligned-access` are provided to reduce migration
+efforts because some compiler implementations of other targets like ARM/AArch64/MIPS use
+these options.
 
 ## Preprocessor Definitions
 
