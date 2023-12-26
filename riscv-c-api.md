@@ -21,7 +21,7 @@ https://creativecommons.org/licenses/by/4.0/.
 * `-mtune=MICRO_ARCHITECTURE`
 * `-mplt` `-mno-plt`
 * `-mcmodel=CODE_MODEL`
-* `-mstrict-align` `-mno-strict-align` `-munaligned-access` `-mnounaligned-access`
+* `-mstrict-align` `-mno-strict-align` `-munaligned-access` `-mno-unaligned-access`
 * `-mfdiv` `-mno-fdiv`
 * `-mdiv` `-mno-div`
 * `-mpreferred-stack-boundary=N`
