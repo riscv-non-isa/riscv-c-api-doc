@@ -21,7 +21,7 @@ https://creativecommons.org/licenses/by/4.0/.
 * `-mtune=MICRO_ARCHITECTURE`
 * `-mplt` `-mno-plt`
 * `-mcmodel=CODE_MODEL`
-* `-mstrict-align` `-mno-strict-align`
+* `-mstrict-align` `-mno-strict-align` `-munaligned-access` `-mnounaligned-access`
 * `-mfdiv` `-mno-fdiv`
 * `-mdiv` `-mno-div`
 * `-mpreferred-stack-boundary=N`
@@ -102,8 +102,9 @@ If none of the rules apply, `__riscv_v_elen_fp` is undefined.
 
 These can be used in common library code to compile time segregate code which relies
 on misaligned access being fast or not.
-A typical complier could (but not necessarily) map fast variant to -mno-strict-align
-and avoid to -mstrict-align, if specified.
+A typical complier could (but not necessarily) map fast variant to `-mno-strict-align`
+or `-munaligned-access` and avoid to `-mstrict-align` or `-mno-unaligned-access`, if
+specified.
 Perhaps obvious, but these are mutually exclusive, so only one is defined at a time
 for a compilation unit.
 
