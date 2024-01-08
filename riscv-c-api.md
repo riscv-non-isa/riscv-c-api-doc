@@ -106,7 +106,7 @@ If none of the rules apply, `__riscv_v_elen_fp` is undefined.
 
 These can be used in common library code to compile time segregate code which relies
 on misaligned access being fast or not.
-A typical complier could (but not necessarily) map fast variant to `-mno-strict-align`
+A typical compiler could (but not necessarily) map fast variant to `-mno-strict-align`
 or `-munaligned-access` and avoid to `-mstrict-align` or `-mno-unaligned-access`, if
 specified.
 Perhaps obvious, but these are mutually exclusive, so only one is defined at a time
