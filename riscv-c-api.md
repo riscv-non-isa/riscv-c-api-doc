@@ -134,6 +134,7 @@ For example:
 | __riscv_a               | Arch Version | `A` extension is available.   |
 | __riscv_f               | Arch Version | `F` extension is available.   |
 | __riscv_d               | Arch Version | `D` extension is available.   |
+| __riscv_q               | Arch Version | `Q` extension is available.   |
 | __riscv_c               | Arch Version | `C` extension is available.   |
 | __riscv_p               | Arch Version | `P` extension is available.   |
 | __riscv_v               | Arch Version | `V` extension is available.   |
