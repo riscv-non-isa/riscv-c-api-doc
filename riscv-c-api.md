@@ -318,6 +318,12 @@ __attribute__((target("arch=+v"))) int foo(void) { return 0; }
 __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 ```
 
+### `__attribute__((riscv_vector_cc))`
+
+Functions declared with this attribute will use to the standard vector calling
+convention variant as defined in the RISC-V psABI, even if the function has
+vector arguments or a return value.
+
 ## Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
