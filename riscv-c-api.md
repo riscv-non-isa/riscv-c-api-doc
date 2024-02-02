@@ -327,7 +327,7 @@ registers, if possible, rather than through general-purpose registers.
 
 The attribute can accept an optional unsigned integer argument within the value
 range of `[32, 65536]`, which must be a power of two. This argument specifies
-the ABI_VLEN. If not provided, the default value is set to 128. However, this
+the `ABI_VLEN`. If not provided, the default value is set to 128. However, this
 default value can be changed via command-line options or pragma directives.
 
 ```c
@@ -339,8 +339,8 @@ void foo __attribute__((riscv_vls_cc));
 void bar __attribute__((riscv_vls_cc(256)));
 ```
 
-One constraint on ABI_VLEN is that it must be larger than or equal to the
-minimal VLEN, as specified by the `-march` option through the `zvl*b` extension,
+One constraint on `ABI_VLEN` is that it must be larger than or equal to the
+minimal `VLEN`, as specified by the `-march` option through the `zvl*b` extension,
 pragma directives, or the target attribute.
 
 ```c
