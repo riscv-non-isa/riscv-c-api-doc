@@ -318,7 +318,14 @@ __attribute__((target("arch=+v"))) int foo(void) { return 0; }
 __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 ```
 
-### `__attribute__((riscv_vector_cc))`
+### riscv_vector_cc
+
+Supported Syntaxes:
+| Style  | Syntax                              |
+| ------ | ----------------------------------- |
+| GNU    | `__attribute__((riscv_vector_cc)))` |
+| C++11  | `[[riscv::vector_cc]]`              |
+| C23    | `[[riscv::vector_cc]]`              |
 
 Functions declared with this attribute will use to the standard vector calling
 convention variant as defined in the RISC-V psABI, even if the function has
