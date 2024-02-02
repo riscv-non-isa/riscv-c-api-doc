@@ -320,6 +320,15 @@ __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 
 ### `__attribute__((riscv_vls_cc))`
 
+Supported Syntaxes:
+| Style  | Syntax                                                                |
+| ------ | --------------------------------------------------------------------- |
+| GNU    | `__attribute__((riscv_vls_cc)))`, `__attribute__((riscv_vls_cc(N))))``*` |
+| C++11  | `[[riscv::vls_cc]]`, `[[riscv::vls_cc(N)]]``*`                           |
+| C23    | `[[riscv::vls_cc]]`, `[[riscv::vls_cc(N)]]``*`                           |
+
+`*` N is the the `ABI_LEN`.
+
 Functions declared with this attribute will utilize the standard fixed-length
 vector calling convention variant instead of the default calling convention
 defined by the ABI. This variant aims to pass fixed-length vectors via vector
