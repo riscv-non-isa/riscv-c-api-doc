@@ -546,6 +546,7 @@ statements, including both RISC-V specific and common operand constraints.
 | I                  | 12-bit signed immediate integer operand      |      |
 | K                  | 5-bit unsigned immediate integer operand     |      |
 | J                  | Zero integer immediate operand                |      |
+| s                  | symbol or label reference with a constant offset |      |
 | vr                 | Vector register                    |            |
 | vd                 | Vector register, excluding v0      |            |
 | vm                 | Vector register, only v0           |            |
