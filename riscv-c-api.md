@@ -305,6 +305,57 @@ __attribute__((target("arch=+v"))) int foo(void) { return 0; }
 __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 ```
 
+### `__attribute__((riscv_vls_cc))`
+
+Supported Syntaxes:
+| Style  | Syntax                                                                |
+| ------ | --------------------------------------------------------------------- |
+| GNU    | `__attribute__((riscv_vls_cc)))`, `__attribute__((riscv_vls_cc(N))))``*` |
+| C++11  | `[[riscv::vls_cc]]`, `[[riscv::vls_cc(N)]]``*`                           |
+| C23    | `[[riscv::vls_cc]]`, `[[riscv::vls_cc(N)]]``*`                           |
+
+`*` N is the the `ABI_LEN`.
+
+Functions declared with this attribute will utilize the standard fixed-length
+vector calling convention variant instead of the default calling convention
+defined by the ABI. This variant aims to pass fixed-length vectors via vector
+registers, if possible, rather than through general-purpose registers.
+
+The attribute can accept an optional unsigned integer argument within the value
+range of `[32, 65536]`, which must be a power of two. This argument specifies
+the `ABI_VLEN`. If not provided, the default value is set to 128. However, this
+default value can be changed via command-line options or pragma directives.
+
+```c
+// foo uses the standard fixed-length vector calling convention variant with the
+// default ABI_VLEN, which is 128.
+void foo __attribute__((riscv_vls_cc));
+// bar uses the standard fixed-length vector calling convention variant with
+// ABI_VLEN=256.
+void bar __attribute__((riscv_vls_cc(256)));
+```
+
+One constraint on `ABI_VLEN` is that it must be larger than or equal to the
+minimal `VLEN`, as specified by the `-march` option through the `zvl*b` extension,
+pragma directives, or the target attribute.
+
+```c
+// foo is declared to use the standard fixed-length vector calling convention variant
+// with ABI_VLEN=256. Compilation will succeed with -march=rv64gcv_zvl256b, as it
+// supports VLEN of 256. However, compiling with -march=rv64gcv will result in an error,
+// because rv64gcv's VLEN is 128, which is less than the specified ABI_VLEN of 256.
+void foo __attribute__((riscv_vls_cc(256)));
+
+// bar uses the standard fixed-length vector calling convention variant with
+// ABI_VLEN=256 and also specifies the minimal VLEN as 256 using the target
+// attribute.
+void bar __attribute__((riscv_vls_cc(256))) __attribute__((target("arch=+zvl256b")));
+```
+
+NOTE: Invoking a function with an incorrect `ABI_VLEN` will cause parameters to
+be passed incorrectly. Users should ensure the consistency of `ABI_VLEN`,
+especially when using a non-default `ABI_VLEN`.
+
 ## Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
