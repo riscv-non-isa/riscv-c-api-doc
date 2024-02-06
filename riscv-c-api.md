@@ -185,7 +185,9 @@ functions. Please consult your compiler's manual for more information.
 The interrupt attribute specifies that a function is an interrupt handler.
 The compiler will save/restore all used registers in the prologue/epilogue
 regardless of the ABI, all used registers including floating point
-register/vector register if `F` extension/vector extension is enabled.
+register/vector register if `F` extension/vector extension is enabled.  If F or
+V CSRs may be modified by an interrupt function, they must be saved by the
+compiler.
 
 The interrupt attribute can have an optional parameter to specify the mode.
 The possible values are `user`, `supervisor`, or `machine`.
