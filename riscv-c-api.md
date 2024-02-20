@@ -319,9 +319,9 @@ __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 
 ### `__attribute__((target_clones("<ATTR-STRING>", ...)))
 
-The `target_clones` attribute is used to create multiple versions of a function. The compiler emits multiple versions based on the provided arguments.
+The `target_clones` attribute is used to create multiple versions of a function. The compiler will emit multiple versions based on the provided arguments. 
 
-Each `ATTR-STRING` defines the distinguished version for the current function. Notably, the ATTR-STRING list must include `default` implying the translation unit scope build attributes.
+Each `ATTR-STRING` defines a distinguished version of the function.  The ATTR-STRING list must include `default` indicating the translation unit scope build attributes.
 
 The syntax and constraints of `ATTR-STRING` are identical to [target attribute](#__attribute__targetattr-string).
 
@@ -341,7 +341,7 @@ It makes the compiler trigger the [function multi-version](#function-multi-versi
 
 The `target_version` attribute is used to create one version of a function. Functions with the same signature may exist with multiple versions in the same translation unit.
 
-The syntax and constraints of `ATTR-STRING` are identical to the [target attribute](#__attribute__targetattr-string). Notably, the version of the function must include `default`, that implying the translation unit scope build attributes.
+The syntax and constraints of `ATTR-STRING` are identical to the [target attribute](#__attribute__targetattr-string). The version of one function must equal `default`, indicating the translation unit scope build attributes.
 
 For example, the following foo function creates one version.
 
