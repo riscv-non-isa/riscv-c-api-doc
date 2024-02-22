@@ -728,4 +728,6 @@ statements, including both RISC-V specific and common operand modifiers.
 
 ## Function Multi-version
 
-Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. This feature is triggered by `target_version/target_clones` function attribute. 
+Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. The final binary may contain all versions of the function, with the compiler generating all supported versions and the runtime selecting the appropriate one.
+
+This feature is triggered by `target_version/target_clones` function attribute.
