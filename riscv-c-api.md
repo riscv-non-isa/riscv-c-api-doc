@@ -356,6 +356,11 @@ int foo(int a)
 {
   return a + 5;
 }
+
+int bar() {
+  // foo will be resolved by ifunc
+  return foo(1);
+}
 ```
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
@@ -391,13 +396,30 @@ VERSION                := [0-9]+ 'p' [0-9]+
 EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 ```
 
-For example, the following foo function creates one version.
+For example, the following foo function has three versions.
 
 ```c
 __attribute__((target_version("arch=+v")))
 int foo(int a)
 {
   return a + 5;
+}
+
+__attribute__((target_version("arch=rv64gc_zbb")))
+int foo(int a)
+{
+  return a + 5;
+}
+
+__attribute__((target_version("default")))
+int foo(int a)
+{
+  return a + 5;
+}
+
+int bar() {
+  // foo will be resolved by ifunc
+  return foo(1);
 }
 ```
 
