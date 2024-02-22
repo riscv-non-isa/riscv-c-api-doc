@@ -317,13 +317,36 @@ __attribute__((target("arch=+v"))) int foo(void) { return 0; }
 __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 ```
 
-### `__attribute__((target_clones("<ATTR-STRING>", ...)))
+### `__attribute__((target_clones("<TARGET-CLONES-ATTR-STRING>", ...)))
 
 The `target_clones` attribute is used to create multiple versions of a function. The compiler will emit multiple versions based on the provided arguments. 
 
-Each `ATTR-STRING` defines a distinguished version of the function.  The ATTR-STRING list must include `default` indicating the translation unit scope build attributes.
+Each `TARGET-CLONES-ATTR-STRING` defines a distinguished version of the function.  The `TARGET-CLONES-ATTR-STRING` list must include `default` indicating the translation unit scope build attributes.
 
-The syntax and constraints of `ATTR-STRING` are identical to [target attribute](#__attribute__targetattr-string).
+The syntax of `<TARGET-CLONES-ATTR-STRING>` describes below:
+
+```
+TARGET-CLONES-ATTR-STRING := 'arch=' EXTENSIONS-OR-FULLARCH
+                           | 'default'
+
+EXTENSIONS-OR-FULLARCH := <EXTENSIONS>
+                        | <FULLARCHSTR>
+
+EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
+                        | <EXTENSION>
+
+FULLARCHSTR            := <full-arch-string>
+
+EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                     := '+'
+
+VERSION                := [0-9]+ 'p' [0-9]+
+                        | [1-9][0-9]*
+                        |
+
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+```
 
 For example, the following `foo` function will have three versions but share the same function signature.
 
@@ -337,11 +360,36 @@ int foo(int a)
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
-### `__attribute__((target_version("<ATTR-STRING>")))
+### `__attribute__((target_version("<TARGET-VERSION-ATTR-STRING>")))
 
 The `target_version` attribute is used to create one version of a function. Functions with the same signature may exist with multiple versions in the same translation unit.
 
-The syntax and constraints of `ATTR-STRING` are identical to the [target attribute](#__attribute__targetattr-string). The version of one function must equal `default`, indicating the translation unit scope build attributes.
+Each `TARGET-VERSION-ATTR-STRING` defines a distinguished version of the function. If there is more than one version for the same function, it must have `default` one that indicating the translation unit scope build attributes.
+
+The syntax of `<TARGET-VERSION-ATTR-STRING>` describes below:
+
+```
+TARGET-VERSION-ATTR-STRING := 'arch=' EXTENSIONS-OR-FULLARCH
+                            | 'default'
+
+EXTENSIONS-OR-FULLARCH := <EXTENSIONS>
+                        | <FULLARCHSTR>
+
+EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
+                        | <EXTENSION>
+
+FULLARCHSTR            := <full-arch-string>
+
+EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                     := '+'
+
+VERSION                := [0-9]+ 'p' [0-9]+
+                        | [1-9][0-9]*
+                        |
+
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+```
 
 For example, the following foo function creates one version.
 
