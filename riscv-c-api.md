@@ -621,3 +621,49 @@ statements, including both RISC-V specific and common operand modifiers.
 | ------------ | --------------------------------------------------------------------------------- | ----------- |
 | z            | Print `zero` (`x0`) register for immediate 0, typically used with constraints `J` |             |
 | i            | Print `i` if corresponding operand is immediate.                                  |             |
+
+## Function Multi-version
+
+Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. The final binary may contain all versions of the function, with the compiler generating all supported versions and the runtime selecting the appropriate one.
+
+This feature is triggered by `target_version/target_clones` function attribute.
+
+### Runtime Resolver Function
+
+When generating the resolver function for Function multi-versioning(FMV), a mechanism is needed to retrieve the environment information.
+
+Here is the prototype of that API.
+
+```
+bool __riscv_ifunc_select(char *FeatureString)
+```
+
+Where FeatureString is a string that concatenates all target features belonging to a particular function version. The form can be described in the following BNF form. 
+
+```
+FeatureString          := EXTENSIONS
+EXTENSIONS             := <EXTENSION-NAME> '_' <EXTENSIONS>
+                        | <EXTENSION-NAME>
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+```
+
+If all features are available for the current runtime environment, it returns true. Otherwise, it returns false.
+
+For example, consider a function that triggers FMV.
+
+```c
+__attribute__((target_clones("default", "arch=rv64gcv", "arch=+zba,+zicond"))) int bar() {
+    return 1;
+}
+```
+
+In this case, there will be two Resolver Functions needed.
+
+```c
+// bar.arch=rv64gcv
+__riscv_ifunc_select("m_a_f_d_c_v_zicsr_zifencei_zve32f_zve32x_zve64d_zve64f_zve64x_zvl128b_zvl32b_zvl64b")
+// bar.arch=+zba,+zbb
+__riscv_ifunc_select("zba_zicond")
+```
+
+Note: It is assumed that if an extension is available by hardware, its implied extensions are also available by hardware. For example, `__riscv_ifunc_select("f")` is equivalent to `__riscv_ifunc_select("f_zicsr")`.
