@@ -229,6 +229,8 @@ is equivalent to "x4,x5,x6")
 - registers must be sorted (integer, floating point, vector, custom, then by 
 lowest numbered)
 - CSRs must be put after the architectural regfiles, those don’t have to be sorted
+- argument registers that are passed but not included in the list, can be assumed
+to be unmodified after return from an annotated function
 
 > **_NOTE:_** Strict syntax rules allow better portability across compilers and ABIs.
 
@@ -263,7 +265,7 @@ bloating. Prestacked annotation can be abused to get rid of the prologue stackin
 without the risk of underflowing the stack as would happen with `naked` attribute.
 
 pure assembly function (FP compute kernel) using only subset of caller saved
-registers (`a0` argument not modified during execution):\
+registers (`a0` argument not modified):\
 `__attribute__((prestacked("x5,x11-x15,f10-f13,v0,v1,v8-v31,fcsr,vl,vtype,vstart")))`
 
 > **_NOTE:_** This use case is necessary for efficient IPRA compilations. Beneficial even without IPRA.
