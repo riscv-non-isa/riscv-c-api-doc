@@ -211,6 +211,7 @@ used without saving/restoring them. It enables efficient use of
 custom interrupt controllers that stack some of the architectural registers.
 Without the need for compiler builds with a custom attributes.
 
+It shall not imply `interrupt` attribute.
 If used together with `interrupt` attribute, `prestacked` annotation overrides
 its register preservation functionality.
 
@@ -227,7 +228,6 @@ is equivalent to "x4,x5,x6")
 - registers must be sorted (integer, floating point, vector, custom, then by 
 lowest numbered)
 - CSRs must be put after the architectural regfiles, those don’t have to be sorted
-- shall not imply `interrupt` attribute
 
 > **_NOTE:_** Strict syntax rules allow better portability across compilers and ABIs.
 
