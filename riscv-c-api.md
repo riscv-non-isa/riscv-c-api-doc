@@ -215,6 +215,11 @@ It shall not imply `interrupt` attribute.
 If used together with `interrupt` attribute, `prestacked` annotation overrides
 its register preservation functionality.
 
+To support auxiliary purposes, annotated functions should be callable by regular code.
+
+> **_NOTE:_** If `x1` (aka `ra`) is included in the list, then a special return
+mechanism must be used (e.g. `mret` from `interrupt` attribute)
+
 `<reglist>` is a string literal, listing all registers available for use 
 in a given function, with a following syntax rules:
 
@@ -233,11 +238,6 @@ lowest numbered)
 to be unmodified after return from an annotated function
 
 > **_NOTE:_** Strict syntax rules allow better portability across compilers and ABIs.
-
-To support auxiliary purposes, annotated functions should be callable by regular code.
-
-> **_NOTE:_** If `x1` (aka `ra`) is included in the list, then a special return
-mechanism must be used (e.g. `mret` from `interrupt` attribute)
 
 This attribute is incompatible with the `naked` attribute.
 
