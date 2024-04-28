@@ -222,6 +222,7 @@ in a given function, with a following syntax rules:
 - raw register names rather than ABI mnemonics
 - register range cover all registers between and including specified ("x4-x6"
 is equivalent to "x4,x5,x6")
+- register range must span at least 3 consecutive registers
 - registers/ranges are separated by comma
 - annotated callee saved registers have to be properly handled as a temporary ones
 - CSRs taking part in calling conventions are also subject to this mechanism
