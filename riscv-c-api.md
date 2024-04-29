@@ -249,8 +249,8 @@ ilp32f, caller saved:\
 standard risc-v irq, ilp32e, caller saved and `ra`:\
 `__attribute__((interrupt, prestacked("x1,x5-x7,x10-x15")))`
 
-standard risc-v irq with simplified range (e.g. shadow register file):\
-`__attribute__((interrupt, prestacked("x8-x15")))`
+preemptible CLIC irq with simplified range (e.g. shadow register file):\
+`__attribute__((interrupt("CLIC-preemptible"), prestacked("x8-x15")))`
 
 custom irq controller, F + P extensions (`ra`,`a0`,`a1` pushed on stack, shadow registers 
 where bit 2 of register operand is set):\
