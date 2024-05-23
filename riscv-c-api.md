@@ -624,46 +624,44 @@ statements, including both RISC-V specific and common operand modifiers.
 
 ## Function Multi-version
 
-Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. The final binary may contain all versions of the function, with the compiler generating all supported versions and the runtime selecting the appropriate one.
+Function multi-versioning (FMV) allows selecting the appropriate function based on the runtime environment. The binary may contain multiple versions of the function, with the compiler generating all supported versions and selecting the appropriate one during the runtime.
 
-This feature is triggered by `target_version/target_clones` function attribute.
+This feature is activated by the `target_version/target_clones` function attributes.
 
-### Runtime Resolver Function
+### Extension Bitmask
 
-When generating the resolver function for Function multi-versioning(FMV), a mechanism is needed to retrieve the environment information.
+When generating the resolver function for FMV, a method is required to retrieve environment information. This is achieved through two bitmask structures: `__riscv_feature_bits` for standard extensions and `__riscv_vendor_feature_bits` for vendor-specific extensions.
 
-Here is the prototype of that API.
-
-```
-bool __riscv_ifunc_select(char *FeatureString)
-```
-
-Where FeatureString is a string that concatenates all target features belonging to a particular function version. The form can be described in the following BNF form. 
-
-```
-FeatureString          := EXTENSIONS
-EXTENSIONS             := <EXTENSION-NAME> '_' <EXTENSIONS>
-                        | <EXTENSION-NAME>
-EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
-```
-
-If all features are available for the current runtime environment, it returns true. Otherwise, it returns false.
-
-For example, consider a function that triggers FMV.
+The bitmask structures use the following definitions:
 
 ```c
-__attribute__((target_clones("default", "arch=rv64gcv", "arch=+zba,+zicond"))) int bar() {
-    return 1;
-}
+#define MAXLENGTH TO_BE_DECIDED
+
+struct {
+    unsigned length;
+    unsigned long long features[MAXLENGTH];
+} __riscv_feature_bits;
+
+struct {
+    unsigned vendorID
+    unsigned length;
+    unsigned long long features[MAXLENGTH];
+} __riscv_vender_feature_bitmask;
 ```
 
-In this case, there will be two Resolver Functions needed.
+- `length`: Represents the number of elements in the features array.
+- `features`: An `unsigned long long` array where each bit indicates the 1 for enable or 0 for disable of a corresponding extension.
+- `vendorID`: Indicates the current vendor core.
 
-```c
-// bar.arch=rv64gcv
-__riscv_ifunc_select("m_a_f_d_c_v_zicsr_zifencei_zve32f_zve32x_zve64d_zve64f_zve64x_zvl128b_zvl32b_zvl64b")
-// bar.arch=+zba,+zbb
-__riscv_ifunc_select("zba_zicond")
+To initiate these structures based on the system's extension status, the following function is provided:
+
+```
+void __init_riscv_features_bit();
 ```
 
-Note: It is assumed that if an extension is available by hardware, its implied extensions are also available by hardware. For example, `__riscv_ifunc_select("f")` is equivalent to `__riscv_ifunc_select("f_zicsr")`.
+The `__init_riscv_features_bit` function updates `length`, `vendorID` and the `features` in `__riscv_feature_bits` and `__riscv_vendor_feature_bits` according to the enabled extensions in the system.
+
+Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array. 
+
+> For example, the zba extension is represented by `groupid`: 3 and `bitmask`: `1ULL << 5`. Users can check if the zba extension is enabled using: `__riscv_feature_bits.features[3] & (1ULL << 5)`.
+
