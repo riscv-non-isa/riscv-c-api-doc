@@ -674,7 +674,6 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | d | 0 | (1 << 34) |
 | e | 0 | (1 << 1) |
 | f | 0 | (1 << 33) |
-| h | 1 | (1 << 43) |
 | i | 0 | (1 << 0) |
 | m | 0 | (1 << 20) |
 | v | 1 | (1 << 22) |
