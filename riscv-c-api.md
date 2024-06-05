@@ -663,7 +663,7 @@ The `__init_riscv_features_bit` function updates `length`, `vendorID` and the `f
 
 Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array. 
 
-> For example, the zba extension is represented by `groupid`: 3 and `bitmask`: `1ULL << 5`. Users can check if the zba extension is enabled using: `__riscv_feature_bits.features[3] & (1ULL << 5)`.
+> For example, the zba extension is represented by `groupid`: 0 and `bitmask`: `1ULL << 52`. Users can check if the zba extension is enabled using: `__riscv_feature_bits.features[0] & (1ULL << 52)`.
 
 ### Extension Bitmask Definitions
 
