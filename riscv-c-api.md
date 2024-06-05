@@ -30,6 +30,9 @@ https://creativecommons.org/licenses/by/4.0/.
 | __riscv_misaligned_fast | 1  | Misaligned accesses are fast. |
 | __riscv_misaligned_slow | 1  | Misaligned accesses are supported, but may be substantially slower than aligned accesses. |
 | __riscv_misaligned_avoid | 1  | Misaligned accesses are not supported and could trap. (see [ __riscv_misaligned_{fast,slow,avoid}](#__riscv_misaligned_{fast,slow,avoid}) |
+| __riscv_landing_pad | 1 | Defined if the landing pad is enabled. |
+| __riscv_landing_pad_simple | 1 | Defined if the simple labeling scheme is enabled. |
+| __riscv_landing_pad_func_sig | 1 | Defined if the function signature based labeling scheme is enabled. |
 
 ### __riscv_v_min_vlen
 
@@ -89,7 +92,6 @@ A typical compiler could (but not necessarily) map fast variant to -mno-strict-a
 and avoid to -mstrict-align, if specified.
 Perhaps obvious, but these are mutually exclusive, so only one is defined at a time
 for a compilation unit.
-
 
 ### Architecture Extension Test Macros
 
