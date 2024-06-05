@@ -14,23 +14,6 @@ It is licensed under the Creative Commons Attribution 4.0 International
 License (CC-BY 4.0). The full license text is available at
 https://creativecommons.org/licenses/by/4.0/.
 
-## Compiler Command-Line Arguments
-
-* `-mabi=ABI`
-* `-march=ISA`
-* `-mtune=MICRO_ARCHITECTURE`
-* `-mplt` `-mno-plt`
-* `-mcmodel=CODE_MODEL`
-* `-mstrict-align` `-mno-strict-align`
-* `-mfdiv` `-mno-fdiv`
-* `-mdiv` `-mno-div`
-* `-mpreferred-stack-boundary=N`
-* `-msmall-data-limit=N`
-* `-mexplicit-relocs` `-mno-explicit-relocs`
-* `-mrelax` `-mno-relax`
-* `-msave-restore` `-mno-save-restore`
-* `-mbranch-cost=N`
-
 ## Preprocessor Definitions
 
 | Name                | Value | When defined                  |
