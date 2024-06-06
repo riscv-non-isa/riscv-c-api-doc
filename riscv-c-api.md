@@ -635,17 +635,15 @@ When generating the resolver function for FMV, a method is required to retrieve 
 The bitmask structures use the following definitions:
 
 ```c
-#define MAXLENGTH TO_BE_DECIDED
-
 struct {
     unsigned length;
-    unsigned long long features[MAXLENGTH];
+    unsigned long long features[];
 } __riscv_feature_bits;
 
 struct {
     unsigned vendorID
     unsigned length;
-    unsigned long long features[MAXLENGTH];
+    unsigned long long features[];
 } __riscv_vender_feature_bitmask;
 ```
 
