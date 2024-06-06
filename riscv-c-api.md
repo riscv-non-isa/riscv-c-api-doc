@@ -342,6 +342,35 @@ RISC-V intrinsics examples:
 vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
 ```
 
+### Atomic Intrisics 
+
+In order to access the RISC-V atomic intrinsics, it is necessary to include the
+header file `riscv_atomic.h`.
+
+The functions are only available if the compiler's `-march` string enables the
+required ISA extension.
+
+The following table contains all the atomic intrinsics:
+
+| Prototype                                                                   | Instruction        | Extension         | Notes |
+| ---------                                                                   | -----------        | ---------         | ----- |
+| `int __riscv_lr_w(int* ptr, unsigned int ordering);`                        | `lr.w`             | Zalrsc            | |
+| `int __riscv_sc_w(int value, int* ptr, unsigned int ordering);`             | `sc.w`             | Zalrsc            | |
+| `int64_t __riscv_lr_d(int64_t* ptr, unsigned int ordering);`                | `lr.d`             | Zalrsc (RV64)     | |
+| `int64_t __riscv_sc_d(int64_t value, int64_t* ptr, unsigned int ordering);` | `sc.d`             | Zalrsc (RV64)     | |
+| `void __riscv_wrs_nto();`                                                   | `wrs.nto`          | Zawrs             | |
+| `void __riscv_wrs_sto();`                                                   | `wrs.sto`          | Zawrs             | |
+
+The `ordering` parameter can only be one of the constants:
+```
+enum {
+  __RISCV_ORDERING_NONE = 0,
+  __RISCV_ORDERING_AQ = 1,
+  __RISCV_ORDERING_RL = 2,
+  __RISCV_ORDERING_AQ_RL = 3
+};
+```
+
 ### NTLH Intrisics 
 
 The RISC-V zihintntl extension provides the RISC-V specific intrinsic functions for generating non-temporal memory accesses. These intrinsic functions provide the domain parameter to specify the behavior of memory accesses.
