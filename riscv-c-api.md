@@ -665,112 +665,112 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 
 ### Extension Bitmask Definitions
 
-| extension | groupid | bitmask|
+| extension | groupid | bit position |
 |-----------|---------|--------|
-| a | 0 | (1 << 22) |
-| c | 0 | (1 << 43) |
-| d | 0 | (1 << 34) |
-| e | 0 | (1 << 1) |
-| f | 0 | (1 << 33) |
-| i | 0 | (1 << 0) |
-| m | 0 | (1 << 20) |
-| v | 1 | (1 << 22) |
-| za128rs | 0 | (1 << 25) |
-| za64rs | 0 | (1 << 24) |
-| zaamo | 0 | (1 << 26) |
-| zabha | 0 | (1 << 27) |
-| zacas | 0 | (1 << 28) |
-| zalasr | 0 | (1 << 29) |
-| zalrsc | 0 | (1 << 30) |
-| zama16b | 0 | (1 << 31) |
-| zawrs | 0 | (1 << 32) |
-| zba | 0 | (1 << 52) |
-| zbb | 0 | (1 << 53) |
-| zbc | 0 | (1 << 54) |
-| zbkb | 0 | (1 << 56) |
-| zbkc | 0 | (1 << 58) |
-| zbkx | 0 | (1 << 57) |
-| zbs | 0 | (1 << 55) |
-| zca | 0 | (1 << 44) |
-| zcb | 0 | (1 << 45) |
-| zcd | 0 | (1 << 46) |
-| zce | 0 | (1 << 50) |
-| zcf | 0 | (1 << 47) |
-| zcmop | 0 | (1 << 51) |
-| zcmp | 0 | (1 << 48) |
-| zcmt | 0 | (1 << 49) |
-| zdinx | 0 | (1 << 40) |
-| zfa | 0 | (1 << 38) |
-| zfbfmin | 0 | (1 << 37) |
-| zfh | 0 | (1 << 36) |
-| zfhmin | 0 | (1 << 35) |
-| zfinx | 0 | (1 << 39) |
-| zhinx | 0 | (1 << 42) |
-| zhinxmin | 0 | (1 << 41) |
-| zic64b | 0 | (1 << 2) |
-| zicbom | 0 | (1 << 3) |
-| zicbop | 0 | (1 << 4) |
-| zicboz | 0 | (1 << 5) |
-| ziccamoa | 0 | (1 << 6) |
-| ziccif | 0 | (1 << 7) |
-| zicclsm | 0 | (1 << 8) |
-| ziccrse | 0 | (1 << 9) |
-| zicfilp | 0 | (1 << 18) |
-| zicfiss | 0 | (1 << 19) |
-| zicntr | 0 | (1 << 11) |
-| zicond | 0 | (1 << 12) |
-| zicsr | 0 | (1 << 10) |
-| zifencei | 0 | (1 << 13) |
-| zihintntl | 0 | (1 << 15) |
-| zihintpause | 0 | (1 << 14) |
-| zihpm | 0 | (1 << 16) |
-| zimop | 0 | (1 << 17) |
-| zk | 1 | (1 << 4) |
-| zkn | 1 | (1 << 1) |
-| zknd | 0 | (1 << 59) |
-| zkne | 0 | (1 << 60) |
-| zknh | 0 | (1 << 61) |
-| zkr | 1 | (1 << 0) |
-| zks | 1 | (1 << 2) |
-| zksed | 0 | (1 << 62) |
-| zksh | 0 | (1 << 63) |
-| zkt | 1 | (1 << 3) |
-| zmmul | 0 | (1 << 21) |
-| ztso | 0 | (1 << 23) |
-| zvbb | 1 | (1 << 28) |
-| zvbc | 1 | (1 << 29) |
-| zve32f | 1 | (1 << 18) |
-| zve32x | 1 | (1 << 17) |
-| zve64d | 1 | (1 << 21) |
-| zve64f | 1 | (1 << 20) |
-| zve64x | 1 | (1 << 19) |
-| zvfbfmin | 1 | (1 << 23) |
-| zvfbfwma | 1 | (1 << 24) |
-| zvfh | 1 | (1 << 26) |
-| zvfhmin | 1 | (1 << 25) |
-| zvkb | 1 | (1 << 27) |
-| zvkg | 1 | (1 << 30) |
-| zvkn | 1 | (1 << 37) |
-| zvknc | 1 | (1 << 38) |
-| zvkned | 1 | (1 << 31) |
-| zvkng | 1 | (1 << 39) |
-| zvknha | 1 | (1 << 32) |
-| zvknhb | 1 | (1 << 33) |
-| zvks | 1 | (1 << 40) |
-| zvksc | 1 | (1 << 41) |
-| zvksed | 1 | (1 << 34) |
-| zvksg | 1 | (1 << 42) |
-| zvksh | 1 | (1 << 35) |
-| zvkt | 1 | (1 << 36) |
-| zvl1024b | 1 | (1 << 10) |
-| zvl128b | 1 | (1 << 7) |
-| zvl16384b | 1 | (1 << 14) |
-| zvl2048b | 1 | (1 << 11) |
-| zvl256b | 1 | (1 << 8) |
-| zvl32768b | 1 | (1 << 15) |
-| zvl32b | 1 | (1 << 5) |
-| zvl4096b | 1 | (1 << 12) |
-| zvl512b | 1 | (1 << 9) |
-| zvl64b | 1 | (1 << 6) |
-| zvl65536b | 1 | (1 << 16) |
-| zvl8192b | 1 | (1 << 13) |
+| a | 0 | 22 |
+| c | 0 | 43 |
+| d | 0 | 34 |
+| e | 0 | 1 |
+| f | 0 | 33 |
+| i | 0 | 0 |
+| m | 0 | 20 |
+| v | 1 | 22 |
+| za128rs | 0 | 25 |
+| za64rs | 0 | 24 |
+| zaamo | 0 | 26 |
+| zabha | 0 | 27 |
+| zacas | 0 | 28 |
+| zalasr | 0 | 29 |
+| zalrsc | 0 | 30 |
+| zama16b | 0 | 31 |
+| zawrs | 0 | 32 |
+| zba | 0 | 52 |
+| zbb | 0 | 53 |
+| zbc | 0 | 54 |
+| zbkb | 0 | 56 |
+| zbkc | 0 | 58 |
+| zbkx | 0 | 57 |
+| zbs | 0 | 55 |
+| zca | 0 | 44 |
+| zcb | 0 | 45 |
+| zcd | 0 | 46 |
+| zce | 0 | 50 |
+| zcf | 0 | 47 |
+| zcmop | 0 | 51 |
+| zcmp | 0 | 48 |
+| zcmt | 0 | 49 |
+| zdinx | 0 | 40 |
+| zfa | 0 | 38 |
+| zfbfmin | 0 | 37 |
+| zfh | 0 | 36 |
+| zfhmin | 0 | 35 |
+| zfinx | 0 | 39 |
+| zhinx | 0 | 42 |
+| zhinxmin | 0 | 41 |
+| zic64b | 0 | 2 |
+| zicbom | 0 | 3 |
+| zicbop | 0 | 4 |
+| zicboz | 0 | 5 |
+| ziccamoa | 0 | 6 |
+| ziccif | 0 | 7 |
+| zicclsm | 0 | 8 |
+| ziccrse | 0 | 9 |
+| zicfilp | 0 | 18 |
+| zicfiss | 0 | 19 |
+| zicntr | 0 | 11 |
+| zicond | 0 | 12 |
+| zicsr | 0 | 10 |
+| zifencei | 0 | 13 |
+| zihintntl | 0 | 15 |
+| zihintpause | 0 | 14 |
+| zihpm | 0 | 16 |
+| zimop | 0 | 17 |
+| zk | 1 | 4 |
+| zkn | 1 | 1 |
+| zknd | 0 | 59 |
+| zkne | 0 | 60 |
+| zknh | 0 | 61 |
+| zkr | 1 | 0 |
+| zks | 1 | 2 |
+| zksed | 0 | 62 |
+| zksh | 0 | 63 |
+| zkt | 1 | 3 |
+| zmmul | 0 | 21 |
+| ztso | 0 | 23 |
+| zvbb | 1 | 28 |
+| zvbc | 1 | 29 |
+| zve32f | 1 | 18 |
+| zve32x | 1 | 17 |
+| zve64d | 1 | 21 |
+| zve64f | 1 | 20 |
+| zve64x | 1 | 19 |
+| zvfbfmin | 1 | 23 |
+| zvfbfwma | 1 | 24 |
+| zvfh | 1 | 26 |
+| zvfhmin | 1 | 25 |
+| zvkb | 1 | 27 |
+| zvkg | 1 | 30 |
+| zvkn | 1 | 37 |
+| zvknc | 1 | 38 |
+| zvkned | 1 | 31 |
+| zvkng | 1 | 39 |
+| zvknha | 1 | 32 |
+| zvknhb | 1 | 33 |
+| zvks | 1 | 40 |
+| zvksc | 1 | 41 |
+| zvksed | 1 | 34 |
+| zvksg | 1 | 42 |
+| zvksh | 1 | 35 |
+| zvkt | 1 | 36 |
+| zvl1024b | 1 | 10 |
+| zvl128b | 1 | 7 |
+| zvl16384b | 1 | 14 |
+| zvl2048b | 1 | 11 |
+| zvl256b | 1 | 8 |
+| zvl32768b | 1 | 15 |
+| zvl32b | 1 | 5 |
+| zvl4096b | 1 | 12 |
+| zvl512b | 1 | 9 |
+| zvl64b | 1 | 6 |
+| zvl65536b | 1 | 16 |
+| zvl8192b | 1 | 13 |
