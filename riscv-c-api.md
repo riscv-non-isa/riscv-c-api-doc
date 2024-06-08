@@ -229,7 +229,7 @@ in a given function, with a following syntax rules:
 is equivalent to "x4,x5,x6")
 - register range must span at least 3 consecutive registers
 - registers/ranges are separated by comma
-- annotated callee saved registers have to be properly handled as a temporary ones
+- annotated callee saved registers have to be properly handled as a temporary ones by caller
 - CSRs taking part in calling conventions are also subject to this mechanism
 - registers must be sorted (integer, floating point, vector, custom, then by 
 lowest numbered)
