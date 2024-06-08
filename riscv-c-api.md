@@ -644,7 +644,7 @@ struct {
     unsigned vendorID
     unsigned length;
     unsigned long long features[];
-} __riscv_vender_feature_bitmask;
+} __riscv_vender_feature_bits;
 ```
 
 - `length`: Represents the number of elements in the features array.
