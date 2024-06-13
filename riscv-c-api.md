@@ -648,7 +648,7 @@ struct {
 ```
 
 - `length`: Represents the number of elements in the features array.
-- `features`: An `unsigned long long` array where each bit indicates the 1 for enable or 0 for disable of a corresponding extension.
+- `features`: An `unsigned long long` array where each bit indicates 1 for a specific extension enabled by the system or 0 for the extension's status unknown in system.
 - `vendorID`: Indicates the current vendor core.
 
 To initiate these structures based on the system's extension status, the following function is provided:
