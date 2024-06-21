@@ -354,22 +354,8 @@ The following table contains all the atomic intrinsics:
 
 | Prototype                                                                   | Instruction        | Extension         | Notes |
 | ---------                                                                   | -----------        | ---------         | ----- |
-| `int __riscv_lr_w(int* ptr, unsigned int ordering);`                        | `lr.w`             | Zalrsc            | |
-| `int __riscv_sc_w(int value, int* ptr, unsigned int ordering);`             | `sc.w`             | Zalrsc            | |
-| `int64_t __riscv_lr_d(int64_t* ptr, unsigned int ordering);`                | `lr.d`             | Zalrsc (RV64)     | |
-| `int64_t __riscv_sc_d(int64_t value, int64_t* ptr, unsigned int ordering);` | `sc.d`             | Zalrsc (RV64)     | |
 | `void __riscv_wrs_nto();`                                                   | `wrs.nto`          | Zawrs             | |
 | `void __riscv_wrs_sto();`                                                   | `wrs.sto`          | Zawrs             | |
-
-The `ordering` parameter can only be one of the constants:
-```
-enum {
-  __RISCV_ORDERING_NONE = 0,
-  __RISCV_ORDERING_AQ = 1,
-  __RISCV_ORDERING_RL = 2,
-  __RISCV_ORDERING_AQ_RL = 3
-};
-```
 
 ### NTLH Intrisics 
 
