@@ -342,7 +342,7 @@ RISC-V intrinsics examples:
 vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
 ```
 
-### Atomic Intrisics 
+### Atomic Intrisics
 
 In order to access the RISC-V atomic intrinsics, it is necessary to include the
 header file `riscv_atomic.h`.
@@ -352,10 +352,10 @@ required ISA extension.
 
 The following table contains all the atomic intrinsics:
 
-| Prototype                                                                   | Instruction        | Extension         | Notes |
-| ---------                                                                   | -----------        | ---------         | ----- |
-| `void __riscv_wrs_nto();`                                                   | `wrs.nto`          | Zawrs             | |
-| `void __riscv_wrs_sto();`                                                   | `wrs.sto`          | Zawrs             | |
+| Prototype                 | Instruction | Extension | Notes |
+| ---------                 | ----------- | --------- | ----- |
+| `void __riscv_wrs_nto();` | `wrs.nto`   | Zawrs     | |
+| `void __riscv_wrs_sto();` | `wrs.sto`   | Zawrs     | |
 
 ### NTLH Intrisics 
 
