@@ -668,7 +668,7 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 > The single-letter extension bitmask follows the `misa` bit position inside `__riscv_feature_bits.features[0]`.
 
 | extension | groupid | bit position |
-|-----------|---------|--------|
+|-----------|---------|--------------|
 | a | 0 | 0 |
 | c | 0 | 2 |
 | d | 0 | 3 |
