@@ -641,7 +641,7 @@ struct {
 } __riscv_feature_bits;
 
 struct {
-    unsigned vendorID
+    unsigned vendorID;
     unsigned length;
     unsigned long long features[];
 } __riscv_vendor_feature_bits;
