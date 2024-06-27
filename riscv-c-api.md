@@ -604,3 +604,109 @@ statements, including both RISC-V specific and common operand modifiers.
 | ------------ | --------------------------------------------------------------------------------- | ----------- |
 | z            | Print `zero` (`x0`) register for immediate 0, typically used with constraints `J` |             |
 | i            | Print `i` if corresponding operand is immediate.                                  |             |
+
+## Function Multi-version
+
+Function multi-versioning (FMV) allows selecting the appropriate function based on the runtime environment. The binary may contain multiple versions of the function, with the compiler generating all supported versions and selecting the appropriate one during the runtime.
+
+This feature is activated by the `target_version/target_clones` function attributes.
+
+### Extension Bitmask
+
+When generating the resolver function for FMV, a method is required to retrieve environment information. This is achieved through two bitmask structures: `__riscv_feature_bits` for standard extensions and `__riscv_vendor_feature_bits` for vendor-specific extensions.
+
+The bitmask structures use the following definitions:
+
+```c
+struct {
+    unsigned length;
+    unsigned long long features[];
+} __riscv_feature_bits;
+
+struct {
+    unsigned vendorID;
+    unsigned length;
+    unsigned long long features[];
+} __riscv_vendor_feature_bits;
+```
+
+- `length`: Represents the number of elements in the features array.
+- `features`: An `unsigned long long` array where each bit indicates 1 for a specific extension enabled by the system or 0 for the extension's status unknown in system.
+- `vendorID`: Indicates the current vendor core.
+
+To initiate these structures based on the system's extension status, the following function is provided:
+
+```
+void __init_riscv_features_bit();
+```
+
+The `__init_riscv_features_bit` function updates `length`, `vendorID` and the `features` in `__riscv_feature_bits` and `__riscv_vendor_feature_bits` according to the enabled extensions in the system.
+
+Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array. 
+
+> For example, the zba extension is represented by `groupid`: 0 and `bitmask`: `1ULL << 35`. Users can check if the zba extension is enabled using: `__riscv_feature_bits.features[0] & (1ULL << 35)`.
+
+### Extension Bitmask Definitions
+
+> The single-letter extension bitmask follows the `misa` bit position inside `__riscv_feature_bits.features[0]`.
+
+| extension | groupid | bit position |
+|-----------|---------|--------------|
+| a | 0 | 0 |
+| c | 0 | 2 |
+| d | 0 | 3 |
+| f | 0 | 5 |
+| i | 0 | 8 |
+| m | 0 | 12 |
+| v | 0 | 21 |
+| zacas | 0 | 31 |
+| zba | 0 | 35 |
+| zbb | 0 | 36 |
+| zbc | 0 | 37 |
+| zbkb | 0 | 39 |
+| zbkc | 0 | 41 |
+| zbkx | 0 | 40 |
+| zbs | 0 | 38 |
+| zfa | 0 | 34 |
+| zfh | 0 | 33 |
+| zfhmin | 0 | 32 |
+| zicboz | 0 | 26 |
+| zicond | 0 | 28 |
+| zicsr | 0 | 27 |
+| zihintntl | 0 | 29 |
+| zknd | 0 | 42 |
+| zkne | 0 | 43 |
+| zknh | 0 | 44 |
+| zksed | 0 | 45 |
+| zksh | 0 | 46 |
+| zkt | 0 | 47 |
+| ztso | 0 | 30 |
+| zvbb | 1 | 4 |
+| zvbc | 1 | 5 |
+| zve32f | 0 | 61 |
+| zve32x | 0 | 60 |
+| zve64d | 1 | 0 |
+| zve64f | 0 | 63 |
+| zve64x | 0 | 62 |
+| zvfh | 1 | 2 |
+| zvfhmin | 1 | 1 |
+| zvkb | 1 | 3 |
+| zvkg | 1 | 6 |
+| zvkned | 1 | 7 |
+| zvknha | 1 | 8 |
+| zvknhb | 1 | 9 |
+| zvksed | 1 | 10 |
+| zvksh | 1 | 11 |
+| zvkt | 1 | 12 |
+| zvl1024b | 0 | 53 |
+| zvl128b | 0 | 50 |
+| zvl16384b | 0 | 57 |
+| zvl2048b | 0 | 54 |
+| zvl256b | 0 | 51 |
+| zvl32768b | 0 | 58 |
+| zvl32b | 0 | 48 |
+| zvl4096b | 0 | 55 |
+| zvl512b | 0 | 52 |
+| zvl64b | 0 | 49 |
+| zvl65536b | 0 | 59 |
+| zvl8192b | 0 | 56 |
