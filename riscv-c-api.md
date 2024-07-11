@@ -319,7 +319,7 @@ EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 For example, the following `foo` function will have three versions but share the same function signature.
 
 ```c
-__attribute__((target_clones("arch=+v", "default", "arch=rv64gc_zbb")))
+__attribute__((target_clones("arch=+v", "default", "arch=+zbb")))
 int foo(int a)
 {
   return a + 5;
