@@ -81,7 +81,7 @@ The value of `__riscv_v_elen_fp` is defined by the following rules:
 If multiple rules apply, the maximum value is taken.
 If none of the rules apply, `__riscv_v_elen_fp` is undefined.
 
-### __riscv_misaligned_{fast,slow,avoid}
+### __riscv_misaligned\_{fast,slow,avoid}
 
 These can be used in common library code to compile time segregate code which relies
 on scalar misaligned access being fast or not.
