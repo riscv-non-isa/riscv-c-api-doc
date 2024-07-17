@@ -735,10 +735,10 @@ struct {
 To initiate these structures based on the system's extension status, the following function is provided:
 
 ```
-void __init_riscv_features_bits();
+void __init_riscv_feature_bits();
 ```
 
-The `__init_riscv_features_bits` function updates `length`, `vendorID` and the `features` in `__riscv_feature_bits` and `__riscv_vendor_feature_bits` according to the enabled extensions in the system.
+The `__init_riscv_feature_bits` function updates `length`, `vendorID` and the `features` in `__riscv_feature_bits` and `__riscv_vendor_feature_bits` according to the enabled extensions in the system.
 
 Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array. 
 
