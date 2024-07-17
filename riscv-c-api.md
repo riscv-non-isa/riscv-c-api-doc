@@ -290,7 +290,7 @@ __attribute__((target("arch=+v"))) int foo(void) { return 0; }
 __attribute__((target("arch=+zbb"))) int foo(void) { return 1; }
 ```
 
-### `__attribute__((target_clones("<TARGET-CLONES-ATTR-STRING>", ...)))
+### `__attribute__((target_clones("<TARGET-CLONES-ATTR-STRING>", ...)))`
 
 The `target_clones` attribute is used to create multiple versions of a function. The compiler will emit multiple versions based on the provided arguments. 
 
@@ -333,7 +333,7 @@ int bar() {
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
-### `__attribute__((target_version("<TARGET-VERSION-ATTR-STRING>")))
+### `__attribute__((target_version("<TARGET-VERSION-ATTR-STRING>")))`
 
 The `target_version` attribute is used to create one version of a function. Functions with the same signature may exist with multiple versions in the same translation unit.
 
