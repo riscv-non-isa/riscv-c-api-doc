@@ -440,6 +440,21 @@ RISC-V intrinsics examples:
 vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
 ```
 
+### Atomic Intrinsics
+
+In order to access the RISC-V atomic intrinsics, it is necessary to include the
+header file `riscv_atomic.h`.
+
+The functions are only available if the compiler's `-march` string enables the
+required ISA extension.
+
+The following table contains all the atomic intrinsics:
+
+| Prototype                 | Instruction | Extension | Notes |
+| ---------                 | ----------- | --------- | ----- |
+| `void __riscv_wrs_nto();` | `wrs.nto`   | Zawrs     | |
+| `void __riscv_wrs_sto();` | `wrs.sto`   | Zawrs     | |
+
 ### NTLH Intrinsics 
 
 The RISC-V zihintntl extension provides the RISC-V specific intrinsic functions for generating non-temporal memory accesses. These intrinsic functions provide the domain parameter to specify the behavior of memory accesses.
