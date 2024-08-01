@@ -722,15 +722,22 @@ struct {
 } __riscv_feature_bits;
 
 struct {
-    unsigned vendorID;
     unsigned length;
     unsigned long long features[];
 } __riscv_vendor_feature_bits;
+
+struct {
+  unsigned mVendorID;
+  unsigned mArchID;
+  unsigned mImplID;
+} __riscv_cpu_model;
 ```
 
 - `length`: Represents the number of elements in the features array.
 - `features`: An `unsigned long long` array where each bit indicates 1 for a specific extension enabled by the system or 0 for the extension's status unknown in system.
-- `vendorID`: Indicates the current vendor core.
+- `mVendorID`: Indicates the value of `mvendorid` CSR.
+- `mArchID`: Indicates the value of `marchid` CSR.
+- `mImplID`: Indicates the value of `mimpid` CSR.
 
 To initiate these structures based on the system's extension status, the following function is provided:
 
@@ -738,7 +745,7 @@ To initiate these structures based on the system's extension status, the followi
 void __init_riscv_feature_bits(void *);
 ```
 
-The `__init_riscv_feature_bits` function updates `length`, `vendorID` and the `features` in `__riscv_feature_bits` and `__riscv_vendor_feature_bits` according to the enabled extensions in the system.
+The `__init_riscv_feature_bits` function updates `length`, `mVendorID`, `mArchID`, `mImplID` and the `features` in `__riscv_feature_bits` and `__riscv_vendor_feature_bits` according to the enabled extensions in the system.
 
 The `__init_riscv_feature_bits` function accepts an argument of type `void *`. This argument allows the platform to provide pre-computed data and access it without additional effort. For example, Linux could pass the vDSO object to avoid an extra system call.
 
