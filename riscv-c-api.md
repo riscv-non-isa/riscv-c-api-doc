@@ -299,8 +299,12 @@ Each `TARGET-CLONES-ATTR-STRING` defines a distinguished version of the function
 The syntax of `<TARGET-CLONES-ATTR-STRING>` describes below:
 
 ```
-TARGET-CLONES-ATTR-STRING := 'arch=' EXTENSIONS
-                           | 'default'
+TARGET-CLONES-ATTR-STRING := ATTR-STRING
+                            | ';' TARGET-VERSION-ATTR-STRING
+
+ATTR-STRING            := 'arch=' EXTENSIONS
+                        | 'default'
+                        | 'Priority=' DIGIT 
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
@@ -313,13 +317,15 @@ VERSION                := [0-9]+ 'p' [0-9]+
                         | [1-9][0-9]*
                         |
 
+DIGIT                  := [0-9]+
+                       
 EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 ```
 
 For example, the following `foo` function will have three versions but share the same function signature.
 
 ```c
-__attribute__((target_clones("arch=+v", "default", "arch=+zbb")))
+__attribute__((target_clones("arch=+v;Priority=2", "default", "arch=+zbb;Priority=1")))
 int foo(int a)
 {
   return a + 5;
@@ -330,6 +336,8 @@ int bar() {
   return foo(1);
 }
 ```
+
+The `Priority` accepts a digit as the version priority during Version Selection. If `Priority` doesn't exist, then the priority of version defaults to zero.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
@@ -342,8 +350,13 @@ Each `TARGET-VERSION-ATTR-STRING` defines a distinguished version of the functio
 The syntax of `<TARGET-VERSION-ATTR-STRING>` describes below:
 
 ```
-TARGET-VERSION-ATTR-STRING := 'arch=' EXTENSIONS
-                            | 'default'
+
+TARGET-VERSION-ATTR-STRING := ATTR-STRING
+                            | ';' TARGET-VERSION-ATTR-STRING
+
+ATTR-STRING            := 'arch=' EXTENSIONS
+                        | 'default'
+                        | 'Priority=' DIGIT 
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
@@ -356,19 +369,21 @@ VERSION                := [0-9]+ 'p' [0-9]+
                         | [1-9][0-9]*
                         |
 
+DIGIT                  := [0-9]+
+
 EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 ```
 
 For example, the following foo function has three versions.
 
 ```c
-__attribute__((target_version("arch=+v")))
+__attribute__((target_version("arch=+v;Priority=1")))
 int foo(int a)
 {
   return a + 5;
 }
 
-__attribute__((target_version("arch=+zbb")))
+__attribute__((target_version("arch=+zbb;Priority=2")))
 int foo(int a)
 {
   return a + 5;
@@ -385,6 +400,8 @@ int bar() {
   return foo(1);
 }
 ```
+
+The `Priority` accepts a digit as the version priority during Version Selection. If `Priority` doesn't exist, then the priority of version defaults to zero.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
@@ -708,3 +725,17 @@ statements, including both RISC-V specific and common operand modifiers.
 Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. The final binary may contain all versions of the function, with the compiler generating all supported versions and the runtime selecting the appropriate one.
 
 This feature is triggered by `target_version/target_clones` function attribute.
+
+### Version Selection
+
+The process of selecting the appropriate function version during function multi-versioning follows these guidelines:
+
+1. The implementation of the selection algorithm is platform-specific.
+2. Once a version is selected, it remains in use for the entire duration of the process.
+3. Only versions whose required features are all available in the runtime environment are eligible for selection.
+
+The version selection process applies the following rules in order:
+
+1. Among the eligible versions, select the one with the highest priority.
+2. If multiple versions are equally priority, select the one that was declared first.
+3. If no other suitable versions are found, fall back to the "default" version.
