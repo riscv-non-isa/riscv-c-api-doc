@@ -749,6 +749,8 @@ The `__init_riscv_feature_bits` function updates `length`, `mVendorID`, `mArchID
 
 The `__init_riscv_feature_bits` function accepts an argument of type `void *`. This argument allows the platform to provide pre-computed data and access it without additional effort. For example, Linux could pass the vDSO object to avoid an extra system call.
 
+NOTE: To detect failure of the `__init_riscv_feature_bits` function, it is recommended to check the bitmask for the `I` extension. The `I` extension must be supported in all valid RISC-V implementations.
+
 Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array. 
 
 > For example, the zba extension is represented by `groupid`: 0 and `bitmask`: `1ULL << 27`. Users can check if the zba extension is enabled using: `__riscv_feature_bits.features[0] & (1ULL << 27)`.
