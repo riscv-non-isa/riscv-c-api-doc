@@ -304,7 +304,7 @@ TARGET-CLONES-ATTR-STRING := ATTR-STRING
 
 ATTR-STRING            := 'arch=' EXTENSIONS
                         | 'default'
-                        | 'Priority=' DIGIT 
+                        | 'priority=' DIGIT 
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
@@ -325,7 +325,7 @@ EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 For example, the following `foo` function will have three versions but share the same function signature.
 
 ```c
-__attribute__((target_clones("arch=+v;Priority=2", "default", "arch=+zbb;Priority=1")))
+__attribute__((target_clones("arch=+v;priority=2", "default", "arch=+zbb;priority=1")))
 int foo(int a)
 {
   return a + 5;
@@ -337,7 +337,7 @@ int bar() {
 }
 ```
 
-The `Priority` accepts a digit as the version priority during Version Selection. If `Priority` doesn't exist, then the priority of version defaults to zero.
+The `priority` accepts a digit as the version priority during Version Selection. If `priority` doesn't exist, then the priority of version defaults to zero.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
@@ -356,7 +356,7 @@ TARGET-VERSION-ATTR-STRING := ATTR-STRING
 
 ATTR-STRING            := 'arch=' EXTENSIONS
                         | 'default'
-                        | 'Priority=' DIGIT 
+                        | 'priority=' DIGIT 
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
@@ -377,13 +377,13 @@ EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 For example, the following foo function has three versions.
 
 ```c
-__attribute__((target_version("arch=+v;Priority=1")))
+__attribute__((target_version("arch=+v;priority=1")))
 int foo(int a)
 {
   return a + 5;
 }
 
-__attribute__((target_version("arch=+zbb;Priority=2")))
+__attribute__((target_version("arch=+zbb;priority=2")))
 int foo(int a)
 {
   return a + 5;
@@ -401,7 +401,7 @@ int bar() {
 }
 ```
 
-The `Priority` accepts a digit as the version priority during Version Selection. If `Priority` doesn't exist, then the priority of version defaults to zero.
+The `priority` accepts a digit as the version priority during Version Selection. If `priority` doesn't exist, then the priority of version defaults to zero.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
