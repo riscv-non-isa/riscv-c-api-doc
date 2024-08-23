@@ -299,27 +299,37 @@ Each `TARGET-CLONES-ATTR-STRING` defines a distinguished version of the function
 The syntax of `<TARGET-CLONES-ATTR-STRING>` describes below:
 
 ```
-TARGET-CLONES-ATTR-STRING := 'arch=' EXTENSIONS
-                           | 'default'
+TARGET-CLONES-ATTR-STRING := DEFAULT-ATTR-STRING
+                           | ATTR-STRINGS
 
-EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
-                        | <EXTENSION>
+ATTR-STRINGS              := ATTR-STRING
+                           | ';' ATTR-STRINGS
 
-EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+DEFAULT-ATTR-STRING       := 'default'
 
-OP                     := '+'
+ATTR-STRING               := 'arch=' EXTENSIONS
+                           | 'priority=' DIGIT 
 
-VERSION                := [0-9]+ 'p' [0-9]+
-                        | [1-9][0-9]*
-                        |
+EXTENSIONS                := <EXTENSION> ',' <EXTENSIONS>
+                           | <EXTENSION>
 
-EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+EXTENSION                 := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                        := '+'
+
+VERSION                   := [0-9]+ 'p' [0-9]+
+                           | [1-9][0-9]*
+                           |
+
+DIGIT                     := [0-9]+
+                       
+EXTENSION-NAME            := Naming rule is defined in RISC-V ISA manual
 ```
 
 For example, the following `foo` function will have three versions but share the same function signature.
 
 ```c
-__attribute__((target_clones("arch=+v", "default", "arch=+zbb")))
+__attribute__((target_clones("arch=+v;priority=2", "default", "arch=+zbb;priority=1")))
 int foo(int a)
 {
   return a + 5;
@@ -330,6 +340,8 @@ int bar() {
   return foo(1);
 }
 ```
+
+The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` isn't specified, then the priority of version defaults to zero.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
@@ -342,33 +354,43 @@ Each `TARGET-VERSION-ATTR-STRING` defines a distinguished version of the functio
 The syntax of `<TARGET-VERSION-ATTR-STRING>` describes below:
 
 ```
-TARGET-VERSION-ATTR-STRING := 'arch=' EXTENSIONS
-                            | 'default'
+TARGET-VERSION-ATTR-STRING := DEFAULT-ATTR-STRING
+                            | ATTR-STRINGS
 
-EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
-                        | <EXTENSION>
+DEFAULT-ATTR-STRING        := 'default'
 
-EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+ATTR-STRINGS               := ATTR-STRING
+                            | ';' ATTR-STRINGS
 
-OP                     := '+'
+ATTR-STRING                := 'arch=' EXTENSIONS
+                            | 'priority=' DIGIT 
 
-VERSION                := [0-9]+ 'p' [0-9]+
-                        | [1-9][0-9]*
-                        |
+EXTENSIONS                 := <EXTENSION> ',' <EXTENSIONS>
+                            | <EXTENSION>
 
-EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+EXTENSION                  := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                         := '+'
+
+VERSION                    := [0-9]+ 'p' [0-9]+
+                            | [1-9][0-9]*
+                            |
+
+DIGIT                      := [0-9]+
+
+EXTENSION-NAME             := Naming rule is defined in RISC-V ISA manual
 ```
 
 For example, the following foo function has three versions.
 
 ```c
-__attribute__((target_version("arch=+v")))
+__attribute__((target_version("arch=+v;priority=1")))
 int foo(int a)
 {
   return a + 5;
 }
 
-__attribute__((target_version("arch=+zbb")))
+__attribute__((target_version("arch=+zbb;priority=2")))
 int foo(int a)
 {
   return a + 5;
@@ -385,6 +407,10 @@ int bar() {
   return foo(1);
 }
 ```
+
+The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` isn't specified, then the priority of version defaults to zero.
+
+The `default` version does not accept the priority.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
@@ -708,3 +734,17 @@ statements, including both RISC-V specific and common operand modifiers.
 Function multi-versioning(FMV) provides an approach to selecting the appropriate function according to the runtime environment. The final binary may contain all versions of the function, with the compiler generating all supported versions and the runtime selecting the appropriate one.
 
 This feature is triggered by `target_version/target_clones` function attribute.
+
+### Version Selection
+
+The process of selecting the appropriate function version during function multi-versioning follows these guidelines:
+
+1. The implementation of the selection algorithm is platform-specific.
+2. Once a version is selected, it remains in use for the entire duration of the process.
+3. Only versions whose required features are all available in the runtime environment are eligible for selection.
+
+The version selection process applies the following rules in order:
+
+1. Among the eligible versions, select the one with the highest priority.
+2. If multiple versions have equal priority, select the one that was declared first.
+3. If no other suitable versions are found, fall back to the "default" version.
