@@ -300,7 +300,7 @@ The syntax of `<TARGET-CLONES-ATTR-STRING>` describes below:
 
 ```
 TARGET-CLONES-ATTR-STRING := ATTR-STRING
-                            | ';' TARGET-VERSION-ATTR-STRING
+                            | ';' TARGET-CLONES-ATTR-STRING
 
 ATTR-STRING            := 'arch=' EXTENSIONS
                         | 'default'
@@ -337,7 +337,7 @@ int bar() {
 }
 ```
 
-The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` doesn't exist, then the priority of version defaults to zero.
+The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` isn't specified, then the priority of version defaults to zero.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
@@ -401,7 +401,7 @@ int bar() {
 }
 ```
 
-The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` doesn't exist, then the priority of version defaults to zero.
+The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` isn't specified, then the priority of version defaults to zero.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
