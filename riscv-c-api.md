@@ -299,27 +299,31 @@ Each `TARGET-CLONES-ATTR-STRING` defines a distinguished version of the function
 The syntax of `<TARGET-CLONES-ATTR-STRING>` describes below:
 
 ```
-TARGET-CLONES-ATTR-STRING := ATTR-STRING
-                            | ';' TARGET-CLONES-ATTR-STRING
+TARGET-CLONES-ATTR-STRING := DEFAULT-ATTR-STRING
+                           | ATTR-STRINGS
 
-ATTR-STRING            := 'arch=' EXTENSIONS
-                        | 'default'
-                        | 'priority=' DIGIT 
+ATTR-STRINGS              := ATTR-STRING
+                           | ';' ATTR-STRINGS
 
-EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
-                        | <EXTENSION>
+DEFAULT-ATTR-STRING       := 'default'
 
-EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+ATTR-STRING               := 'arch=' EXTENSIONS
+                           | 'priority=' DIGIT 
 
-OP                     := '+'
+EXTENSIONS                := <EXTENSION> ',' <EXTENSIONS>
+                           | <EXTENSION>
 
-VERSION                := [0-9]+ 'p' [0-9]+
-                        | [1-9][0-9]*
-                        |
+EXTENSION                 := <OP> <EXTENSION-NAME> <VERSION>
 
-DIGIT                  := [0-9]+
+OP                        := '+'
+
+VERSION                   := [0-9]+ 'p' [0-9]+
+                           | [1-9][0-9]*
+                           |
+
+DIGIT                     := [0-9]+
                        
-EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+EXTENSION-NAME            := Naming rule is defined in RISC-V ISA manual
 ```
 
 For example, the following `foo` function will have three versions but share the same function signature.
@@ -350,28 +354,31 @@ Each `TARGET-VERSION-ATTR-STRING` defines a distinguished version of the functio
 The syntax of `<TARGET-VERSION-ATTR-STRING>` describes below:
 
 ```
+TARGET-VERSION-ATTR-STRING := DEFAULT-ATTR-STRING
+                            | ATTR-STRINGS
 
-TARGET-VERSION-ATTR-STRING := ATTR-STRING
-                            | ';' TARGET-VERSION-ATTR-STRING
+DEFAULT-ATTR-STRING        := 'default'
 
-ATTR-STRING            := 'arch=' EXTENSIONS
-                        | 'default'
-                        | 'priority=' DIGIT 
+ATTR-STRINGS               := ATTR-STRING
+                            | ';' ATTR-STRINGS
 
-EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
-                        | <EXTENSION>
+ATTR-STRING                := 'arch=' EXTENSIONS
+                            | 'priority=' DIGIT 
 
-EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+EXTENSIONS                 := <EXTENSION> ',' <EXTENSIONS>
+                            | <EXTENSION>
 
-OP                     := '+'
+EXTENSION                  := <OP> <EXTENSION-NAME> <VERSION>
 
-VERSION                := [0-9]+ 'p' [0-9]+
-                        | [1-9][0-9]*
-                        |
+OP                         := '+'
 
-DIGIT                  := [0-9]+
+VERSION                    := [0-9]+ 'p' [0-9]+
+                            | [1-9][0-9]*
+                            |
 
-EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
+DIGIT                      := [0-9]+
+
+EXTENSION-NAME             := Naming rule is defined in RISC-V ISA manual
 ```
 
 For example, the following foo function has three versions.
@@ -402,6 +409,8 @@ int bar() {
 ```
 
 The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` isn't specified, then the priority of version defaults to zero.
+
+The `default` version does not accept the priority.
 
 It makes the compiler trigger the [function multi-version](#function-multi-version) when there exist more than one version for the same function signature.
 
