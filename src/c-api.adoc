@@ -149,6 +149,7 @@ For example:
 |*Name*                     |*Value* |*When defined*
 |`+__riscv_cmodel_medlow+` |1        |Defined if using `medlow` code model.
 |`+__riscv_cmodel_medany+` |1        |Defined if using `medany` code model.
+|`+__riscv_cmodel_large+`  |1        |Defined if using `large` code model.
 |===
 
 === Deprecated Preprocessor Definitions
