@@ -13,6 +13,12 @@ a|
 * 128 for rv128
 |Always defined.
 
+|`+__riscv_endianness+`
+a|
+* 'B' for big-endian
+* 'L' for little-endian
+|Always defined.
+
 |`+__riscv_flen+`
 a|
 * 32 if the F extension is available *or*
