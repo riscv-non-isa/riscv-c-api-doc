@@ -310,7 +310,8 @@ DEFAULT-ATTR-STRING       := 'default'
 ATTR-STRING               := 'arch=' EXTENSIONS
                            | 'priority=' DIGIT 
 
-DIGIT                     := [0-9]+
+DIGIT                     := '-' [0-9]+
+                           | [0-9]+
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
@@ -365,7 +366,8 @@ ATTR-STRINGS               := ATTR-STRING
 ATTR-STRING                := 'arch=' EXTENSIONS
                             | 'priority=' DIGIT 
 
-DIGIT                      := [0-9]+
+DIGIT                     := '-' [0-9]+
+                           | [0-9]+
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
