@@ -310,20 +310,20 @@ DEFAULT-ATTR-STRING       := 'default'
 ATTR-STRING               := 'arch=' EXTENSIONS
                            | 'priority=' DIGIT 
 
-EXTENSIONS                := <EXTENSION> ',' <EXTENSIONS>
-                           | <EXTENSION>
-
-EXTENSION                 := <OP> <EXTENSION-NAME> <VERSION>
-
-OP                        := '+'
-
-VERSION                   := [0-9]+ 'p' [0-9]+
-                           | [1-9][0-9]*
-                           |
-
 DIGIT                     := [0-9]+
-                       
-EXTENSION-NAME            := Naming rule is defined in RISC-V ISA manual
+
+EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
+                        | <EXTENSION>
+
+EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                     := '+'
+
+VERSION                := [0-9]+ 'p' [0-9]+
+                        | [1-9][0-9]*
+                        |
+
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 ```
 
 For example, the following `foo` function will have three versions but share the same function signature.
@@ -365,20 +365,20 @@ ATTR-STRINGS               := ATTR-STRING
 ATTR-STRING                := 'arch=' EXTENSIONS
                             | 'priority=' DIGIT 
 
-EXTENSIONS                 := <EXTENSION> ',' <EXTENSIONS>
-                            | <EXTENSION>
-
-EXTENSION                  := <OP> <EXTENSION-NAME> <VERSION>
-
-OP                         := '+'
-
-VERSION                    := [0-9]+ 'p' [0-9]+
-                            | [1-9][0-9]*
-                            |
-
 DIGIT                      := [0-9]+
 
-EXTENSION-NAME             := Naming rule is defined in RISC-V ISA manual
+EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
+                        | <EXTENSION>
+
+EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
+
+OP                     := '+'
+
+VERSION                := [0-9]+ 'p' [0-9]+
+                        | [1-9][0-9]*
+                        |
+
+EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
 ```
 
 For example, the following foo function has three versions.
