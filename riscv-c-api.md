@@ -299,13 +299,11 @@ Each `TARGET-CLONES-ATTR-STRING` defines a distinguished version of the function
 The syntax of `<TARGET-CLONES-ATTR-STRING>` describes below:
 
 ```
-TARGET-CLONES-ATTR-STRING := DEFAULT-ATTR-STRING
+TARGET-CLONES-ATTR-STRING := 'default'
                            | ATTR-STRINGS
 
 ATTR-STRINGS              := ATTR-STRING
                            | ';' ATTR-STRINGS
-
-DEFAULT-ATTR-STRING       := 'default'
 
 ATTR-STRING               := ARCH-ATTR ';' PRIORITY-ATTR
                            | PRIORITY-ATTR ';' ARCH-ATTR
@@ -360,10 +358,8 @@ Each `TARGET-VERSION-ATTR-STRING` defines a distinguished version of the functio
 The syntax of `<TARGET-VERSION-ATTR-STRING>` describes below:
 
 ```
-TARGET-VERSION-ATTR-STRING := DEFAULT-ATTR-STRING
+TARGET-VERSION-ATTR-STRING := 'default'
                             | ATTR-STRINGS
-
-DEFAULT-ATTR-STRING        := 'default'
 
 ATTR-STRINGS               := ATTR-STRING
                             | ';' ATTR-STRINGS
