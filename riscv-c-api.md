@@ -746,5 +746,5 @@ The process of selecting the appropriate function version during function multi-
 The version selection process applies the following rules in order:
 
 1. Among the eligible versions, select the one with the highest priority.
-2. If multiple versions have equal priority, select the one that was declared first.
+2. If multiple versions have equal priority, select one based on an implementation-defined heuristic.
 3. If no other suitable versions are found, fall back to the "default" version.
