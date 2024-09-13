@@ -739,7 +739,7 @@ This feature is triggered by `target_version/target_clones` function attribute.
 
 The process of selecting the appropriate function version during function multi-versioning follows these guidelines:
 
-1. The implementation of the selection algorithm is platform-specific.
+1. The implementation of the selection algorithm is implementation-specific.
 2. Once a version is selected, it remains in use for the entire duration of the process.
 3. Only versions whose required features are all available in the runtime environment are eligible for selection.
 
