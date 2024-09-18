@@ -355,39 +355,7 @@ The `target_version` attribute is used to create one version of a function. Func
 
 Each `TARGET-VERSION-ATTR-STRING` defines a distinguished version of the function. If there is more than one version for the same function, it must have `default` one that indicating the translation unit scope build attributes.
 
-The syntax of `<TARGET-VERSION-ATTR-STRING>` describes below:
-
-```
-TARGET-VERSION-ATTR-STRING := 'default'
-                            | ATTR-STRINGS
-
-ATTR-STRINGS               := ATTR-STRING
-                            | ';' ATTR-STRINGS
-
-ATTR-STRING                := ARCH-ATTR ';' PRIORITY-ATTR
-                            | PRIORITY-ATTR ';' ARCH-ATTR
-                            | ARCH-ATTR
-
-ARCH-ATTR                  := 'arch=' EXTENSIONS
-
-PRIORITY-ATTR              := 'priority=' DIGITS
-
-DIGITS                     := '-' [0-9]+
-                            | [0-9]+
-
-EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
-                        | <EXTENSION>
-
-EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
-
-OP                     := '+'
-
-VERSION                := [0-9]+ 'p' [0-9]+
-                        | [1-9][0-9]*
-                        |
-
-EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
-```
+The syntax of `<TARGET-VERSION-ATTR-STRING>` is the same as described above for `<TARGET-CLONES-ATTR-STRING>`.
 
 For example, the following foo function has three versions.
 
