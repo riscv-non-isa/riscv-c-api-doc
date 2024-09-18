@@ -311,9 +311,9 @@ ATTR-STRING               := ARCH-ATTR ';' PRIORITY-ATTR
 
 ARCH-ATTR                 := 'arch=' EXTENSIONS
 
-PRIORITY-ATTR             := 'priority=' DIGIT
+PRIORITY-ATTR             := 'priority=' DIGITS
 
-DIGIT                     := '-' [0-9]+
+DIGITS                    := '-' [0-9]+
                            | [0-9]+
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
@@ -370,10 +370,10 @@ ATTR-STRING                := ARCH-ATTR ';' PRIORITY-ATTR
 
 ARCH-ATTR                  := 'arch=' EXTENSIONS
 
-PRIORITY-ATTR              := 'priority=' DIGIT
+PRIORITY-ATTR              := 'priority=' DIGITS
 
-DIGIT                     := '-' [0-9]+
-                           | [0-9]+
+DIGITS                     := '-' [0-9]+
+                            | [0-9]+
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
