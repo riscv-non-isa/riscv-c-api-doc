@@ -814,9 +814,114 @@ statements, including both RISC-V specific and common operand modifiers.
 [id=function-multi-version]
 == Function Multi-version
 
-Function multi-versioning(FMV) provides an approach to selecting the appropriate
-function according to the runtime environment. The final binary may contain all
-versions of the function, with the compiler generating all supported versions
-and the runtime selecting the appropriate one.
+Function multi-versioning (FMV) allows selecting the appropriate function based on the runtime environment. The binary may contain multiple versions of the function, with the compiler generating all supported versions and selecting the appropriate one at runtime.
 
-This feature is triggered by `target_version/target_clones` function attribute.
+This feature is activated by the `target_version/target_clones` function attributes.
+
+=== Extension Bitmask
+
+The Extension Bitmask is used to probe whether features are enabled during runtime. This is achieved through three bitmask structures: `__riscv_feature_bits` for standard extensions,  `__riscv_vendor_feature_bits` for vendor-specific extensions and `__riscv_cpu_model` for the CPU model. Additionally, `__init_riscv_feature_bits` is used to update the contents of these structures according to the system configuration.
+
+The bitmask structures use the following definitions:
+
+```c
+struct {
+    unsigned length;
+    unsigned long long features[];
+} __riscv_feature_bits;
+
+struct {
+    unsigned length;
+    unsigned long long features[];
+} __riscv_vendor_feature_bits;
+
+struct {
+  unsigned mvendorid;
+  unsigned marchid;
+  unsigned mimpid;
+} __riscv_cpu_model;
+```
+
+- `length`: Represents the number of elements in the features array.
+- `features`: An `unsigned long long` array where each bit indicates 1 for a specific extension enabled by the system or 0 for the extension's status unknown in system.
+- `mvendorid`: Indicates the value of `mvendorid` CSR.
+- `marchid`: Indicates the value of `marchid` CSR.
+- `mimpid`: Indicates the value of `mimpid` CSR.
+
+To initiate these structures based on the system's extension status, the following function is provided:
+
+```
+void __init_riscv_feature_bits(void *);
+```
+
+The `__init_riscv_feature_bits` function updates `length`, `mvendorid`, `marchid`, `mimpid` and the `features` in `__riscv_feature_bits` and `__riscv_vendor_feature_bits` according to the enabled extensions in the system.
+
+The `__init_riscv_feature_bits` function accepts an argument of type `void *`. This argument allows the platform to provide pre-computed data and access it without additional effort. For example, Linux could pass the vDSO object to avoid an extra system call.
+
+NOTE: To detect failure of the `__init_riscv_feature_bits` function, it is recommended to check the bitmask for the `I` extension. The `I` extension must be supported in all valid RISC-V implementations.
+
+Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array. 
+
+> For example, the zba extension is represented by `groupid`: 0 and `bitmask`: `1ULL << 27`. Users can check if the zba extension is enabled using: `__riscv_feature_bits.features[0] & (1ULL << 27)`.
+
+==== Extension Bitmask Definitions
+
+> The single-letter extension bitmask follows the `misa` bit position inside `__riscv_feature_bits.features[0]`.
+
+[%autowidth]
+|====
+| extension | groupid | bit position
+| a | 0 | 0
+| c | 0 | 2
+| d | 0 | 3
+| f | 0 | 5
+| i | 0 | 8
+| m | 0 | 12
+| v | 0 | 21
+| zacas | 0 | 26
+| zba | 0 | 27
+| zbb | 0 | 28
+| zbc | 0 | 29
+| zbkb | 0 | 30
+| zbkc | 0 | 31
+| zbkx | 0 | 32
+| zbs | 0 | 33
+| zfa | 0 | 34
+| zfh | 0 | 35
+| zfhmin | 0 | 36
+| zicboz | 0 | 37
+| zicond | 0 | 38
+| zihintntl | 0 | 39
+| zihintpause | 0 | 40
+| zknd | 0 | 41
+| zkne | 0 | 42
+| zknh | 0 | 43
+| zksed | 0 | 44
+| zksh | 0 | 45
+| zkt | 0 | 46
+| ztso | 0 | 47
+| zvbb | 0 | 48
+| zvbc | 0 | 49
+| zvfh | 0 | 50
+| zvfhmin | 0 | 51
+| zvkb | 0 | 52
+| zvkg | 0 | 53
+| zvkned | 0 | 54
+| zvknha | 0 | 55
+| zvknhb | 0 | 56
+| zvksed | 0 | 57
+| zvksh | 0 | 58
+| zvkt | 0 | 59
+| zve32x | 0 | 60
+| zve32f | 0 | 61
+| zve64x | 0 | 62
+| zve64f | 0 | 63
+| zve64d | 1 | 0
+| zimop | 1 | 1
+| zca | 1 | 2
+| zcb | 1 | 3
+| zcd | 1 | 4
+| zcf | 1 | 5
+| zcmop | 1 | 6
+| zawra | 1 | 7
+|====
