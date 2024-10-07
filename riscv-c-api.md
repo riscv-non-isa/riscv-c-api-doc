@@ -313,8 +313,7 @@ ARCH-ATTR                 := 'arch=' EXTENSIONS
 
 PRIORITY-ATTR             := 'priority=' DIGITS
 
-DIGITS                    := '-' [0-9]+
-                           | [0-9]+
+DIGITS                    := [0-9]+
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
