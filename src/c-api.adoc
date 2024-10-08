@@ -923,5 +923,5 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | zcd | 1 | 4
 | zcf | 1 | 5
 | zcmop | 1 | 6
-| zawra | 1 | 7
+| zawrs | 1 | 7
 |====
