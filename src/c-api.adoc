@@ -736,7 +736,7 @@ statements, including both RISC-V specific and common operand constraints.
 .Constraints on Operands of Inline Assembly Statements
 [%autowidth]
 |===
-|*Constraint*       |                                             |*Note*
+|*Constraint*       |*Description*                                |*Note*
 |m                  |An address that is held in a general-purpose register with offset. |
 |A                  |An address that is held in a general-purpose register. |
 |r                  |General purpose register                     |
