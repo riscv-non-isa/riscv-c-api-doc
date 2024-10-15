@@ -746,12 +746,17 @@ statements, including both RISC-V specific and common operand constraints.
 |K                  |5-bit unsigned immediate integer operand     |
 |J                  |Zero integer immediate operand               |
 |s                  |symbol or label reference with a constant offset |
+|cr                 |RVC general purpose register (`x8`-`x15`)  |
+|cf                 |RVC floating point register (`f8`-`f15`)   |
+|Pr                 |Even-odd general purpose register pair     |
 |vr                 |Vector register                    |
 |vd                 |Vector register, excluding v0      |
 |vm                 |Vector register, only v0           |
 |===
 
 NOTE: Immediate value must be a compile-time constant.
+
+NOTE: The `c*` and `P*` constraints are designed to be extensible to more kinds of registers in the future.
 
 === The Difference Between `m` and `A` Constraints
 
@@ -809,6 +814,7 @@ statements, including both RISC-V specific and common operand modifiers.
 |*Modifiers*       |*Description*                                                                  |*Note*
 |z            |Print `zero` (`x0`) register for immediate 0, typically used with constraints `J` |
 |i            |Print `i` if corresponding operand is immediate.                                  |
+|N            |Print register encoding as integer (0-31). |
 |===
 
 [id=function-multi-version]
