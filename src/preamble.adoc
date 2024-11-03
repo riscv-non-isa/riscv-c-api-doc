@@ -1,0 +1,19 @@
+[preface]
+== Copyright and License Information
+
+The C API Sepecification is
+(C) 2018 Palmer Dabbelt mailto:palmer@sifive.com[palmer@sifive.com] and
+(C) 2018 SiFive, Inc.
+
+It is licensed under the Creative Commons Attribution 4.0 International
+License (CC-BY 4.0).
+
+The full license text is available at
+https://creativecommons.org/licenses/by/4.0/
+
+[preface]
+== Scope
+
+This file contains the RISC-V additions to the standard C APIs.  It
+merges together the compiler command-line API, the preprocessor API, and
+the C language extensions (function attributes and intrinsic functions).
