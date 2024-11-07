@@ -858,7 +858,9 @@ The `__init_riscv_feature_bits` function updates `length`, `mvendorid`, `marchid
 
 The `__init_riscv_feature_bits` function accepts an argument of type `void *`. This argument allows the platform to provide pre-computed data and access it without additional effort. For example, Linux could pass the vDSO object to avoid an extra system call.
 
-NOTE: To detect failure of the `__init_riscv_feature_bits` function, it is recommended to check the bitmask for the `I` extension. The `I` extension must be supported in all valid RISC-V implementations.
+All `length` fields should be initialized to zero if `__init_riscv_feature_bits` fails to detect the features.
+
+NOTE: To detect failure in the `__init_riscv_feature_bits` function, it is recommended to check that `__riscv_feature_bits.length` is non-zero.
 
 Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array. 
 
