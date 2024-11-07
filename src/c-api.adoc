@@ -462,7 +462,8 @@ NOTE: This can be implemented with `.option push; .option norelax; <function-bod
 NOTE: The use case for this attribute is to apply it to functions that may be invoked
 at a very early stage of the process, when the GP may not be initialized properly at that
 moment.
-NOTE: The compiler may automatically apply this attribute to ifunc resolver functions.
+NOTE: Functions used as ifunc resolvers should use this attribute. The compiler
+may apply this to automatically generated ifunc resolvers.
 
 == Intrinsic Functions
 
