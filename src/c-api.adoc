@@ -444,6 +444,25 @@ Functions declared with this attribute will use to the standard vector calling
 convention variant as defined in the RISC-V psABI, even if the function has
 vector arguments or a return value.
 
+=== norelax
+
+Supported Syntaxes:
+.Supported Syntaxes:
+[%autowidth]
+|===
+|*Style*  |*Syntax*
+|GNU    |`+__attribute__((norelax))+`
+|C++11  |`+[[riscv::norelax]]+`
+|C23    |`+[[riscv::norelax]]+`
+|===
+
+Functions declared with this attribute will not be relaxed by the linker.
+
+NOTE: This can be implemented with `.option push; .option norelax; <function-body>; .option pop`.
+NOTE: The use case for this attribute is to apply it to functions that may be invoked
+at a very early stage of the process, when the GP may not be initialized properly at that
+moment.
+
 == Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
