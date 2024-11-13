@@ -752,7 +752,7 @@ to aid portability of floating-point code.
 |J                  |Zero integer immediate operand               |
 |s                  |symbol or label reference with a constant offset |
 |cr                 |RVC general purpose register (`x8`-`x15`)  |
-|cf                 |RVC floating-point register (`f8`-`f15`)   |
+|cf                 |RVC floating-point register (`f8`-`f15` or `x8-x15` with `Zfinx`) |
 |Pr                 |Even-odd general purpose register pair     |
 |vr                 |Vector register                    |
 |vd                 |Vector register, excluding v0      |
