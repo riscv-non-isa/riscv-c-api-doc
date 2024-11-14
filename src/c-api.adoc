@@ -732,6 +732,7 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 
 This section lists operand constraints that can be used with inline assembly
 statements, including both RISC-V specific and common operand constraints.
+Operand constraints are case-sensitive.
 
 "Floating-point register" in both the `f` and `cf` rows means "a register
 suitable for passing a floating-point value", so when using the `Zfinx`,
@@ -753,13 +754,13 @@ to aid portability of floating-point code.
 |s                  |symbol or label reference with a constant offset |
 |cr                 |RVC general purpose register (`x8`-`x15`)  |
 |cf                 |RVC floating-point register (`f8`-`f15` or `x8-x15` with `Zfinx`) |
-|Pr                 |Even-odd general purpose register pair     |
+|R                  |Even-odd general purpose register pair     |
 |vr                 |Vector register                    |
 |vd                 |Vector register, excluding v0      |
 |vm                 |Vector register, only v0           |
 |===
 
-The `Pr` constraint should print as the even register in the pair, as this
+The `R` constraint should print as the even register in the pair, as this
 matches how the `amocas.q` instruction (on RV64) or the `amocas.d` and `Zdinx`
 instructions (on RV32) expect to parse their pair register operands. However,
 both registers in the pair should be considered to be live or clobbered
@@ -767,7 +768,8 @@ together.
 
 NOTE: Immediate value must be a compile-time constant.
 
-NOTE: The `c*` and `P*` constraints are designed to be extensible to more kinds of registers in the future.
+NOTE: The `c*` constraints are designed to be extensible to more kinds of
+RVC-compatible register constraints in the future.
 
 === The Difference Between `m` and `A` Constraints
 
