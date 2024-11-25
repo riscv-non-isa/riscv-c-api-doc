@@ -485,6 +485,38 @@ RISC-V intrinsics examples:
 vint8m1_t __riscv_vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1, size_t vl); // vadd.vv vd, vs2, vs1
 ----
 
+=== CMO Intrinsics
+
+The RISC-V CMO extension provides instruction for perform operations on copies 
+of data in the memory hierarchy. 
+
+In order to access the RISC-V CMO intrinsics, it is necessary to
+include the header file `riscv_cmo.h`.
+
+The functions are only available if the compiler's `-march` string enables the
+required ISA extension.
+
+.CMO Extension Intrinsics
+[%autowidth]
+|===
+|*Prototype*                                                                              |*Instruction*        |*Extension*    |*Notes*
+|`+void __riscv_cbo_clean(void *addr);+`                                                  |`cbo.clean`          |Zicbom         |
+|`+void __riscv_cbo_flush(void *addr);+`                                                  |`cbo.flush`          |Zicbom         |
+|`+void __riscv_cbo_inval(void *addr);+`                                                  |`cbo.inval`          |Zicbom         |
+|`+void __riscv_cbo_zero(void *addr);+`                                                   |`cbo.zero`           |Zicboz         |
+|`+void __riscv_cbo_prefetch(void *addr, const int rw, const int locality);+`             |`prefetch.[r][w]`    |Zicbop         | `rw`= [0,1], `locality` = [0..4].
+|`+int  __riscv_cbo_prefetchi(const int locality);+`                                      |`prefetch.i`         |Zicbop         |
+|===
+
+Note: riscv_cbo_prefetch is a wrapper around of builtin_prefetch
+[source, C]
+----
+void __riscv_cbo_prefetch(void *addr, const int rw, const int locality)
+{
+  __builtin_prefetch(addr, rw, locality);
+}
+----
+
 === NTLH Intrinsics
 
 
