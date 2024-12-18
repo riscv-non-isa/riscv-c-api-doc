@@ -881,7 +881,7 @@ All `length` fields should be initialized to zero if `__init_riscv_feature_bits`
 
 NOTE: To detect failure in the `__init_riscv_feature_bits` function, it is recommended to check that `__riscv_feature_bits.length` is non-zero.
 
-Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array. 
+Each queryable extension must have an associated `groupid` and `bitmask` that indicates its position within the features array.
 
 > For example, the zba extension is represented by `groupid`: 0 and `bitmask`: `1ULL << 27`. Users can check if the zba extension is enabled using: `__riscv_feature_bits.features[0] & (1ULL << 27)`.
 
