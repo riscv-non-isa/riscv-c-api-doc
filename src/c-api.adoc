@@ -328,8 +328,21 @@ The syntax of `<TARGET-CLONES-ATTR-STRING>` describes below:
 
 [source, C]
 ----
-TARGET-CLONES-ATTR-STRING := 'arch=' EXTENSIONS
-                           | 'default'
+TARGET-CLONES-ATTR-STRING := 'default'
+                           | ATTR-STRINGS
+
+ATTR-STRINGS              := ATTR-STRING
+                           | ';' ATTR-STRINGS
+
+ATTR-STRING               := ARCH-ATTR ';' PRIORITY-ATTR
+                           | PRIORITY-ATTR ';' ARCH-ATTR
+                           | ARCH-ATTR
+
+ARCH-ATTR                 := 'arch=' EXTENSIONS
+
+PRIORITY-ATTR             := 'priority=' DIGITS
+
+DIGITS                    := [0-9]+
 
 EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
                         | <EXTENSION>
@@ -350,7 +363,7 @@ same function signature.
 
 [source, C]
 ----
-__attribute__((target_clones("arch=+v", "default", "arch=+zbb")))
+__attribute__((target_clones("arch=+v;priority=2", "default", "arch=+zbb;priority=1")))
 int foo(int a)
 {
   return a + 5;
@@ -361,6 +374,8 @@ int bar() {
   return foo(1);
 }
 ----
+
+The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` isn't specified, then the priority of version defaults to zero.
 
 It makes the compiler trigger the <<function-multi-version, function multi-version>>,
 when there exist more than one version for the same function signature.
@@ -376,38 +391,19 @@ function. If there is more than one version for the same function, it
 must have `default` one that indicating the translation unit scope build
 attributes.
 
-The syntax of `<TARGET-VERSION-ATTR-STRING>` describes below:
-
-[source, C]
-----
-TARGET-VERSION-ATTR-STRING := 'arch=' EXTENSIONS
-                            | 'default'
-
-EXTENSIONS             := <EXTENSION> ',' <EXTENSIONS>
-                        | <EXTENSION>
-
-EXTENSION              := <OP> <EXTENSION-NAME> <VERSION>
-
-OP                     := '+'
-
-VERSION                := [0-9]+ 'p' [0-9]+
-                        | [1-9][0-9]*
-                        |
-
-EXTENSION-NAME         := Naming rule is defined in RISC-V ISA manual
-----
+The syntax of `<TARGET-VERSION-ATTR-STRING>` is the same as described above for `<TARGET-CLONES-ATTR-STRING>`.
 
 For example, the following foo function has three versions.
 
 [source, C]
 ----
-__attribute__((target_version("arch=+v")))
+__attribute__((target_version("arch=+v;priority=1")))
 int foo(int a)
 {
   return a + 5;
 }
 
-__attribute__((target_version("arch=+zbb")))
+__attribute__((target_version("arch=+zbb;priority=2")))
 int foo(int a)
 {
   return a + 5;
@@ -424,6 +420,10 @@ int bar() {
   return foo(1);
 }
 ----
+
+The `priority` accepts a digit as the version priority during [Version Selection](#version-selection). If `priority` isn't specified, then the priority of version defaults to zero.
+
+The `default` version does not accept the priority.
 
 It makes the compiler trigger the <<function-multi-version, function multi-version>>
 when there exist more than one version for the same function signature.
@@ -946,3 +946,17 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | zcmop | 1 | 6
 | zawrs | 1 | 7
 |====
+
+=== Version Selection
+
+The process of selecting the appropriate function version during function multi-versioning follows these guidelines:
+
+1. The implementation of the selection algorithm is implementation-specific.
+2. Once a version is selected, it remains in use for the entire duration of the process.
+3. Only versions whose required features are all available in the runtime environment are eligible for selection.
+
+The version selection process applies the following rules in order:
+
+1. Among the eligible versions, select the one with the highest priority.
+2. If multiple versions have equal priority, select one based on an implementation-defined heuristic.
+3. If no other suitable versions are found, fall back to the "default" version.
