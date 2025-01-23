@@ -755,6 +755,7 @@ to aid portability of floating-point code.
 |cr                 |RVC general purpose register (`x8`-`x15`)  |
 |cf                 |RVC floating-point register (`f8`-`f15` or `x8-x15` with `Zfinx`) |
 |R                  |Even-odd general purpose register pair     |
+|cR                 |RVC even-odd general purpose register pair (`x8`-`x14`) |
 |vr                 |Vector register                    |
 |vd                 |Vector register, excluding v0      |
 |vm                 |Vector register, only v0           |
