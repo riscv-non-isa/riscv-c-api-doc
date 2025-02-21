@@ -839,7 +839,7 @@ This feature is activated by the `target_version/target_clones` function attribu
 
 === Extension Bitmask
 
-The Extension Bitmask is used to probe whether features are enabled during runtime. This is achieved through three bitmask structures: `__riscv_feature_bits` for standard extensions,  `__riscv_vendor_feature_bits` for vendor-specific extensions and `__riscv_cpu_model` for the CPU model. Additionally, `__init_riscv_feature_bits` is used to update the contents of these structures according to the system configuration.
+The Extension Bitmask is used to probe whether features are enabled during runtime. This is achieved through three bitmask structures: `__riscv_feature_bits` for standard extensions and `__riscv_cpu_model` for the CPU model. Additionally, `__init_riscv_feature_bits` is used to update the contents of these structures according to the system configuration.
 
 The bitmask structures use the following definitions:
 
@@ -848,11 +848,6 @@ struct {
     unsigned length;
     unsigned long long features[];
 } __riscv_feature_bits;
-
-struct {
-    unsigned length;
-    unsigned long long features[];
-} __riscv_vendor_feature_bits;
 
 struct {
   unsigned mvendorid;
@@ -873,7 +868,7 @@ To initiate these structures based on the system's extension status, the followi
 void __init_riscv_feature_bits(void *);
 ```
 
-The `__init_riscv_feature_bits` function updates `length`, `mvendorid`, `marchid`, `mimpid` and the `features` in `__riscv_feature_bits` and `__riscv_vendor_feature_bits` according to the enabled extensions in the system.
+The `__init_riscv_feature_bits` function updates `length`, `mvendorid`, `marchid`, `mimpid` and the `features` in `__riscv_feature_bits` according to the enabled extensions in the system.
 
 The `__init_riscv_feature_bits` function accepts an argument of type `void *`. This argument allows the platform to provide pre-computed data and access it without additional effort. For example, Linux could pass the vDSO object to avoid an extra system call.
 
