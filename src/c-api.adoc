@@ -940,6 +940,9 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | zcf | 1 | 5
 | zcmop | 1 | 6
 | zawrs | 1 | 7
+| zilsd | 1 | 8
+| zclsd | 1 | 9
+| zcmp | 1 | 10
 |====
 
 === Version Selection
