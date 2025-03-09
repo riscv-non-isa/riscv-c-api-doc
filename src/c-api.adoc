@@ -201,6 +201,72 @@ function declares more than one mode or an undefined mode.
 
 This attribute is incompatible with the `naked` attribute.
 
+=== `+__attribute__((prestacked("<reglist>"))+`
+
+The prestacked attribute instructs the compiler which registers can be
+used without saving/restoring them. It enables efficient use of 
+custom interrupt controllers that stack some of the architectural registers.
+Without the need for compiler builds with a custom attributes.
+
+It shall not imply `interrupt` attribute.
+If used together with `interrupt` attribute, `prestacked` annotation overrides
+its register preservation functionality.
+
+To support auxiliary purposes, annotated functions should be callable by regular code.
+
+NOTE: If `x1` (aka `ra`) is included in the list, then a special return
+mechanism must be used (e.g. `mret` from `interrupt` attribute)
+
+`<reglist>` is a string literal, listing all registers available for use 
+in a given function, with a following syntax rules:
+
+- no whitespaces
+- raw register names rather than ABI mnemonics
+- register range cover all registers between and including specified ("x4-x6"
+is equivalent to "x4,x5,x6")
+- register range must span at least 3 consecutive registers
+- registers/ranges are separated by comma
+- annotated callee saved registers have to be properly handled as a temporary ones by caller
+- CSRs taking part in calling conventions are also subject to this mechanism
+- registers must be sorted (integer, floating point, vector, custom, then by 
+lowest numbered)
+- CSRs must be put after the architectural regfiles, those don’t have to be sorted
+- argument registers that are passed but not included in the list, can be assumed
+to be unmodified after return from an annotated function
+
+NOTE: Strict syntax rules allow better portability across compilers and ABIs.
+
+This attribute is incompatible with the `naked` attribute.
+
+==== usage examples
+
+ilp32f, caller saved: +
+`+__attribute__((prestacked("x5-x7,x10-x17,x28-x31,f0-f7,f10-f17,f28-f31,fcsr")))+`
+
+standard risc-v irq, ilp32e, caller saved and `ra`: +
+`+__attribute__((interrupt, prestacked("x1,x5-x7,x10-x15")))+`
+
+preemptible CLIC irq with simplified range (e.g. shadow register file): +
+`+__attribute__((interrupt("CLIC-preemptible"), prestacked("x8-x15")))+`
+
+custom irq controller, F + P extensions (`ra`,`a0`,`a1` pushed on stack, shadow registers 
+where bit 2 of register operand is set): +
+`+__attribute__((prestacked("x4-x7,x10,x11,x12-x15,x20-x23,x28-x31,fcsr,vxsat")))+`
+
+optimization for `noreturn` functions (ilp32f): +
+`+__attribute__((noreturn, prestacked("x1,x5-x31,f0-f31,fcsr")))+`
+
+NOTE: Compilers are intentionally preserving full prologues, of `noreturn` functions, to 
+allow backtracing and throwing exceptions. Which leads to stack and codespace
+bloating. Prestacked annotation can be abused to get rid of the prologue stacking
+without the risk of underflowing the stack as would happen with `naked` attribute.
+
+pure assembly function (FP compute kernel) using only subset of caller saved
+registers (`a0` argument not modified): +
+`+__attribute__((prestacked("x5,x11-x15,f10-f13,v0,v1,v8-v31,fcsr,vl,vtype,vstart")))+`
+
+NOTE: This use case is necessary for efficient IPRA compilations. Beneficial even without IPRA.
+
 === `+__attribute__((target("<ATTR-STRING>")))+`
 
 The `target` attribute is used to enable a set of features or extensions for a
