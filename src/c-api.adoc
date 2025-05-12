@@ -183,7 +183,7 @@ This attribute is incompatible with the `interrupt` attribute.
 NOTE: Be aware that compilers might have further restrictions on naked
 functions. Please consult your compiler's manual for more information.
 
-=== `+__attribute__((interrupt))+`, `+__attribute__((interrupt("user")))+`, `+__attribute__((interrupt("supervisor")))+`, `+__attribute__((interrupt("machine")))+`
+=== `+__attribute__((interrupt))+`, `+__attribute__((interrupt("supervisor")))+`, `+__attribute__((interrupt("machine")))+`
 
 The interrupt attribute specifies that a function is an interrupt handler.
 The compiler will save/restore all used registers in the prologue/epilogue
@@ -192,12 +192,13 @@ register/vector register if `F` extension/vector extension is enabled.  If F or
 V CSRs may be modified by an interrupt function, they must be saved by the
 compiler.
 
-The interrupt attribute can have an optional parameter to specify the mode.
-The possible values are `user`, `supervisor`, or `machine`.
+The interrupt attribute can have optional parameters to specify the mode.
+The possible values are `supervisor`, or `machine`, or vendor-specific values.
 The default value `machine` is used, if the mode is not specified.
 
-The function can specify only one mode; the compiler should raise an error if a
-function declares more than one mode or an undefined mode.
+The compiler should raise an error if a function declares incompatible modes, or
+an undefined mode. The `supervisor` mode is incompatible with the `machine`
+mode.
 
 This attribute is incompatible with the `naked` attribute.
 
