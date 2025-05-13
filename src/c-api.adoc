@@ -894,6 +894,7 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | f | 0 | 5
 | i | 0 | 8
 | m | 0 | 12
+| q | 0 | 16
 | v | 0 | 21
 | zacas | 0 | 26
 | zba | 0 | 27
