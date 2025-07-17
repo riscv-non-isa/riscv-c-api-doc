@@ -65,12 +65,12 @@ jobs:
         run: make -j$(nproc)
 
       # Upload the built PDF files as a single artifact
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Build Artifacts
-          path: ${{ github.workspace }}/build/*.pdf
-          retention-days: 30
+#      - name: Upload Build Artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: Build Artifacts
+#          path: ${{ github.workspace }}/build/*.pdf
+#          retention-days: 30
 
       # Upload the riscv-c-api PDF file
       - name: Upload riscv-c-api.pdf
