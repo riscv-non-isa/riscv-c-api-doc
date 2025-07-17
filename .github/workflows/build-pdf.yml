@@ -123,6 +123,7 @@ jobs:
     needs: build
 
     permissions:
+      contents: read
       pages: write
       id-token: write
 
