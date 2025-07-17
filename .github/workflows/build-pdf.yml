@@ -61,7 +61,8 @@ jobs:
 
       # Build Files
       - name: Build Files
-        run: make
+        id: build_files
+        run: make -j$(nproc)
 
       # Upload the built PDF files as a single artifact
       - name: Upload Build Artifacts
@@ -70,6 +71,24 @@ jobs:
           name: Build Artifacts
           path: ${{ github.workspace }}/build/*.pdf
           retention-days: 30
+
+      # Upload the riscv-c-api PDF file
+      - name: Upload riscv-c-api.pdf
+        if: steps.build_files.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+            name: riscv-c-api-${{ env.SHORT_SHA }}.pdf
+            path: ${{ github.workspace }}/build/riscv-c-api.pdf
+            retention-days: 7
+
+      # Upload the riscv-c-api HTML file
+      - name: Upload riscv-c-api.html
+        if: steps.build_files.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+            name: riscv-c-api-${{ env.SHORT_SHA }}.html
+            path: ${{ github.workspace }}/build/riscv-c-api.html
+            retention-days: 7
 
       # Create Release
       - name: Create Release
