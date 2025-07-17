@@ -107,7 +107,7 @@ jobs:
       - name: Make GitHub pages directory
         run: |
           mkdir -p dist/snapshot/riscv-c-api
-          cp build/riscv-riscv-c-api.html dist/snapshot/riscv-c-api/index.html
+          cp build/riscv-c-api.html dist/snapshot/riscv-c-api/index.html
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
 
       - name: Upload pages artifact
