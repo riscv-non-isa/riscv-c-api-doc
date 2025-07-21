@@ -183,7 +183,7 @@ This attribute is incompatible with the `interrupt` attribute.
 NOTE: Be aware that compilers might have further restrictions on naked
 functions. Please consult your compiler's manual for more information.
 
-=== `+__attribute__((interrupt))+`, `+__attribute__((interrupt("supervisor")))+`, `+__attribute__((interrupt("machine")))+`
+=== `+__attribute__((interrupt))+`, `+__attribute__((interrupt("supervisor")))+`, `+__attribute__((interrupt("machine")))+`, `+__attribute__((interrupt("rnmi")))+`
 
 The interrupt attribute specifies that a function is an interrupt handler.
 The compiler will save/restore all used registers in the prologue/epilogue
@@ -193,12 +193,18 @@ V CSRs may be modified by an interrupt function, they must be saved by the
 compiler.
 
 The interrupt attribute can have optional parameters to specify the mode.
-The possible values are `supervisor`, or `machine`, or vendor-specific values.
+The possible values are `supervisor`, `machine`, `rnmi` (`Smrnmi` extension) or
+vendor-specific values.
 The default value `machine` is used, if the mode is not specified.
 
-The compiler should raise an error if a function declares incompatible modes, or
-an undefined mode. The `supervisor` mode is incompatible with the `machine`
-mode.
+The `rnmi` mode (resumable non-maskable interrupt) can be used only with
+the `Smrnmi` extension.
+
+The compiler should raise an error if a function declares incompatible,
+unavailable (e.g. `rnmi` mode is only available with the `Smrnmi` extension) or
+undefined modes. The modes are incompatible with each other, i.e. the attribute
+should be used either without the mode specified, or with only one of the
+modes specified.
 
 This attribute is incompatible with the `naked` attribute.
 
