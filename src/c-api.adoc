@@ -202,9 +202,7 @@ the `Smrnmi` extension.
 
 The compiler should raise an error if a function declares incompatible,
 unavailable (e.g. `rnmi` mode is only available with the `Smrnmi` extension) or
-undefined modes. The modes are incompatible with each other, i.e. the attribute
-should be used either without the mode specified, or with only one of the
-modes specified.
+undefined modes.
 
 This attribute is incompatible with the `naked` attribute.
 
