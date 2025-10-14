@@ -128,6 +128,37 @@ For example:
 
 - F-extension v2.2 will define `+__riscv_f+` as `2002000`.
 
+=== Architecture Profile Test Macros
+
+Architecture profile test macros allow checking whether a specific RISC-V profile
+is in effect at compile-time. These macros enable developers to conditionally compile code
+based on the target profile.
+
+The naming rule for profile test macros is `+__riscv_<profile_name>+`,
+where `<profile_name>` is the lowercase profile identifier.
+
+Examples:
+
+- The test macro for the RVA23U64 profile is `+__riscv_rva23u64+`.
+- The test macro for the RVI20U32 profile is `+__riscv_rvi20u32+`.
+
+The profile macro is defined (with value 1) when the compiler detects that the enabled extensions match a specific RISC-V profile.
+
+Example usage:
+
+[source, C]
+----
+#ifdef __riscv_rva23u64
+  // Code specific to the RVA23U64 profile
+#endif
+
+#ifdef __riscv_rvi20u32
+  // Code specific to the RVI20U32 profile
+#endif
+----
+
+NOTE: The compiler selects the best matching profile based on the maximum number of matching extensions when multiple profiles could apply.
+
 === ABI Related Preprocessor Definitions
 
 .ABI Related Preprocessor Definitions
