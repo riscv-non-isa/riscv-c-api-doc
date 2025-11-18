@@ -170,6 +170,51 @@ For example:
 |`+__riscv_compressed+`    |1        |`C` extension is available.   | `+__riscv_c+`
 |===
 
+== Non-Interoperable Types and Definitions
+
+There are several implementation-defined C/C++ types and constants that are
+usually implemented in RISC-V implementations. The types and constants in this
+section should not be relied upon by public interfaces in your code. Their
+definitions may be changed by new compiler versions, compiler options, or on a
+per-processor basis.
+
+[id=non_interoperable_constants]
+.Non-Interoperable C/C++ Constants
+[cols="30,~"]
+|===
+|*Name*                      |*Description*
+|`+std::hardware_constructive_interference_size+` |The maximum recommended size of contiguous memory occupied by two objects accessed with temporal locality by concurrent threads.
+|`+std::hardware_destructive_interference_size+`  |The minimum recommended offset between two concurrently-accessed objects to avoid additional performance degradation due to contention introduced by the implementation.
+|`+INT_FASTN_WIDTH+`         |Bit width of an object of type `+int_fastN_t+`
+|`+INT_FASTN_MIN+`           |Minimum value of an object of type `+int_fastN_t+`
+|`+INT_FASTN_MAX+`           |Maximum value of an object of type `+int_fastN_t+`
+|`+INT_LEASTN_WIDTH+`        |Bit width of an object of type `+int_leastN_t+`
+|`+INT_LEASTN_MIN+`          |Minimum value of an object of type `+int_leastN_t+`
+|`+INT_LEASTN_MAX+`          |Maximum value of an object of type `+int_leastN_t+`
+|`+UINT_FASTN_WIDTH+`        |Bit width of an object of type `+uint_fastN_t+`
+|`+UINT_FASTN_MAX+`          |Maximum value of an object of type `+uint_fastN_t+`
+|`+UINT_LEASTN_WIDTH+`       |Bit width of an object of type `+uint_leastN_t+`
+|`+UINT_LEASTN_MAX+`         |Maximum value of an object of type `+uint_leastN_t+`
+|===
+
+=== Non-Interoperable Types
+
+Most C type sizes and alignments are defined by the ABI. The following types
+should not be relied upon by public interfaces in your code. Their sizes and
+alignments are not fixed.
+
+.Non-Interoperable Types
+[cols="30,~"]
+|===
+|*Type*            |*Description*
+|`+int_fastN_t+`   |Fastest signed integer types with widths of at least `+N+` bits.
+|`+int_leastN_t+`  |Smallest signed integer types with widths of at least `+N+` bits.
+|`+uint_fastN_t+`  |Fastest unsigned integer types with widths of at least `+N+` bits.
+|`+uint_leastN_t+` |Smallest unsigned integer types with widths of at least `+N+` bits.
+|===
+
+The corresponding constants are also unstable (see <<non_interoperable_constants, Non-Interoperable Constants>>).
+
 == Function Attributes
 
 === `+__attribute__((naked))+`
