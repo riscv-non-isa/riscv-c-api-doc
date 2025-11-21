@@ -142,22 +142,39 @@ Examples:
 - The test macro for the RVA23U64 profile is `+__riscv_rva23u64+`.
 - The test macro for the RVI20U32 profile is `+__riscv_rvi20u32+`.
 
-The profile macro is defined (with value 1) when the compiler detects that the enabled extensions match a specific RISC-V profile.
+When a specific profile is targeted, the compiler defines (with value 1) not only the exact profile macro,
+but also all compatible profile macros. This includes:
+
+1. The exact profile macro for the targeted profile
+2. Lower privilege mode variants (e.g., when targeting an S-mode profile, the corresponding U-mode profile macro is also defined, since S-mode is a superset of U-mode)
+3. All previous compatible profile versions
+
+For example, when compiling with `-march=rva23s64`, the following macros are defined:
+
+- `+__riscv_rva23s64+`
+- `+__riscv_rva23u64+`
+- `+__riscv_rva22s64+`
+- `+__riscv_rva22u64+`
+- `+__riscv_rva20s64+`
+- `+__riscv_rva20u64+`
+
+This behavior ensures that code guarded with a profile macro will work correctly on any future
+profile that is compatible with it, providing better forward compatibility and code portability.
 
 Example usage:
 
 [source, C]
 ----
 #ifdef __riscv_rva23u64
-  // Code specific to the RVA23U64 profile
+  // This code will execute on RVA23U64, RVA23S64, and any future
+  // profiles compatible with RVA23U64
 #endif
 
 #ifdef __riscv_rvi20u32
-  // Code specific to the RVI20U32 profile
+  // This code will execute on RVI20U32 and any future
+  // profiles compatible with RVI20U32
 #endif
 ----
-
-NOTE: The compiler selects the best matching profile based on the maximum number of matching extensions when multiple profiles could apply.
 
 === ABI Related Preprocessor Definitions
 
