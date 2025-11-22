@@ -133,7 +133,7 @@ For example:
 Architecture profile test macros allow checking whether a specific RISC-V profile
 is in effect at compile-time. These macros enable developers to conditionally compile code
 based on the target profile. These feature macros are optional, and compilers
-that support them provide a `+__riscv_arch_test+` macro (with the value `1`).
+that support them provide a `+__riscv_profile_test+` macro (with the value `1`).
 
 The naming rule for profile test macros is `+__riscv_<profile_name>+`,
 where `<profile_name>` is the lowercase profile identifier.
@@ -143,7 +143,14 @@ Examples:
 - The test macro for the RVA23U64 profile is `+__riscv_rva23u64+`.
 - The test macro for the RVI20U32 profile is `+__riscv_rvi20u32+`.
 
-When a specific profile is targeted, the compiler defines (with value 1) not only the exact profile macro,
+All profile test macros are defined with the value `1`:
+
+[source, C]
+----
+#define __riscv_rva23u64 1
+----
+
+When a specific profile is targeted, the compiler defines not only the exact profile macro,
 but also all compatible profile macros. This includes:
 
 1. The exact profile macro for the targeted profile
