@@ -128,6 +128,64 @@ For example:
 
 - F-extension v2.2 will define `+__riscv_f+` as `2002000`.
 
+=== Architecture Profile Test Macros
+
+Architecture profile test macros allow checking whether a specific RISC-V profile
+is in effect at compile-time. These macros enable developers to conditionally compile code
+based on the target profile. These feature macros are optional, and compilers
+that support them provide a `+__riscv_profile_test+` macro (with the value `1`).
+
+The naming rule for profile test macros is `+__riscv_<profile_name>+`,
+where `<profile_name>` is the lowercase profile identifier.
+
+Examples:
+
+- The test macro for the RVA23U64 profile is `+__riscv_rva23u64+`.
+- The test macro for the RVI20U32 profile is `+__riscv_rvi20u32+`.
+
+All profile test macros are defined with the value `1`:
+
+[source, C]
+----
+#define __riscv_rva23u64 1
+----
+
+When a specific profile is targeted, the compiler defines not only the exact profile macro,
+but also all compatible profile macros. This includes:
+
+1. The exact profile macro for the targeted profile
+2. Lower privilege mode variants (e.g., when targeting an S-mode profile, the corresponding U-mode profile macro is also defined, since S-mode is a superset of U-mode)
+3. All previous compatible profile versions
+
+For example, when compiling with `-march=rva23s64`, the following macros are defined:
+
+- `+__riscv_rva23s64+`
+- `+__riscv_rva23u64+`
+- `+__riscv_rva22s64+`
+- `+__riscv_rva22u64+`
+- `+__riscv_rva20s64+`
+- `+__riscv_rva20u64+`
+- `+__riscv_rvi20u64+`
+- ... (and any other profiles whose extension set is a subset)
+
+This behavior ensures that code guarded with a profile macro will work correctly on any future
+profile that is compatible with it, providing better forward compatibility and code portability.
+
+Example usage:
+
+[source, C]
+----
+#ifdef __riscv_rva23u64
+  // This code will execute on RVA23U64, RVA23S64, and any future
+  // profiles compatible with RVA23U64
+#endif
+
+#ifdef __riscv_rvi20u32
+  // This code will execute on RVI20U32 and any future
+  // profiles compatible with RVI20U32
+#endif
+----
+
 === ABI Related Preprocessor Definitions
 
 .ABI Related Preprocessor Definitions
