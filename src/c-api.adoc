@@ -1000,6 +1000,7 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | zcmp | 1 | 10
 | zifencei | 1 | 11
 | zmmul | 1 | 12
+| zibi | 1 | 13
 |====
 
 === Version Selection
