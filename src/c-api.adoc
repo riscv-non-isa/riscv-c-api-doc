@@ -128,6 +128,26 @@ For example:
 
 - F-extension v2.2 will define `+__riscv_f+` as `2002000`.
 
+=== Microarchitecture Test Macros
+
+Microarchitecture test macros allow checking the target microarchitecture or
+core at compile-time. The compiler can define one of these macros based on the
+`-mtune` option passed either explicitly (by specifying `-mtune`) or implicitly
+(by specifying `-mcpu`) to the compiler. These macros are optional, and
+compilers that support them provide a `+__riscv_uarch_test+` macro (with the
+value `1`). Developers can use these macros to write optimized code for specific
+microarchitectures or cores within a single C source file, and compile the code
+to different object files for different microarchitectures or cores.
+
+The naming rule for the test macros is `+__riscv_<uarch>+`, where `<uarch>` is
+all lower-case, and identical to the corresponding `-mtune` option, except that
+hyphens are replaced with underscores. Examples:
+
+- The test macro for the Rocket core is `+__riscv_rocket+`.
+- The test macro for SiFive 7 Series is `+__riscv_sifive_7_series+`.
+
+The value of the test macros is 1, if defined.
+
 === ABI Related Preprocessor Definitions
 
 .ABI Related Preprocessor Definitions
