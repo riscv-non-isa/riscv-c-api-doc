@@ -128,6 +128,62 @@ For example:
 
 - F-extension v2.2 will define `+__riscv_f+` as `2002000`.
 
+=== Intrinsic Support Detection Macros
+
+Toolchains provide macros to detect which RISC-V intrinsics are supported, independent of whether the corresponding ISA extensions are currently enabled via command-line options (e.g., `-march`). These macros allow developers to detect toolchain capabilities at compile-time and write portable code that can use intrinsics when available.
+
+*Note:* Intrinsic support is independent from assembler support. A toolchain may support intrinsics for an extension even if that extension is not enabled in the current compilation unit.
+
+==== Detection Macro Naming
+
+Intrinsic support detection macros follow the naming pattern `+__riscv_intrinsic_<extension>+`, where `<extension>` is the extension name in lowercase. This applies to both scalar and vector intrinsics.
+
+These macros are defined with the value `1` when the toolchain has intrinsic support for the corresponding extension.
+
+Examples:
+
+.Scalar Intrinsic Detection Macros
+- `+__riscv_intrinsic_zbb+` - Zbb (Basic bit-manipulation) scalar intrinsics
+- `+__riscv_intrinsic_zbc+` - Zbc (Carry-less multiplication) scalar intrinsics
+- `+__riscv_intrinsic_zbkb+` - Zbkb (Bit-manipulation for cryptography) scalar intrinsics
+
+.Vector Intrinsic Detection Macros
+- `+__riscv_intrinsic_v+` - Base vector (V extension) intrinsics
+- `+__riscv_intrinsic_zve32x+` - Zve32x vector intrinsics
+- `+__riscv_intrinsic_zve32f+` - Zve32f vector intrinsics
+- `+__riscv_intrinsic_zvbb+` - Zvbb (Vector bit-manipulation) intrinsics
+- `+__riscv_intrinsic_zvbc+` - Zvbc (Vector carry-less multiplication) intrinsics
+
+.Vendor Extension Detection Macros
+- `+__riscv_intrinsic_xtheadbb+` - XTheadBb scalar intrinsics
+- `+__riscv_intrinsic_xsfvcp+` - SiFive VCIX vector intrinsics
+- `+__riscv_intrinsic_xandesvdot+` - Andes vector dot product intrinsics
+
+==== Usage Examples
+
+[source, C]
+----
+#if defined(__riscv_intrinsic_zbb)
+  // Toolchain supports Zbb scalar intrinsics like __builtin_riscv_orc_b_*
+  // These can be used with target attributes even if -march doesn't include Zbb
+  __attribute__((target("arch=+zbb")))
+  unsigned long process_with_zbb(unsigned long x) {
+    return __builtin_riscv_orc_b_64(x);
+  }
+#endif
+----
+
+==== Composite Extensions
+
+When all sub-extensions of a composite extension have intrinsic support, a macro for the composite extension is also defined. These are defined conditionally using preprocessor directives.
+
+Examples of scalar and vector composite extensions:
+
+- `+__riscv_intrinsic_zkn+` - Defined when all of the following are supported: `zbkb`, `zbkc`, `zbkx`, `zkne`, `zknd`, `zknh`
+- `+__riscv_intrinsic_zks+` - Defined when all of the following are supported: `zbkb`, `zbkc`, `zbkx`, `zksed`, `zksh`
+- `+__riscv_intrinsic_zvkn+` - Defined when all of the following are supported: `zvkned`, `zvknhb`, `zvkb`
+- `+__riscv_intrinsic_zvknc+` - Defined when all of the following are supported: `zvkn`, `zvbc`
+
 === ABI Related Preprocessor Definitions
 
 .ABI Related Preprocessor Definitions
