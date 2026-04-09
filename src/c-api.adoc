@@ -778,6 +778,10 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 |`+uint64_t __riscv_moprr_64(uint64_t rs1, uint64_t rs2, const int n);+`|`mop.rr.[n]`  |Zimop (RV64) |`n`=[0..7]
 |===
 
+=== V and Zv* Extension Intrinsics
+
+Intrinsics for RISC-V Vectors (RVV) are documented in https://github.com/riscv-non-isa/riscv-rvv-intrinsic-doc[RISC-V Vector Intrinsics].
+
 == Constraints on Operands of Inline Assembly Statements
 
 This section lists operand constraints that can be used with inline assembly
