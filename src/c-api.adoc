@@ -1004,6 +1004,19 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | zcmp | 1 | 10
 | zifencei | 1 | 11
 | zmmul | 1 | 12
+| supm | 1 | 14
+| zicntr | 1 | 15
+| zihpm | 1 | 16
+| zfbfmin | 1 | 17
+| zvfbfmin | 1 | 18
+| zvfbfwma | 1 | 19
+| zicbom | 1 | 20
+| zaamo | 1 | 21
+| zalrsc | 1 | 22
+| zabha | 1 | 23
+| zalasr | 1 | 24
+| zicbop | 1 | 25
+| zicflip | 1 | 26
 |====
 
 === Version Selection
