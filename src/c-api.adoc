@@ -1016,7 +1016,7 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | zabha | 1 | 23
 | zalasr | 1 | 24
 | zicbop | 1 | 25
-| zicflip | 1 | 26
+| zicfilp | 1 | 26
 |====
 
 === Version Selection
