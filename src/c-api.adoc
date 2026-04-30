@@ -29,6 +29,10 @@ a|
 |`+__riscv_misaligned_fast+` |1  | Scalar misaligned accesses are fast.
 |`+__riscv_misaligned_slow+` |1  | Scalar misaligned accesses are supported, but may be substantially slower than aligned accesses.
 |`+__riscv_misaligned_avoid+` |1  | Scalar misaligned accesses are not supported and could trap. (see <<__riscv_misaligned_fast_slow_avoid, `+__riscv_misaligned_{fast,slow,avoid}+`>>)
+| `+__riscv_landing_pad+` | 1 | Defined if the landing pad is enabled.
+| `+__riscv_landing_pad_unlabeled+` | 1 | Defined if the unlabeled labeling scheme is enabled.
+| `+__riscv_landing_pad_func_sig+` | 1 | Defined if the function signature based labeling scheme is enabled.
+| `+__riscv_shadow_stack+` | 1 | Defined if the shadow stack is enabled.
 |===
 
 [id=__riscv_v_min_vlen]
