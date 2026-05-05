@@ -130,9 +130,9 @@ For example:
 
 === Intrinsic Support Detection Macros
 
-Toolchains provide macros to detect which RISC-V intrinsics are supported, independent of whether the corresponding ISA extensions are currently enabled via command-line options (e.g., `-march`). These macros allow developers to detect toolchain capabilities at compile-time and write portable code that can use intrinsics when available.
+Toolchains provide macros to detect which RISC-V intrinsics are supported, independent of whether the corresponding ISA extensions are currently enabled via command-line options (e.g., `-march`). These macros allow developers to detect toolchain capabilities at compile-time and write portable code that can use intrinsics when available. Macros are defined in their corresponding header files, e.g. __riscv_intrinsic_zbb, __riscv_intrinsic_zbc, etc. are defined in riscv_bitmanip.h, it can be used with __has_include macro to guard intrinsic usage.
 
-*Note:* Intrinsic support is independent from assembler support. A toolchain may support intrinsics for an extension even if that extension is not enabled in the current compilation unit.
+*Note:* Intrinsic support is independent from assembler support. A toolchain may support intrinsics for an extension even if that extension is not enabled in the current compilation unit. This is only available if intrinsics are ratified, in other word, experimental intrinsics do not have macro defined.
 
 ==== Detection Macro Naming
 
