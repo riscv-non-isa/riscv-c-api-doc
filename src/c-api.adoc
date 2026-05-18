@@ -1061,6 +1061,7 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | zifencei | 1 | 11
 | zmmul | 1 | 12
 | zibi | 1 | 13
+| zicfiss | 1 | 27
 |====
 
 === Version Selection
