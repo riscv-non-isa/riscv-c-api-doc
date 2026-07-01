@@ -46,7 +46,7 @@ The value of `+__riscv_v_min_vlen+` is defined by the following rules:
 is present.
 
 If multiple rules apply, the maximum value is taken.
-If none of the rules apply, `+__riscv_v_min_vlen+` is undefined.
+If none of the rules apply, `+__riscv_v_min_vlen+` is not defined.
 
 Examples:
 
@@ -86,6 +86,37 @@ The value of `+__riscv_v_elen_fp+` is defined by the following rules:
 - 0, if one of the `Zve{32,64}x` extensions is present.
 If multiple rules apply, the maximum value is taken.
 If none of the rules apply, `+__riscv_v_elen_fp+` is undefined.
+
+[id=__riscv_v_fixed_vlen]
+=== +__riscv_v_fixed_vlen+
+
+The `+__riscv_v_fixed_vlen+` macro expands to the fixed vector register length
+(VLEN), in bits, selected at compile time. It is the length of a single vector
+register (LMUL=1).
+
+`+__riscv_v_fixed_vlen+` is defined only when the compiler is configured to use
+a single, compile-time-known VLEN. This is currently requested with the
+`+-mrvv-vector-bits=zvl+` command-line option, in which case its value is the
+minimal VLEN mandated by the `-march` string, that is the same value as
+`+__riscv_v_min_vlen+`.
+
+NOTE: When `+__riscv_v_fixed_vlen+` is defined, the translation unit is built for
+this single fixed VLEN and may not run correctly on a processor whose VLEN differs
+from this value. For example, a translation unit built with
+`+__riscv_v_fixed_vlen+` equal to 128 may not run correctly on a processor with a
+VLEN of 256.
+
+`+__riscv_v_fixed_vlen+` is undefined when no fixed VLEN is selected (the
+default, vector-length-agnostic mode), and when no vector extension (`Zve32x`
+or above) is available. It is the basis for the `<<riscv_rvv_vector_bits>>`
+type attribute.
+
+Examples:
+
+- `+__riscv_v_fixed_vlen+` is 128 for `+rv64gcv -mrvv-vector-bits=zvl+`
+- `+__riscv_v_fixed_vlen+` is 256 for `+rv64gcv_zvl256b -mrvv-vector-bits=zvl+`
+- `+__riscv_v_fixed_vlen+` is undefined for `rv64gcv` without
+`+-mrvv-vector-bits=zvl+`
 
 [id=__riscv_misaligned_fast_slow_avoid]
 === +__riscv_misaligned_{fast,slow,avoid}+
@@ -549,6 +580,257 @@ Supported Syntaxes:
 Functions declared with this attribute will use to the standard vector calling
 convention variant as defined in the RISC-V psABI, even if the function has
 vector arguments or a return value.
+
+== Type Attributes
+
+[id=riscv_rvv_vector_bits]
+=== riscv_rvv_vector_bits
+
+Supported Syntaxes:
+.Supported Syntaxes:
+[%autowidth]
+|===
+|*Style*  |*Syntax*
+|GNU    |`+__attribute__((riscv_rvv_vector_bits(N)))+`
+|C++11  |`+[[riscv::rvv_vector_bits(N)]]+`
+|C23    |`+[[riscv::rvv_vector_bits(N)]]+`
+|===
+
+The `+riscv_rvv_vector_bits(N)+` attribute creates a fixed-length variant of a
+sizeless RVV type. It is applied to an RVV type, normally through a typedef, and
+produces a type that is fixed to `N` bits wide with a compile-time-known size
+and layout, while still being recognized as the RVV type it was created from for
+use with the vector intrinsics. `N` is the size of the resulting type in bits.
+
+[source, C]
+----
+#include <riscv_vector.h>
+#if defined(__riscv_v_fixed_vlen)
+typedef vint8m1_t fixed_vint8m1_t
+    __attribute__((riscv_rvv_vector_bits(__riscv_v_fixed_vlen)));
+#endif
+----
+
+==== Background
+
+RVV data types such as `vint8m1_t` and mask types such as `vbool8_t` are
+_sizeless_ (also called vector-length-agnostic, VLA): their size is not known at
+compile time, so they cannot be the type of a global variable, a `struct` or
+`union` member, or an array element, and `sizeof` cannot be applied to them.
+
+The `+riscv_rvv_vector_bits+` attribute turns such a type into a _fixed-length_
+(vector-length-specific, VLS) type. The fixed-length type has a compile-time
+size, so all of the uses above become valid, and it remains usable with the RVV
+intrinsics declared in `riscv_vector.h`.
+
+A fixed-length RVV type is not the same as a GNU vector type created with
+`+__attribute__((vector_size(N)))+`. A GNU vector type carries only an element
+type and a total size; it does not record the LMUL (the vector register group
+multiplier) or the mask ratio, and it is not an RVV type, so it cannot be passed
+to or returned from an RVV intrinsic. The RVV intrinsics are typed and overloaded
+on the exact RVV type, which encodes the LMUL needed to select the right
+operation and registers. A type created with `+riscv_rvv_vector_bits+` keeps this
+RVV type identity, so it can both provide sized storage and be used with the
+intrinsics.
+
+[NOTE]
+====
+A GNU vector can still be moved to and from an RVV sizeless type by other means,
+for example by storing it to memory and loading it back with the `vle`/`vse`
+intrinsics. Such a conversion goes through memory, so it introduces extra load
+and store operations that later compiler passes cannot easily remove.
+
+[source, C]
+----
+#include <riscv_vector.h>
+
+typedef int32_t int32x4_t __attribute__((vector_size(16)));
+
+// int32x4_t -> vint32m1_t, through a store and a vector load.
+vint32m1_t to_rvv(int32x4_t g) {
+  return __riscv_vle32_v_i32m1((const int32_t *)&g, 4);
+}
+
+// vint32m1_t -> int32x4_t, through a vector store and a load.
+int32x4_t from_rvv(vint32m1_t v) {
+  int32x4_t g;
+  __riscv_vse32_v_i32m1((int32_t *)&g, v, 4);
+  return g;
+}
+----
+====
+
+==== The __riscv_v_fixed_vlen Macro
+
+The attribute argument is normally derived from the `<<__riscv_v_fixed_vlen>>`
+macro, which gives the fixed VLEN, in bits, of a single vector register
+(LMUL=1). Because the argument is derived from it, portable code should define
+fixed-length typedefs only where it is available:
+
+[source, C]
+----
+#if defined(__riscv_v_fixed_vlen)
+// fixed-length typedefs
+#endif
+----
+
+NOTE: Some current GCC and Clang versions require a fixed VLEN to be selected at
+compile time before this attribute can be used, that is they define
+`+__riscv_v_fixed_vlen+` and accept the attribute only when compiling with the
+`+-mrvv-vector-bits=zvl+` command-line option. This is a limitation of those
+implementations, not a requirement of this specification.
+
+==== Applicable Types
+
+The attribute applies only to:
+
+- a single RVV data vector type (a non-segment type, that is `+NF == 1+`), for
+example `vint8m1_t`, `vfloat32m2_t`, or a fractional-LMUL type such as
+`vint8mf2_t`; or
+- an RVV mask type, `vbool1_t` through `vbool64_t`.
+
+Applying it to any other type is ill-formed and the compiler reports an error.
+This includes a non-RVV type, a tuple or segment type (`+NF > 1+`, for example
+`vint8m1x2_t`), a wrong number of arguments, and an argument that is not an
+integer constant expression.
+
+==== The N Argument
+
+For a _data_ vector type with vector register group multiplier LMUL, `N` is the
+fixed register-group size in bits, `+N == __riscv_v_fixed_vlen * LMUL+`:
+
+.Data type size in bits
+[%autowidth]
+|===
+|*LMUL* |*N*
+
+|mf8 |`+__riscv_v_fixed_vlen / 8+`
+|mf4 |`+__riscv_v_fixed_vlen / 4+`
+|mf2 |`+__riscv_v_fixed_vlen / 2+`
+|m1  |`+__riscv_v_fixed_vlen+`
+|m2  |`+__riscv_v_fixed_vlen * 2+`
+|m4  |`+__riscv_v_fixed_vlen * 4+`
+|m8  |`+__riscv_v_fixed_vlen * 8+`
+|===
+
+The number of elements is `N` divided by the element width in bits.
+
+For a _mask_ type `+vbool<RATIO>_t+`, `N` is the number of mask elements,
+`+N == __riscv_v_fixed_vlen / RATIO+`. RATIO is the number in the mask type name;
+it is the ratio between the element width (SEW) and LMUL of the data vector that
+the mask corresponds to. A mask holds one bit per element of that data vector, so
+the number of mask elements is `+__riscv_v_fixed_vlen / RATIO+`.
+
+.Mask type size in mask elements
+[%autowidth]
+|===
+|*Type* |*RATIO* |*N*
+
+|`vbool1_t`  |1  |`+__riscv_v_fixed_vlen+`
+|`vbool2_t`  |2  |`+__riscv_v_fixed_vlen / 2+`
+|`vbool4_t`  |4  |`+__riscv_v_fixed_vlen / 4+`
+|`vbool8_t`  |8  |`+__riscv_v_fixed_vlen / 8+`
+|`vbool16_t` |16 |`+__riscv_v_fixed_vlen / 16+`
+|`vbool32_t` |32 |`+__riscv_v_fixed_vlen / 32+`
+|`vbool64_t` |64 |`+__riscv_v_fixed_vlen / 64+`
+|===
+
+A mask type is representable for a given `+__riscv_v_fixed_vlen+` only when
+`+__riscv_v_fixed_vlen / RATIO+` is at least 8; for smaller values the mask still
+occupies one byte, so portable code should guard such typedefs with `#if` on
+`+__riscv_v_fixed_vlen+`.
+
+If `N` does not match the value required by the type's LMUL or ratio, the program
+is ill-formed and the compiler reports an error. This is a diagnosed error, not
+undefined behavior.
+
+==== Size, Alignment, and Layout
+
+A fixed-length _data_ type holds `N / 8` bytes of element data, and `sizeof`
+returns `N / 8`.
+
+A fixed-length _mask_ type is laid out as a vector of bytes, with eight mask
+elements per byte and at least one byte; `sizeof` returns `+max(1, N / 8)+`.
+
+The alignment of a fixed-length RVV type follows the RISC-V psABI rules for
+fixed-length vectors.
+
+==== Conversions
+
+A fixed-length type and the sizeless RVV type it was created from convert
+implicitly in both directions, provided they have the same element type and the
+same LMUL (for data) or ratio (for masks). This is what allows a fixed-length
+value to be passed to and returned from an RVV intrinsic that is typed on the
+sizeless type.
+
+Combining a fixed-length type and a sizeless RVV type, or a GNU vector type and
+an RVV type, as operands of the same operation is ill-formed; the result type
+would otherwise be ambiguous.
+
+==== Permitted Uses
+
+A fixed-length type can be used wherever a complete type is required: as the type
+of a global, `static`, `extern`, or thread-local variable, a pointer target, a
+`struct` or `union` member, or an array element, and with `sizeof` and `alignof`.
+Sizeless RVV types cannot be used in any of these ways.
+
+==== Operators
+
+A fixed-length _data_ type supports the GNU vector operators: arithmetic,
+comparison, bitwise, shift, and the corresponding unary operators, following the
+rules for GNU vector types (which operators are available depends on the element
+type). An operator is applied element by element over the whole fixed-length
+vector, that is over all `+N / SEW+` elements, where `N` is the size of the type
+in bits and SEW is the element width in bits. This element count is fixed at
+compile time.
+
+A comparison follows the GNU vector rules: it yields a vector of the same shape
+whose elements are all-ones for a true result and zero for a false result, not an
+RVV mask type.
+
+The subscript operator `+[]+` accesses an individual element of a fixed-length
+_data_ type. The index selects one of the `+N / SEW+` elements; using an index
+that is negative or not less than `+N / SEW+` is undefined behavior.
+
+==== Calling Convention
+
+A fixed-length RVV type is passed and returned using the standard fixed-length
+vector calling convention variant of the RISC-V psABI. Under that convention a
+fixed-length type is passed and returned in the same way as the sizeless RVV type
+it was created from. See the RISC-V psABI for the full rules, including the C++
+name mangling of these types.
+
+==== Examples
+
+[source, C]
+----
+#include <riscv_vector.h>
+#if defined(__riscv_v_fixed_vlen)
+// Data types.
+typedef vint8m1_t  fixed_vint8m1_t
+    __attribute__((riscv_rvv_vector_bits(__riscv_v_fixed_vlen)));
+typedef vint8mf2_t fixed_vint8mf2_t
+    __attribute__((riscv_rvv_vector_bits(__riscv_v_fixed_vlen / 2)));
+typedef vint8m8_t  fixed_vint8m8_t
+    __attribute__((riscv_rvv_vector_bits(__riscv_v_fixed_vlen * 8)));
+
+// Mask type (vbool8_t has RATIO 8).
+typedef vbool8_t   fixed_vbool8_t
+    __attribute__((riscv_rvv_vector_bits(__riscv_v_fixed_vlen / 8)));
+
+// Fixed-length types can be used where sizeless types cannot.
+fixed_vint8m1_t global_vec;
+struct S { fixed_vint8m1_t v; };
+_Static_assert(sizeof(fixed_vint8m1_t) == __riscv_v_fixed_vlen / 8, "");
+#endif
+----
+
+==== Availability
+
+The GNU spelling `+__attribute__((riscv_rvv_vector_bits(N)))+` is implemented by
+both GCC and Clang. The `+[[riscv::rvv_vector_bits(N)]]+` spelling is currently
+implemented by GCC. The attribute is available when `<<__riscv_v_fixed_vlen>>` is
+defined.
 
 == Intrinsic Functions
 
