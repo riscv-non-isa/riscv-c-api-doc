@@ -46,7 +46,7 @@ The value of `+__riscv_v_min_vlen+` is defined by the following rules:
 is present.
 
 If multiple rules apply, the maximum value is taken.
-If none of the rules apply, `+__riscv_v_min_vlen+` is undefined.
+If none of the rules apply, `+__riscv_v_min_vlen+` is not defined.
 
 Examples:
 
@@ -69,7 +69,7 @@ The value of `+__riscv_v_elen+` is defined by the following rules:
 - 64, if the `V` extension or one of the `Zve64{x,f,d}` extensions is present; and
 - 32, if one of the `Zve32{x,f}` extensions is present.
 If multiple rules apply, the maximum value is taken.
-If none of the rules apply, `+__riscv_v_elen+` is undefined.
+If none of the rules apply, `+__riscv_v_elen+` is not defined.
 
 [id=__riscv_v_elen_fp]
 === +__riscv_v_elen_fp+
@@ -85,7 +85,7 @@ The value of `+__riscv_v_elen_fp+` is defined by the following rules:
 - 32, if one of the `Zve{32,64}f` extensions is present; and
 - 0, if one of the `Zve{32,64}x` extensions is present.
 If multiple rules apply, the maximum value is taken.
-If none of the rules apply, `+__riscv_v_elen_fp+` is undefined.
+If none of the rules apply, `+__riscv_v_elen_fp+` is not defined.
 
 [id=__riscv_misaligned_fast_slow_avoid]
 === +__riscv_misaligned_{fast,slow,avoid}+
