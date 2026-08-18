@@ -184,6 +184,22 @@ Examples of scalar and vector composite extensions:
 - `+__riscv_intrinsic_zvkn+` - Defined when all of the following are supported: `zvkned`, `zvknhb`, `zvkb`
 - `+__riscv_intrinsic_zvknc+` - Defined when all of the following are supported: `zvkn`, `zvbc`
 
+[[state-attribute-macros]]
+=== State Attribute Macros
+
+Implementations that support the <<state-attributes,state attributes>>
+predefine the `+__riscv_state_attributes+` macro (with the value `1`).
+
+In addition, for each state string `"<name>"` that the implementation
+recognizes in state attributes, it predefines the macro
+`+__riscv_state_<name>+` to `1`. For example, `+__riscv_state_xsfmm+`
+indicates that function declarations may use the `"xsfmm"` state string.
+
+Whether a function definition can actually access a state additionally
+depends on the required extension being enabled, which is indicated by
+the corresponding architecture extension test macro (for example
+`+__riscv_xsfmmbase+`).
+
 === ABI Related Preprocessor Definitions
 
 .ABI Related Preprocessor Definitions
@@ -549,6 +565,248 @@ Supported Syntaxes:
 Functions declared with this attribute will use to the standard vector calling
 convention variant as defined in the RISC-V psABI, even if the function has
 vector arguments or a return value.
+
+[[state-attributes]]
+=== State Attributes
+
+Some RISC-V extensions define architectural state that cannot be modeled
+as normal C or C++ objects. For example, the SiFive Xsfmm matrix
+extensions define a single set of matrix tile registers together with
+associated configuration state: there is only one instance of this state,
+and copying it is prohibitively expensive. State attributes let a function type
+describe the contract between the function and its callers for such state, so
+that compilers can check calls at compile time and keep the state live across
+calls where the contract allows it.
+
+Each piece of state is identified by a case-sensitive string:
+
+[[state-attribute-strings]]
+.State strings
+[%autowidth]
+|===
+|*String* |*State* |*Required extension*
+
+|`"xsfmm"`
+|Matrix tile registers and associated configuration state, as defined by
+the SiFive Xsfmm Matrix Extensions Specification
+|`xsfmmbase`
+|===
+
+A program is ill-formed if a state attribute uses a string that the
+implementation does not recognize. The state string for state defined by
+a vendor extension is the lower-case vendor extension (family) name.
+State strings for state defined by future standard extensions will be
+added to this table when such extensions are ratified.
+
+For a piece of state S, the attributes express two properties of a
+function:
+
+* A function either _shares_ S with its caller or it does not.
+* A function either _uses_ S or it does not. A function that shares S
+  also uses S. A function that uses S without sharing it is said to
+  create a _new scope_ for S.
+
+Calls are checked against these properties, see
+<<state-attribute-call-rules,Rules for Calls>>.
+
+NOTE: Although the only state defined so far belongs to the SiFive Xsfmm
+matrix extension family, the attributes themselves are generic. Future
+standard RISC-V matrix extensions, such as VME and AME, are expected to
+reuse them directly by defining new state strings, and vendor extensions
+that add other architectural state (for example additional register
+files or configuration CSRs) can be supported the same way.
+
+==== Syntax
+
+The following keyword attributes are defined. Each takes a non-empty,
+comma-separated list of state strings and appertains to a *function
+type*:
+
+[%autowidth]
+|===
+|*Attribute* |*Relationship with each listed state S*
+
+|`+__riscv_in(...)+` |Shares S; S is an input only.
+|`+__riscv_out(...)+` |Shares S; S is an output only.
+|`+__riscv_inout(...)+` |Shares S; S is both an input and an output.
+|`+__riscv_preserves(...)+` |Shares S; S is neither an input nor an
+output, and its contents are preserved.
+|`+__riscv_new(...)+` |Uses S without sharing it; creates a new scope
+for S.
+|===
+
+The attributes are spelled as keywords rather than as
+`+__attribute__((...))+` or `+[[...]]+` attributes because they change
+the semantics and the type of the program, whereas standard attributes
+are required to be ignorable.
+
+A keyword attribute is written after the parameter list of a function
+declarator and applies to the enclosing function type. It can appear on
+function declarations and definitions, function pointers and typedefs:
+
+[source, C]
+----
+void matmul(float *dst, const float *a, const float *b)
+    __riscv_inout("xsfmm");
+
+void (*fnptr)(void) __riscv_inout("xsfmm");
+
+typedef void mm_kernel_t(void) __riscv_inout("xsfmm");
+----
+
+The attributes can only be applied to function types that have a
+prototype.
+
+The same relationship may be specified more than once; for example,
+`+void f(void) __riscv_in("xsfmm") __riscv_in("xsfmm");+` is
+well-formed. A program is ill-formed if a function type has two
+attributes that specify a different relationship for the same state,
+such as `+__riscv_in("xsfmm") __riscv_out("xsfmm")+`.
+
+==== Semantics
+
+In the following, F is a function whose type carries the given attribute
+for a state S.
+
+`+__riscv_in(S)+`::
+F shares S with its caller. On entry, S contains data that F may read.
+On return, the contents of S are unchanged. This is similar to passing
+an argument by const reference in C++.
+
+`+__riscv_out(S)+`::
+F shares S with its caller. F must not depend on the contents of S on
+entry. On return, S contains data provided by F. This is similar to a
+function return value.
+
+`+__riscv_inout(S)+`::
+F shares S with its caller. On entry, S contains data that F may read.
+On return, S contains data provided by F. This is similar to passing an
+argument by non-const reference in C++.
+
+`+__riscv_preserves(S)+`::
+F shares S with its caller. F does not read the contents of S on entry
+and returns with the contents of S unchanged.
+
+`+__riscv_new(S)+`::
+F does not share S with its caller; it creates a new scope for S. The
+contents of S on entry and on return are not part of F's interface, and
+F must initialize S itself before reading it.
+
+`+__riscv_in+` and `+__riscv_preserves+` both guarantee that the
+contents of S are unchanged on return. A function with one of these
+attributes may still write to S, but it must ensure that the cumulative
+effect of such writes is to leave the contents of S unchanged.
+
+[[state-attribute-call-rules]]
+==== Rules for Calls
+
+The following rules apply to every call, whether direct or through a
+function pointer; the callee's relationship with a state is determined
+by the static type of the callee expression. A program that violates
+these rules is ill-formed.
+
+For each recognized state S and a call from a function F to a callee F2:
+
+. If F does not use S, then F2 must not share S. F2 may be a function
+  that does not use S, or a `+__riscv_new(S)+` function (whose new
+  scope for S is local to F2).
+. If F uses S, then F2 must share S. In particular:
+** F2 must not be a function that does not use S: such a function gives
+   no guarantee about S, and this specification does not define a
+   mechanism for automatically preserving S across the call.
+** F2 must not be a `+__riscv_new(S)+` function: entering a new scope
+   for S would destroy the contents of S that are live in F.
+. If F uses S and F2 shares S, the combination must be permitted by the
+  following table:
+
+.Permitted caller/callee combinations
+[%autowidth]
+|===
+|*Caller relationship with S* |*Permitted callee relationships with S*
+
+|`+__riscv_in+`
+|`+__riscv_in+`, `+__riscv_preserves+`
+
+|`+__riscv_out+`
+|`+__riscv_in+`, `+__riscv_out+`, `+__riscv_preserves+`
+
+|`+__riscv_inout+` or `+__riscv_new+`
+|`+__riscv_in+`, `+__riscv_out+`, `+__riscv_inout+`, `+__riscv_preserves+`
+
+|`+__riscv_preserves+`
+|`+__riscv_preserves+`
+|===
+
+The intent of the table is that a callee must not break a guarantee made
+by its caller: a function that must return S unchanged cannot call a
+function that overwrites S, and a function that promises not to read S
+cannot pass S as an input to a callee. The rules are conservative and
+flow-insensitive; for example, an `+__riscv_out+` caller may call an
+`+__riscv_in+` callee on the assumption that the caller has already
+produced the data, and implementations are not required to prove that
+this is the case.
+
+NOTE: This specification does not define a mechanism for saving and
+restoring a state around a call, so a function that uses a state cannot
+call a function that gives no guarantee about that state (such as an
+ordinary libc function).
+
+Example:
+
+[source, C]
+----
+void produce(void) __riscv_out("xsfmm");
+void consume(void) __riscv_in("xsfmm");
+void untouched(void) __riscv_preserves("xsfmm");
+void plain(void);
+
+void kernel(void) __riscv_new("xsfmm")
+{
+  produce();    // OK
+  consume();    // OK
+  untouched();  // OK
+  plain();      // Error: no guarantee about "xsfmm" state
+}
+
+void plain_caller(void)
+{
+  kernel();     // OK: kernel's state scope is local to kernel
+  consume();    // Error: caller does not use "xsfmm" state
+}
+
+void reader(void) __riscv_in("xsfmm")
+{
+  consume();    // OK
+  untouched();  // OK
+  produce();    // Error: would overwrite state that reader
+                // must return unchanged
+}
+----
+
+==== Effects on the Type System
+
+State attributes are part of the function type: two function types are
+incompatible if they handle a piece of state differently. It is
+ill-formed to assign or convert between pointers to such incompatible
+function types, and, as for any incompatible function types, calling a
+function through a function pointer type that handles a state
+differently than the function's actual type is undefined behavior.
+
+[source, C]
+----
+void f(void) __riscv_inout("xsfmm");
+
+void (*good)(void) __riscv_inout("xsfmm") = f; // OK
+void (*bad1)(void) __riscv_in("xsfmm") = f;    // Error
+void (*bad2)(void) = f;                        // Error
+----
+
+==== Feature Detection
+
+Support for the state attributes and for individual state strings can be
+detected with the `+__riscv_state_attributes+` and
+`+__riscv_state_<name>+` macros, see
+<<state-attribute-macros,State Attribute Macros>>.
 
 == Intrinsic Functions
 
