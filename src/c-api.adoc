@@ -1029,6 +1029,7 @@ Each queryable extension must have an associated `groupid` and `bitmask` that in
 | zknh | 0 | 43
 | zksed | 0 | 44
 | zksh | 0 | 45
+| zkr | 1 | 28
 | zkt | 0 | 46
 | ztso | 0 | 47
 | zvbb | 0 | 48
