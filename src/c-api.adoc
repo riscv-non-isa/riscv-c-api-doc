@@ -770,15 +770,15 @@ Sign extension of 32-bit values on RV64 is not reflected in the interface.
 |*Prototype*                                                               |*Instruction*        |*Extension*         |*Notes*
 |`+uint32_t __riscv_aes32dsi(uint32_t rs1, uint32_t rs2, const int bs);+`  |`aes32dsi`    |Zknd (RV32)       |`bs`=[0..3]
 |`+uint32_t __riscv_aes32dsmi(uint32_t rs1, uint32_t rs2, const int bs);+` |`aes32dsmi`   |Zknd (RV32)       |`bs`=[0..3]
-|`+uint64_t __riscv_aes64ds(uint64 rs1, uint64_t rs2);+`                   |`aes64ds`     |Zknd (RV64)       |
-|`+uint64_t __riscv_aes64dsm(uint64 rs1, uint64_t rs2);+`                  |`aes64dsm`    |Zknd (RV64)       |
-|`+uint64_t __riscv_aes64im(uint64 rs1);+`                                 |`aes64im`     |Zknd (RV64)       |`rnum`=[0..10]
-|`+uint64_t __riscv_aes64ks1i(uint64 rs1, const int rnum);+`               |`aes64ks1i`   |Zknd, Zkne (RV64) |`rnum`=[0..10]
-|`+uint64_t __riscv_aes64ks2(uint64 rs1, uint64_t rs2);+`                  |`aes64ks2`    |Zknd, Zkne (RV64) |
+|`+uint64_t __riscv_aes64ds(uint64_t rs1, uint64_t rs2);+`                 |`aes64ds`     |Zknd (RV64)       |
+|`+uint64_t __riscv_aes64dsm(uint64_t rs1, uint64_t rs2);+`                |`aes64dsm`    |Zknd (RV64)       |
+|`+uint64_t __riscv_aes64im(uint64_t rs1);+`                               |`aes64im`     |Zknd (RV64)       |`rnum`=[0..10]
+|`+uint64_t __riscv_aes64ks1i(uint64_t rs1, const int rnum);+`             |`aes64ks1i`   |Zknd, Zkne (RV64) |`rnum`=[0..10]
+|`+uint64_t __riscv_aes64ks2(uint64_t rs1, uint64_t rs2);+`                |`aes64ks2`    |Zknd, Zkne (RV64) |
 |`+uint32_t __riscv_aes32esi(uint32_t rs1, uint32_t rs2, const int bs);+`  |`aes32esi`    |Zkne (RV32)       |`bs`=[0..3]
 |`+uint32_t __riscv_aes32esmi(uint32_t rs1, uint32_t rs2, const int bs);+` |`aes32esmi`   |Zkne (RV32)       |`bs`=[0..3]
-|`+uint64_t __riscv_aes64es(uint64 rs1, uint64_t rs2);+`                   |`aes32es`     |Zkne (RV64)       |
-|`+uint64_t __riscv_aes64esm(uint64 rs1, uint64_t rs2);+`                  |`aes32esm`    |Zkne (RV64)       |
+|`+uint64_t __riscv_aes64es(uint64_t rs1, uint64_t rs2);+`                 |`aes64es`     |Zkne (RV64)       |
+|`+uint64_t __riscv_aes64esm(uint64_t rs1, uint64_t rs2);+`                |`aes64esm`    |Zkne (RV64)       |
 |`+uint32_t __riscv_sha256sig0(uint32_t rs1);+`                            |`sha256sig0`  |Zknh              |
 |`+uint32_t __riscv_sha256sig1(uint32_t rs1);+`                            |`sha256sig1`  |Zknh              |
 |`+uint32_t __riscv_sha256sum0(uint32_t rs1);+`                            |`sha256sum0`  |Zknh              |
