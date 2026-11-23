@@ -118,18 +118,26 @@ Examples:
 - `+__riscv_v_fixed_vlen+` is not defined for `rv64gcv` without
 `+-mrvv-vector-bits=zvl+`
 
-[id=__riscv_rvv_vector_bits_relaxed]
-=== +__riscv_rvv_vector_bits_relaxed+
+[id=__riscv_rvv_vector_bits]
+=== +__riscv_rvv_vector_bits+
 
-The `+__riscv_rvv_vector_bits_relaxed+` macro expands to 1 when the compiler
-accepts the relaxed rules of the `<<riscv_rvv_vector_bits>>` type attribute,
-described in <<riscv_rvv_vector_bits_shorter>>. Under these rules the attribute
-does not need a fixed VLEN, and its argument may be smaller than the full size of
-the type.
+The `+__riscv_rvv_vector_bits+` macro expands to a version number that tells
+which features of the `<<riscv_rvv_vector_bits>>` type attribute the compiler
+supports. Each version includes all features of the lower versions.
 
-`+__riscv_rvv_vector_bits_relaxed+` is not defined when the compiler does not
-accept the relaxed rules, and when no vector extension (`Zve32x` or above) is
-available.
+.`+__riscv_rvv_vector_bits+` versions
+[%autowidth]
+|===
+|*Value* |*Features*
+
+|1 |The relaxed rules in <<riscv_rvv_vector_bits_shorter>>: the attribute does
+not need a fixed VLEN, and its argument may be smaller than the full size of the
+type.
+|===
+
+`+__riscv_rvv_vector_bits+` is not defined when the compiler supports none of
+these features, and when no vector extension (`Zve32x` or above) is available.
+In that case only the rules without the relaxed rules apply.
 
 [id=__riscv_misaligned_fast_slow_avoid]
 === +__riscv_misaligned_{fast,slow,avoid}+
@@ -760,7 +768,7 @@ allow it. This is a diagnosed error, not undefined behavior.
 [id=riscv_rvv_vector_bits_shorter]
 ==== Relaxed Rules and Shorter Types
 
-When `<<__riscv_rvv_vector_bits_relaxed>>` is defined, the compiler accepts
+When `<<__riscv_rvv_vector_bits>>` is at least 1, the compiler accepts
 the following relaxed rules instead. In this section, VLEN is
 `+__riscv_v_fixed_vlen+` if it is defined, and `+__riscv_v_min_vlen+`
 otherwise.
@@ -794,7 +802,7 @@ The size and layout rules below apply with this `N`.
 [source, C]
 ----
 #include <riscv_vector.h>
-#if defined(__riscv_rvv_vector_bits_relaxed)
+#if defined(__riscv_rvv_vector_bits) && __riscv_rvv_vector_bits >= 1
 // Two 32-bit elements, in one vector register (LMUL=1).
 typedef vint32m1_t vint32m1x2_fixed_t
     __attribute__((riscv_rvv_vector_bits(64)));
@@ -888,7 +896,7 @@ _Static_assert(sizeof(fixed_vint8m1_t) == __riscv_v_fixed_vlen / 8, "");
 ==== Availability
 
 The attribute is available when `<<__riscv_v_fixed_vlen>>` is defined, or when
-`<<__riscv_rvv_vector_bits_relaxed>>` is defined.
+`<<__riscv_rvv_vector_bits>>` is at least 1.
 
 == Intrinsic Functions
 
