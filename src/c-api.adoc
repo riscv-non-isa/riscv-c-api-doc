@@ -118,6 +118,19 @@ Examples:
 - `+__riscv_v_fixed_vlen+` is not defined for `rv64gcv` without
 `+-mrvv-vector-bits=zvl+`
 
+[id=__riscv_rvv_vector_bits_relaxed]
+=== +__riscv_rvv_vector_bits_relaxed+
+
+The `+__riscv_rvv_vector_bits_relaxed+` macro expands to 1 when the compiler
+accepts the relaxed rules of the `<<riscv_rvv_vector_bits>>` type attribute,
+described in <<riscv_rvv_vector_bits_shorter>>. Under these rules the attribute
+does not need a fixed VLEN, and its argument may be smaller than the full size of
+the type.
+
+`+__riscv_rvv_vector_bits_relaxed+` is not defined when the compiler does not
+accept the relaxed rules, and when no vector extension (`Zve32x` or above) is
+available.
+
 [id=__riscv_misaligned_fast_slow_avoid]
 === +__riscv_misaligned_{fast,slow,avoid}+
 
@@ -741,8 +754,55 @@ occupies one byte, so portable code should guard such typedefs with `#if` on
 `+__riscv_v_fixed_vlen+`.
 
 If `N` does not match the value required by the type's LMUL or ratio, the program
-is ill-formed and the compiler reports an error. This is a diagnosed error, not
-undefined behavior.
+is ill-formed and the compiler reports an error, unless the relaxed rules below
+allow it. This is a diagnosed error, not undefined behavior.
+
+[id=riscv_rvv_vector_bits_shorter]
+==== Relaxed Rules and Shorter Types
+
+When `<<__riscv_rvv_vector_bits_relaxed>>` is defined, the compiler accepts
+the following relaxed rules instead. In this section, VLEN is
+`+__riscv_v_fixed_vlen+` if it is defined, and `+__riscv_v_min_vlen+`
+otherwise.
+
+- The attribute does not need a fixed VLEN: it is available whenever
+  `+__riscv_v_min_vlen+` is defined.
+- For a data type, `N` must be a positive multiple of the element width, the
+  number of elements `N` divided by the element width must be a power of 2, and
+  `N` must not exceed `+VLEN * LMUL+`.
+- For a mask type `+vbool<RATIO>_t+`, `N` must be a power of 2 and must not
+  exceed `+VLEN / RATIO+`.
+
+Any other value of `N` is ill-formed and the compiler reports an error.
+
+A type whose `N` is smaller than that maximum is a _shorter_ type. It uses only
+the low elements of the register group:
+
+- It keeps the LMUL, or for a mask type the ratio, of the type it was created
+  from. For example, `vint32m1_t` with `+riscv_rvv_vector_bits(64)+` occupies a
+  single vector register, and is a different type from `vint32mf2_t` with
+  `+riscv_rvv_vector_bits(64)+`.
+- It converts implicitly to and from its own sizeless RVV type only. Converting
+  it to the sizeless type leaves the elements past the first `N / SEW` (or `N`
+  for a mask) with unspecified values. Converting a sizeless value to it keeps
+  only those first elements.
+- When such a value is passed to an RVV intrinsic, the program must keep `vl`,
+  and any index used by the intrinsic, within those first elements.
+
+The size and layout rules below apply with this `N`.
+
+[source, C]
+----
+#include <riscv_vector.h>
+#if defined(__riscv_rvv_vector_bits_relaxed)
+// Two 32-bit elements, in one vector register (LMUL=1).
+typedef vint32m1_t vint32m1x2_fixed_t
+    __attribute__((riscv_rvv_vector_bits(64)));
+// Four mask elements, for vbool32_t.
+typedef vbool32_t vbool32x4_fixed_t
+    __attribute__((riscv_rvv_vector_bits(4)));
+#endif
+----
 
 ==== Size, Alignment, and Layout
 
@@ -827,7 +887,8 @@ _Static_assert(sizeof(fixed_vint8m1_t) == __riscv_v_fixed_vlen / 8, "");
 
 ==== Availability
 
-The attribute is available when `<<__riscv_v_fixed_vlen>>` is defined.
+The attribute is available when `<<__riscv_v_fixed_vlen>>` is defined, or when
+`<<__riscv_rvv_vector_bits_relaxed>>` is defined.
 
 == Intrinsic Functions
 
