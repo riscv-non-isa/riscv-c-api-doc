@@ -137,7 +137,7 @@ type.
 
 `+__riscv_rvv_vector_bits+` is not defined when the compiler supports none of
 these features, and when no vector extension (`Zve32x` or above) is available.
-In that case only the rules without the relaxed rules apply.
+In that case the relaxed rules do not apply.
 
 [id=__riscv_misaligned_fast_slow_avoid]
 === +__riscv_misaligned_{fast,slow,avoid}+
