@@ -893,11 +893,6 @@ _Static_assert(sizeof(fixed_vint8m1_t) == __riscv_v_fixed_vlen / 8, "");
 #endif
 ----
 
-==== Availability
-
-The attribute is available when `<<__riscv_v_fixed_vlen>>` is defined, or when
-`<<__riscv_rvv_vector_bits>>` is at least 1.
-
 == Intrinsic Functions
 
 Intrinsic functions (or intrinsics or built-ins) are expanded into instruction sequences by compilers.
